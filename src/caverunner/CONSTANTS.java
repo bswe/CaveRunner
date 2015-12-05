@@ -12,7 +12,6 @@ package caverunner;
 
 public class CONSTANTS {
    public static final int WINDOW_WIDTH = 1232;
-   //public static final int WINDOW_WIDTH = 1222;
    public static final int WINDOW_HEIGHT = 704;
    public static final int BLOCK_WIDTH = 44;
    public static final int BLOCK_HEIGHT = 44;
