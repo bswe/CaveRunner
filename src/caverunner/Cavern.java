@@ -127,7 +127,6 @@ class Cavern {
 		BlockLocationType blockLocation;
 
 		blockLocation = getBlockRunnerIsIn (theRunner.theirLocation).Location;
-		//theRunner.theirLocation.setY ((blockLocation.getY()+1)*CONSTANTS.BLOCK_HEIGHT);
 		theRunner.theirLocation.setY (blockLocation.getY()*CONSTANTS.BLOCK_HEIGHT);
 		}
 
@@ -646,17 +645,7 @@ class Cavern {
 				}
 			}
 
-		// THIRD: display the cavern in its present state
-      /*
-		Gc.drawImage (Images.mossWorld, 0, 0);   // display background
-		// display any blocks that have images at their correct graphical location in the window
-		for (int x=0; x < Width; x++)
-			for (int y=0; y < Height; y++)
-			   if (Blocks[x][y].blockImage != null) 
-					Gc.drawImage (Blocks[x][y].blockImage, 
-								     Blocks[x][y].Location.getX()*CONSTANTS.BLOCK_WIDTH,
-								     Blocks[x][y].Location.getY()*CONSTANTS.BLOCK_HEIGHT);
-      */
+		// THIRD: display any changes in the cavern
 
 		// display any raygun blast before displaying the runner so raygun that the runner is holding displays on top of the blast
 		if (raygunBlast != null) {
@@ -682,32 +671,15 @@ class Cavern {
 				}
 			}
 		
-		// draw the troll
+		// update the troll in the View
       Troll1.theirView.setImage (Troll1.theirImage.theImage);
       Troll1.theirView.setX (Troll1.theirLocation.getX());
       Troll1.theirView.setY (Troll1.theirLocation.getY());
-		//Gc.drawImage (Troll1.theirImage.theImage, Troll1.theirLocation.getX(), Troll1.theirLocation.getY());
-		//Troll1.theirLocation.setX (Troll1.theirLocation.getX() + Troll1.theirImage.xDelta);
-		//Troll1.theirLocation.setY (Troll1.theirLocation.getY() + Troll1.theirImage.yDelta);
-		//Troll1.theirImage = Troll1.theirImage.nextImage;
 
-		// display the user controlled runner
+		// update the user controlled runner in the View
       theRunner.theirView.setImage (theRunner.theirImage.theImage);
       theRunner.theirView.setX (theRunner.theirLocation.getX());
       theRunner.theirView.setY (theRunner.theirLocation.getY());
-		//Gc.drawImage (theRunner.theirImage.theImage, theRunner.theirLocation.getX(), theRunner.theirLocation.getY());
-
-		// draw other test runners to verify that the graphics look smooth and the processing load can be handled
-		/*
-		Gc.drawImage (Runner2.theirImage.theImage, Runner2.theirLocation.getX(), Runner2.theirLocation.getY());
-		Gc.drawImage (Runner3.theirImage.theImage, Runner3.theirLocation.getX(), Runner3.theirLocation.getY());
-		Gc.drawImage (Runner4.theirImage.theImage, Runner4.theirLocation.getX(), Runner4.theirLocation.getY());
-		Gc.drawImage (Runner5.theirImage.theImage, Runner5.theirLocation.getX(), Runner5.theirLocation.getY());
-		Gc.drawImage (Runner6.theirImage.theImage, Runner6.theirLocation.getX(), Runner6.theirLocation.getY());
-		Gc.drawImage (Runner7.theirImage.theImage, Runner7.theirLocation.getX(), Runner7.theirLocation.getY());
-		Gc.drawImage (Runner8.theirImage.theImage, Runner8.theirLocation.getX(), Runner8.theirLocation.getY());
-		*/
-
 		}
 
 	public void display () {
