@@ -27,6 +27,7 @@ class Cavern {
 	private String lastKeyCode = "";
 	private RaygunBlast raygunBlast;
 	private ArrayList<ActiveBlock> activeBlocks = new ArrayList<>();
+   private Runner Troll1;
 
 	AudioClip pling = new AudioClip ("file:Pling.mp3");
 	AudioClip laserBlast = new AudioClip ("file:LaserBlast.mp3");
@@ -60,6 +61,7 @@ class Cavern {
 		for (int x=0; x < Width; x++)
 			for (int y=0; y < Height; y++) 
 				Blocks [x] [y] = new BlockType (new BlockLocationType (x, y));
+      Troll1 = new Runner (new MovableLocationType(0, 132), Images.R_TrollRunning);
 		}
    
    public void LoadCavernIntoView () {
@@ -70,6 +72,7 @@ class Cavern {
 			   if (Blocks[x][y].blockImage != null) 
                View.getChildren().add(Blocks[x][y].blockView);
       View.getChildren().add (theRunner.theirView);
+      View.getChildren().add (Troll1.theirView);
       }
 
 	public void addRunner (MovableLocationType location) {
@@ -610,7 +613,7 @@ class Cavern {
 
 		// SECOND: update any active elements in the cavern
 		upDateMovie (theRunner);
-		//upDateMovie (Troll1);
+		upDateMovie (Troll1);
 		/*
 		upDateMovie (Runner3);
 		upDateMovie (Runner4);
@@ -680,6 +683,9 @@ class Cavern {
 			}
 		
 		// draw the troll
+      Troll1.theirView.setImage (Troll1.theirImage.theImage);
+      Troll1.theirView.setX (Troll1.theirLocation.getX());
+      Troll1.theirView.setY (Troll1.theirLocation.getY());
 		//Gc.drawImage (Troll1.theirImage.theImage, Troll1.theirLocation.getX(), Troll1.theirLocation.getY());
 		//Troll1.theirLocation.setX (Troll1.theirLocation.getX() + Troll1.theirImage.xDelta);
 		//Troll1.theirLocation.setY (Troll1.theirLocation.getY() + Troll1.theirImage.yDelta);
