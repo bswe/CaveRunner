@@ -680,6 +680,13 @@ public class CaveRunner extends Application {
 		theScene.setOnMouseDragged (new EventHandler<MouseEvent>() {
 			@Override public void handle (MouseEvent event) {
 				//System.err.println ("mouse drag detected at " + event.getSceneX() + ", " + event.getSceneY());
+				if (editBlock.Type != BlockTypes.RUNNER) {
+					BlockType block = editCavern.getBlock (new BlockLocationType ((int)event.getSceneX() / CONSTANTS.BLOCK_WIDTH, 
+                                                                             ((int)event.getSceneY() - 26) / CONSTANTS.BLOCK_HEIGHT));
+					block.Type = editBlock.Type;
+					block.blockImage = editBlock.blockImage;
+					}
+				editCavern.display();
 				}
 		   });
 
