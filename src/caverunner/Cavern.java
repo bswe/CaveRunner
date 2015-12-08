@@ -300,6 +300,32 @@ class Cavern {
 			return false;
 		}
 
+	private boolean IsThereSomethingToBlastOnTheRight (Runner theRunner) {
+		BlockType thisBlock, nextBlock;
+		BlockLocationType location;
+
+		thisBlock = getBlockRunnerIsIn (theRunner.theirLocation);
+		location = thisBlock.Location.locationToTheLowerRight();
+		nextBlock = getBlock (location);
+		if ((nextBlock != null) && (nextBlock.Type != BlockTypes.EMPTY))
+			return true;
+		else
+			return false;
+		}
+
+	private boolean IsThereSomethingToBlastOnTheLeft (Runner theRunner) {
+		BlockType thisBlock, nextBlock;
+		BlockLocationType location;
+
+		thisBlock = getBlockRunnerIsIn (theRunner.theirLocation);
+		location = thisBlock.Location.locationToTheLowerLeft();
+		nextBlock = getBlock (location);
+		if ((nextBlock != null) && (nextBlock.Type != BlockTypes.EMPTY))
+			return true;
+		else
+			return false;
+		}
+
 	private boolean IsThereSolidGroundOnTheLeft (Runner theRunner) {
 		BlockType thisBlock, nextBlock;
 		BlockLocationType location;
@@ -565,18 +591,22 @@ class Cavern {
          theRunner.movieState = MovieState.PAUSED;
 		// some key is pressed so see if it is a runner control key
       if (code == CONSTANTS.PAGE_UP) {  // right side ray gun
-         laserBlast.play();
-         theRunner.setImage (Images.R_firingRaygun);
-         centerRunnerInBlock (theRunner);
-         raygunBlast = new RaygunBlast (new MovableLocationType(theRunner.theirLocation.getX()+44, theRunner.theirLocation.getY()), Images.R_raygunBlast);
-         View.getChildren().add (raygunBlast.theView);
+         if (IsThereSomethingToBlastOnTheRight (theRunner)) {
+            laserBlast.play();
+            theRunner.setImage (Images.R_firingRaygun);
+            centerRunnerInBlock (theRunner);
+            raygunBlast = new RaygunBlast (new MovableLocationType(theRunner.theirLocation.getX()+44, theRunner.theirLocation.getY()), Images.R_raygunBlast);
+            View.getChildren().add (raygunBlast.theView);
+            }
          }
       if (code == CONSTANTS.HOME) {     // left side ray gun
-         laserBlast.play();
-         theRunner.setImage (Images.L_firingRaygun);
-         centerRunnerInBlock (theRunner);
-         raygunBlast = new RaygunBlast (new MovableLocationType(theRunner.theirLocation.getX()-44, theRunner.theirLocation.getY()), Images.L_raygunBlast);
-         View.getChildren().add (raygunBlast.theView);
+         if (IsThereSomethingToBlastOnTheLeft (theRunner)) {
+            laserBlast.play();
+            theRunner.setImage (Images.L_firingRaygun);
+            centerRunnerInBlock (theRunner);
+            raygunBlast = new RaygunBlast (new MovableLocationType(theRunner.theirLocation.getX()-44, theRunner.theirLocation.getY()), Images.L_raygunBlast);
+            View.getChildren().add (raygunBlast.theView);
+            }
          }
       else if (code == CONSTANTS.RIGHT_ARROW) {
          if (canRunnerMoveRight (theRunner)) {
