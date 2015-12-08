@@ -705,8 +705,8 @@ public class CaveRunner extends Application {
                    
 		// init graphics and cavern
 		Images.InitImages();
-		//Cavern theCavern = createTestCavern (gameGc);
 		Cavern theCavern = createTestCavern (gameView);
+		theCavern.restore ("test.ser");
       theCavern.LoadCavernIntoView ();
  		theStage.show();
 
