@@ -82,6 +82,7 @@ class Cavern {
       }
    
    public int LoadCavernIntoView () {
+      TotalGold = 0;
       View.getChildren().clear();
       View.getChildren().add (new ImageView(Images.mossWorld));
       for (int x=0; x < Width; x++)
