@@ -45,26 +45,19 @@ enum ItemTypes {
    }
 
 enum MovieType {
-	RUNNING_RIGHT,
-	RUNNING_LEFT,
-	STANDING_RIGHT,
-	STANDING_LEFT,
+	RUNNING,
+	STANDING,
 	FACING_YOU,
 	HANGING_ON_LADDER,
 	CLIMBING_DOWN,
 	CLIMBING_UP,
 	FALLING,
-	LEAPING_RIGHT_ONTO_LADDER,
-	LEAPING_RIGHT_OFF_OF_LADDER,
-	LEAPING_LEFT_ONTO_LADDER,
-	LEAPING_LEFT_OFF_OF_LADDER,
-	FIRING_RAYGUN_RIGHT,
-	FIRING_RAYGUN_LEFT,
-	RAYGUN_BLAST_RIGHT,
-	RAYGUN_BLAST_LEFT,
-	HANGING_ON_ROPE_RIGHT,
-	HANGING_ON_ROPE_LEFT,
-	TROLL_RUNNING_RIGHT
+	LEAPING_ONTO_LADDER,
+	LEAPING_OFF_OF_LADDER,
+	FIRING_RAYGUN,
+	RAYGUN_BLAST,
+	HANGING_ON_ROPE,
+	TROLL_RUNNING
 	}
 
 class MovieImage {
@@ -83,25 +76,18 @@ class MovieImage {
 	}
 
 class Images {
-	static MovieImage R_RunnerImages;
-	static MovieImage L_RunnerImages;
-	static MovieImage R_RunnerStanding;
-	static MovieImage L_RunnerStanding;
-	static MovieImage C_RunnerStanding;
-	static MovieImage R_RunnerLeapingOntoLadder;
-	static MovieImage R_RunnerLeapingOffOfLadder;
-	static MovieImage L_RunnerLeapingOntoLadder;
-	static MovieImage L_RunnerLeapingOffOfLadder;
-	static MovieImage R_firingRaygun;
-	static MovieImage L_firingRaygun;
-	static MovieImage R_raygunBlast;
-	static MovieImage L_raygunBlast;
+	static MovieImage RunnerRunning;
+	static MovieImage RunnerTurned;
+	static MovieImage RunnerFacing;
+	static MovieImage RunnerLeapingOntoLadder;
+	static MovieImage RunnerLeapingOffOfLadder;
+	static MovieImage firingRaygun;
+	static MovieImage raygunBlast;
 	static MovieImage RunnerHangingOnLadder;
 	static MovieImage RunnerClimbingDown;
 	static MovieImage RunnerClimbingUp;
 	static MovieImage RunnerFalling;
-	static MovieImage L_RunnerHangingOnRope;
-	static MovieImage R_RunnerHangingOnRope;
+	static MovieImage RunnerHangingOnRope;
 	static MovieImage R_TrollRunning;
 	static Image white;
 	static Image mossWorld;
@@ -122,64 +108,41 @@ class Images {
 		MovieImage theLastImage;
 
 		// load the troll running right images into a movie loop
-		R_TrollRunning = new MovieImage (new Image ("file:Images/R_troll_running_1.png"), MovieType.TROLL_RUNNING_RIGHT, null, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/R_troll_running_11.png"), MovieType.TROLL_RUNNING_RIGHT, R_TrollRunning, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/R_troll_running_10.png"), MovieType.TROLL_RUNNING_RIGHT, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/R_troll_running_9.png"), MovieType.TROLL_RUNNING_RIGHT, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/R_troll_running_8.png"), MovieType.TROLL_RUNNING_RIGHT, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/R_troll_running_7.png"), MovieType.TROLL_RUNNING_RIGHT, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/R_troll_running_6.png"), MovieType.TROLL_RUNNING_RIGHT, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/R_troll_running_5.png"), MovieType.TROLL_RUNNING_RIGHT, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/R_troll_running_4.png"), MovieType.TROLL_RUNNING_RIGHT, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/R_troll_running_3.png"), MovieType.TROLL_RUNNING_RIGHT, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/R_troll_running_2.png"), MovieType.TROLL_RUNNING_RIGHT, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
+		R_TrollRunning = new MovieImage (new Image ("file:Images/R_troll_running_1.png"), MovieType.TROLL_RUNNING, null, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/R_troll_running_11.png"), MovieType.TROLL_RUNNING, R_TrollRunning, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/R_troll_running_10.png"), MovieType.TROLL_RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/R_troll_running_9.png"), MovieType.TROLL_RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/R_troll_running_8.png"), MovieType.TROLL_RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/R_troll_running_7.png"), MovieType.TROLL_RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/R_troll_running_6.png"), MovieType.TROLL_RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/R_troll_running_5.png"), MovieType.TROLL_RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/R_troll_running_4.png"), MovieType.TROLL_RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/R_troll_running_3.png"), MovieType.TROLL_RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/R_troll_running_2.png"), MovieType.TROLL_RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
 		R_TrollRunning.nextImage = theLastImage;
 		
-		// load the runner images for going right into a movie loop
-		R_RunnerImages = new MovieImage (new Image ("file:Images/R_runner_1.png"), MovieType.RUNNING_RIGHT, null, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/R_runner_11.png"), MovieType.RUNNING_RIGHT, R_RunnerImages, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/R_runner_10.png"), MovieType.RUNNING_RIGHT, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/R_runner_9.png"), MovieType.RUNNING_RIGHT, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/R_runner_8.png"), MovieType.RUNNING_RIGHT, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/R_runner_7.png"), MovieType.RUNNING_RIGHT, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/R_runner_6.png"), MovieType.RUNNING_RIGHT, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/R_runner_5.png"), MovieType.RUNNING_RIGHT, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/R_runner_4.png"), MovieType.RUNNING_RIGHT, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/R_runner_3.png"), MovieType.RUNNING_RIGHT, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/R_runner_2.png"), MovieType.RUNNING_RIGHT, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
-		R_RunnerImages.nextImage = theLastImage;
+		// load the runner images for running into a movie loop
+		RunnerRunning = new MovieImage (new Image ("file:Images/runner_running_1.png"), MovieType.RUNNING, null, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/runner_running_11.png"), MovieType.RUNNING, RunnerRunning, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/runner_running_10.png"), MovieType.RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/runner_running_9.png"), MovieType.RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/runner_running_8.png"), MovieType.RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/runner_running_7.png"), MovieType.RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/runner_running_6.png"), MovieType.RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/runner_running_5.png"), MovieType.RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/runner_running_4.png"), MovieType.RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/runner_running_3.png"), MovieType.RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/runner_running_2.png"), MovieType.RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
+		RunnerRunning.nextImage = theLastImage;
 		
-		// load the runner images for going left into a movie loop
-		L_RunnerImages = new MovieImage (new Image ("file:Images/L_runner_1.png"), MovieType.RUNNING_LEFT, null, -CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/L_runner_11.png"), MovieType.RUNNING_LEFT, L_RunnerImages, -CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/L_runner_10.png"), MovieType.RUNNING_LEFT, theLastImage, -CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/L_runner_9.png"), MovieType.RUNNING_LEFT, theLastImage, -CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/L_runner_8.png"), MovieType.RUNNING_LEFT, theLastImage, -CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/L_runner_7.png"), MovieType.RUNNING_LEFT, theLastImage, -CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/L_runner_6.png"), MovieType.RUNNING_LEFT, theLastImage, -CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/L_runner_5.png"), MovieType.RUNNING_LEFT, theLastImage, -CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/L_runner_4.png"), MovieType.RUNNING_LEFT, theLastImage, -CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/L_runner_3.png"), MovieType.RUNNING_LEFT, theLastImage, -CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/L_runner_2.png"), MovieType.RUNNING_LEFT, theLastImage, -CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
-		L_RunnerImages.nextImage = theLastImage;
-		
-		// load the runner images for hanging on rope to the left into a movie loop
-		L_RunnerHangingOnRope = new MovieImage (new Image ("file:Images/L_runner_hanging_1.png"), MovieType.HANGING_ON_ROPE_LEFT, null, -CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/L_runner_hanging_6.png"), MovieType.HANGING_ON_ROPE_LEFT, L_RunnerHangingOnRope, -CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/L_runner_hanging_5.png"), MovieType.HANGING_ON_ROPE_LEFT, theLastImage, -CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/L_runner_hanging_4.png"), MovieType.HANGING_ON_ROPE_LEFT, theLastImage, -CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/L_runner_hanging_3.png"), MovieType.HANGING_ON_ROPE_LEFT, theLastImage, -CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/L_runner_hanging_2.png"), MovieType.HANGING_ON_ROPE_LEFT, theLastImage, -CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
-		L_RunnerHangingOnRope.nextImage = theLastImage;
-		
-		// load the runner images for hanging on rope to the right into a movie loop
-		R_RunnerHangingOnRope = new MovieImage (new Image ("file:Images/R_runner_hanging_1.png"), MovieType.HANGING_ON_ROPE_RIGHT, null, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/R_runner_hanging_6.png"), MovieType.HANGING_ON_ROPE_RIGHT, R_RunnerHangingOnRope, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/R_runner_hanging_5.png"), MovieType.HANGING_ON_ROPE_RIGHT, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/R_runner_hanging_4.png"), MovieType.HANGING_ON_ROPE_RIGHT, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/R_runner_hanging_3.png"), MovieType.HANGING_ON_ROPE_RIGHT, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/R_runner_hanging_2.png"), MovieType.HANGING_ON_ROPE_RIGHT, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
-		R_RunnerHangingOnRope.nextImage = theLastImage;
+		// load the runner images for hanging on rope into a movie loop
+		RunnerHangingOnRope = new MovieImage (new Image ("file:Images/runner_on_rope_1.png"), MovieType.HANGING_ON_ROPE, null, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/runner_on_rope_6.png"), MovieType.HANGING_ON_ROPE, RunnerHangingOnRope, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/runner_on_rope_5.png"), MovieType.HANGING_ON_ROPE, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/runner_on_rope_4.png"), MovieType.HANGING_ON_ROPE, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/runner_on_rope_3.png"), MovieType.HANGING_ON_ROPE, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/runner_on_rope_2.png"), MovieType.HANGING_ON_ROPE, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
+		RunnerHangingOnRope.nextImage = theLastImage;
 		
 		// load the runner falling images into a movie loop
 		RunnerFalling = new MovieImage (new Image("file:Images/runner_falling_1.png"), MovieType.FALLING, null, 0, CONSTANTS.FALLING_FRAME_DISTANCE);
@@ -191,12 +154,10 @@ class Images {
 		RunnerFalling.nextImage = theLastImage;
 		
 		// load the runner standing still images and have them point to themselves because they aren't moving (one image movie)
-		L_RunnerStanding = new MovieImage (new Image("file:Images/L_runner_standing.png"), MovieType.STANDING_LEFT, null, 0, 0);
-		L_RunnerStanding.nextImage = L_RunnerStanding;
-		R_RunnerStanding = new MovieImage (new Image("file:Images/R_runner_standing.png"), MovieType.STANDING_RIGHT, null, 0, 0);
-		R_RunnerStanding.nextImage = R_RunnerStanding;
-		C_RunnerStanding = new MovieImage (new Image("file:Images/C_runner_standing.png"), MovieType.FACING_YOU, null, 0, 0);
-		C_RunnerStanding.nextImage = C_RunnerStanding;
+		RunnerTurned = new MovieImage (new Image("file:Images/runner_turned.png"), MovieType.STANDING, null, 0, 0);
+		RunnerTurned.nextImage = RunnerTurned;
+		RunnerFacing = new MovieImage (new Image("file:Images/runner_facing.png"), MovieType.FACING_YOU, null, 0, 0);
+		RunnerFacing.nextImage = RunnerFacing;
 		
 		// load the runner climbing down image and have it point to itself because it doesn't change
 		RunnerClimbingDown = new MovieImage (new Image("file:Images/runner_down_ladder.png"), MovieType.CLIMBING_DOWN, null, 0, CONSTANTS.CLIMBING_FRAME_DISTANCE);
@@ -206,81 +167,43 @@ class Images {
 		RunnerHangingOnLadder = new MovieImage (new Image("file:Images/runner_down_ladder.png"), MovieType.HANGING_ON_LADDER, null, 0, 0);
 		RunnerHangingOnLadder.nextImage = RunnerHangingOnLadder;
 		
-		// load the raygun blast to the right into a movie strip (not a movie loop)
-		theLastImage = new MovieImage (new Image ("file:Images/R_raygun_blast_8.png"), MovieType.RAYGUN_BLAST_RIGHT, null, 0, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/R_raygun_blast_7.png"), MovieType.RAYGUN_BLAST_RIGHT, theLastImage, 0, 8);
-		theLastImage = new MovieImage (new Image ("file:Images/R_raygun_blast_6.png"), MovieType.RAYGUN_BLAST_RIGHT, theLastImage, 0, 8);
-		theLastImage = new MovieImage (new Image ("file:Images/R_raygun_blast_5.png"), MovieType.RAYGUN_BLAST_RIGHT, theLastImage, 0, 8);
-		theLastImage = new MovieImage (new Image ("file:Images/R_raygun_blast_4.png"), MovieType.RAYGUN_BLAST_RIGHT, theLastImage, 0, 8);
-		theLastImage = new MovieImage (new Image ("file:Images/R_raygun_blast_3.png"), MovieType.RAYGUN_BLAST_RIGHT, theLastImage, 0, 8);
-		theLastImage = new MovieImage (new Image ("file:Images/R_raygun_blast_2.png"), MovieType.RAYGUN_BLAST_RIGHT, theLastImage, 0, 8);
-		R_raygunBlast = theLastImage = new MovieImage (new Image ("file:Images/R_raygun_blast_1.png"), MovieType.RAYGUN_BLAST_RIGHT, theLastImage, 0, 8);
+		// load the raygun blast into a movie strip (not a movie loop)
+		theLastImage = new MovieImage (new Image ("file:Images/raygun_blast_8.png"), MovieType.RAYGUN_BLAST, null, 0, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/raygun_blast_7.png"), MovieType.RAYGUN_BLAST, theLastImage, 0, 8);
+		theLastImage = new MovieImage (new Image ("file:Images/raygun_blast_6.png"), MovieType.RAYGUN_BLAST, theLastImage, 0, 8);
+		theLastImage = new MovieImage (new Image ("file:Images/raygun_blast_5.png"), MovieType.RAYGUN_BLAST, theLastImage, 0, 8);
+		theLastImage = new MovieImage (new Image ("file:Images/raygun_blast_4.png"), MovieType.RAYGUN_BLAST, theLastImage, 0, 8);
+		theLastImage = new MovieImage (new Image ("file:Images/raygun_blast_3.png"), MovieType.RAYGUN_BLAST, theLastImage, 0, 8);
+		theLastImage = new MovieImage (new Image ("file:Images/raygun_blast_2.png"), MovieType.RAYGUN_BLAST, theLastImage, 0, 8);
+		raygunBlast = theLastImage = new MovieImage (new Image ("file:Images/raygun_blast_1.png"), MovieType.RAYGUN_BLAST, theLastImage, 0, 8);
 		
-		// load the raygun blast to the left into a movie strip (not a movie loop)
-		theLastImage = new MovieImage (new Image ("file:Images/L_raygun_blast_8.png"), MovieType.RAYGUN_BLAST_LEFT, null, 0, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/L_raygun_blast_7.png"), MovieType.RAYGUN_BLAST_LEFT, theLastImage, 0, 8);
-		theLastImage = new MovieImage (new Image ("file:Images/L_raygun_blast_6.png"), MovieType.RAYGUN_BLAST_LEFT, theLastImage, 0, 8);
-		theLastImage = new MovieImage (new Image ("file:Images/L_raygun_blast_5.png"), MovieType.RAYGUN_BLAST_LEFT, theLastImage, 0, 8);
-		theLastImage = new MovieImage (new Image ("file:Images/L_raygun_blast_4.png"), MovieType.RAYGUN_BLAST_LEFT, theLastImage, 0, 8);
-		theLastImage = new MovieImage (new Image ("file:Images/L_raygun_blast_3.png"), MovieType.RAYGUN_BLAST_LEFT, theLastImage, 0, 8);
-		theLastImage = new MovieImage (new Image ("file:Images/L_raygun_blast_2.png"), MovieType.RAYGUN_BLAST_LEFT, theLastImage, 0, 8);
-		L_raygunBlast = theLastImage = new MovieImage (new Image ("file:Images/L_raygun_blast_1.png"), MovieType.RAYGUN_BLAST_LEFT, theLastImage, 0, 8);
+		// load the runner images for firing raygun into a movie strip (not a movie loop)
+		theLastImage = new MovieImage (new Image ("file:Images/raygun_runner_10.png"), MovieType.FIRING_RAYGUN, RunnerTurned, 0, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/raygun_runner_9.png"), MovieType.FIRING_RAYGUN, theLastImage, 0, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/raygun_runner_8.png"), MovieType.FIRING_RAYGUN, theLastImage, 0, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/raygun_runner_7.png"), MovieType.FIRING_RAYGUN, theLastImage, 0, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/raygun_runner_6.png"), MovieType.FIRING_RAYGUN, theLastImage, 0, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/raygun_runner_5.png"), MovieType.FIRING_RAYGUN, theLastImage, 0, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/raygun_runner_4.png"), MovieType.FIRING_RAYGUN, theLastImage, 0, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/raygun_runner_3.png"), MovieType.FIRING_RAYGUN, theLastImage, 0, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/raygun_runner_2.png"), MovieType.FIRING_RAYGUN, theLastImage, 0, 0);
+		firingRaygun = theLastImage = new MovieImage (new Image ("file:Images/raygun_runner_1.png"), MovieType.FIRING_RAYGUN, theLastImage, 0, 0);
 		
-		// load the runner images for firing raygun to the right into a movie strip (not a movie loop)
-		theLastImage = new MovieImage (new Image ("file:Images/R_raygun_runner_10.png"), MovieType.FIRING_RAYGUN_RIGHT, R_RunnerStanding, 0, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/R_raygun_runner_9.png"), MovieType.FIRING_RAYGUN_RIGHT, theLastImage, 0, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/R_raygun_runner_8.png"), MovieType.FIRING_RAYGUN_RIGHT, theLastImage, 0, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/R_raygun_runner_7.png"), MovieType.FIRING_RAYGUN_RIGHT, theLastImage, 0, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/R_raygun_runner_6.png"), MovieType.FIRING_RAYGUN_RIGHT, theLastImage, 0, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/R_raygun_runner_5.png"), MovieType.FIRING_RAYGUN_RIGHT, theLastImage, 0, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/R_raygun_runner_4.png"), MovieType.FIRING_RAYGUN_RIGHT, theLastImage, 0, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/R_raygun_runner_3.png"), MovieType.FIRING_RAYGUN_RIGHT, theLastImage, 0, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/R_raygun_runner_2.png"), MovieType.FIRING_RAYGUN_RIGHT, theLastImage, 0, 0);
-		R_firingRaygun = theLastImage = new MovieImage (new Image ("file:Images/R_raygun_runner_1.png"), MovieType.FIRING_RAYGUN_RIGHT, theLastImage, 0, 0);
+		// load the runner images for leaping onto a ladder into a movie strip (not a movie loop)
+		theLastImage = new MovieImage (new Image ("file:Images/runner_ladder_leap_1.png"), MovieType.LEAPING_ONTO_LADDER, RunnerHangingOnLadder, CONSTANTS.LEAPING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/runner_ladder_leap_5.png"), MovieType.LEAPING_ONTO_LADDER, theLastImage, CONSTANTS.LEAPING_FRAME_DISTANCE, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/runner_ladder_leap_4.png"), MovieType.LEAPING_ONTO_LADDER, theLastImage, CONSTANTS.LEAPING_FRAME_DISTANCE, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/runner_ladder_leap_3.png"), MovieType.LEAPING_ONTO_LADDER, theLastImage, CONSTANTS.LEAPING_FRAME_DISTANCE, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/runner_ladder_leap_2.png"), MovieType.LEAPING_ONTO_LADDER, theLastImage, CONSTANTS.LEAPING_FRAME_DISTANCE, 0);
+		RunnerLeapingOntoLadder = new MovieImage (new Image ("file:Images/runner_ladder_leap_1.png"), MovieType.LEAPING_ONTO_LADDER, theLastImage, CONSTANTS.LEAPING_FRAME_DISTANCE, 0);
 		
-		// load the runner images for firing raygun to the left into a movie strip (not a movie loop)
-		theLastImage = new MovieImage (new Image ("file:Images/L_raygun_runner_10.png"), MovieType.FIRING_RAYGUN_LEFT, L_RunnerStanding, 0, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/L_raygun_runner_9.png"), MovieType.FIRING_RAYGUN_LEFT, theLastImage, 0, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/L_raygun_runner_8.png"), MovieType.FIRING_RAYGUN_LEFT, theLastImage, 0, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/L_raygun_runner_7.png"), MovieType.FIRING_RAYGUN_LEFT, theLastImage, 0, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/L_raygun_runner_6.png"), MovieType.FIRING_RAYGUN_LEFT, theLastImage, 0, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/L_raygun_runner_5.png"), MovieType.FIRING_RAYGUN_LEFT, theLastImage, 0, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/L_raygun_runner_4.png"), MovieType.FIRING_RAYGUN_LEFT, theLastImage, 0, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/l_raygun_runner_3.png"), MovieType.FIRING_RAYGUN_LEFT, theLastImage, 0, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/L_raygun_runner_2.png"), MovieType.FIRING_RAYGUN_LEFT, theLastImage, 0, 0);
-		L_firingRaygun = theLastImage = new MovieImage (new Image ("file:Images/L_raygun_runner_1.png"), MovieType.FIRING_RAYGUN_LEFT, theLastImage, 0, 0);
-		
-		// load the runner images for leaping onto a ladder to the right into a movie strip (not a movie loop)
-		theLastImage = new MovieImage (new Image ("file:Images/R_ladder_leap_1.png"), MovieType.LEAPING_RIGHT_ONTO_LADDER, RunnerHangingOnLadder, CONSTANTS.LEAPING_FRAME_DISTANCE/2, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/R_ladder_leap_5.png"), MovieType.LEAPING_RIGHT_ONTO_LADDER, theLastImage, CONSTANTS.LEAPING_FRAME_DISTANCE, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/R_ladder_leap_4.png"), MovieType.LEAPING_RIGHT_ONTO_LADDER, theLastImage, CONSTANTS.LEAPING_FRAME_DISTANCE, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/R_ladder_leap_3.png"), MovieType.LEAPING_RIGHT_ONTO_LADDER, theLastImage, CONSTANTS.LEAPING_FRAME_DISTANCE, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/R_ladder_leap_2.png"), MovieType.LEAPING_RIGHT_ONTO_LADDER, theLastImage, CONSTANTS.LEAPING_FRAME_DISTANCE, 0);
-		R_RunnerLeapingOntoLadder = new MovieImage (new Image ("file:Images/R_ladder_leap_1.png"), MovieType.LEAPING_RIGHT_ONTO_LADDER, theLastImage, CONSTANTS.LEAPING_FRAME_DISTANCE, 0);
-		
-		// load the runner images for leaping off of a ladder to the right into a movie strip (not a movie loop)
-		theLastImage = new MovieImage (new Image ("file:Images/R_ladder_leap_1.png"), MovieType.LEAPING_RIGHT_OFF_OF_LADDER, R_RunnerImages, CONSTANTS.LEAPING_FRAME_DISTANCE/2, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/R_ladder_leap_5.png"), MovieType.LEAPING_RIGHT_OFF_OF_LADDER, theLastImage, CONSTANTS.LEAPING_FRAME_DISTANCE, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/R_ladder_leap_4.png"), MovieType.LEAPING_RIGHT_OFF_OF_LADDER, theLastImage, CONSTANTS.LEAPING_FRAME_DISTANCE, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/R_ladder_leap_3.png"), MovieType.LEAPING_RIGHT_OFF_OF_LADDER, theLastImage, CONSTANTS.LEAPING_FRAME_DISTANCE, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/R_ladder_leap_2.png"), MovieType.LEAPING_RIGHT_OFF_OF_LADDER, theLastImage, CONSTANTS.LEAPING_FRAME_DISTANCE, 0);
-		R_RunnerLeapingOffOfLadder = new MovieImage (new Image ("file:Images/R_ladder_leap_1.png"), MovieType.LEAPING_RIGHT_OFF_OF_LADDER, theLastImage, CONSTANTS.LEAPING_FRAME_DISTANCE, 0);
-		
-		// load the runner images for leaping onto a ladder to the left into a movie strip (not a movie loop)
-		theLastImage = new MovieImage (new Image ("file:Images/L_ladder_leap_1.png"), MovieType.LEAPING_LEFT_ONTO_LADDER, RunnerHangingOnLadder, -CONSTANTS.LEAPING_FRAME_DISTANCE/2, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/L_ladder_leap_5.png"), MovieType.LEAPING_LEFT_ONTO_LADDER, theLastImage, -CONSTANTS.LEAPING_FRAME_DISTANCE, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/L_ladder_leap_4.png"), MovieType.LEAPING_LEFT_ONTO_LADDER, theLastImage, -CONSTANTS.LEAPING_FRAME_DISTANCE, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/L_ladder_leap_3.png"), MovieType.LEAPING_LEFT_ONTO_LADDER, theLastImage, -CONSTANTS.LEAPING_FRAME_DISTANCE, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/L_ladder_leap_2.png"), MovieType.LEAPING_LEFT_ONTO_LADDER, theLastImage, -CONSTANTS.LEAPING_FRAME_DISTANCE, 0);
-		L_RunnerLeapingOntoLadder = new MovieImage (new Image ("file:Images/L_ladder_leap_1.png"), MovieType.LEAPING_LEFT_ONTO_LADDER, theLastImage, -CONSTANTS.LEAPING_FRAME_DISTANCE, 0);
-		
-		// load the runner images for leaping off of a ladder to the left into a movie strip (not a movie loop)
-		theLastImage = new MovieImage (new Image ("file:Images/L_ladder_leap_1.png"), MovieType.LEAPING_LEFT_OFF_OF_LADDER, L_RunnerImages, -CONSTANTS.LEAPING_FRAME_DISTANCE/2, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/L_ladder_leap_5.png"), MovieType.LEAPING_LEFT_OFF_OF_LADDER, theLastImage, -CONSTANTS.LEAPING_FRAME_DISTANCE, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/L_ladder_leap_4.png"), MovieType.LEAPING_LEFT_OFF_OF_LADDER, theLastImage, -CONSTANTS.LEAPING_FRAME_DISTANCE, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/L_ladder_leap_3.png"), MovieType.LEAPING_LEFT_OFF_OF_LADDER, theLastImage, -CONSTANTS.LEAPING_FRAME_DISTANCE, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/L_ladder_leap_2.png"), MovieType.LEAPING_LEFT_OFF_OF_LADDER, theLastImage, -CONSTANTS.LEAPING_FRAME_DISTANCE, 0);
-		L_RunnerLeapingOffOfLadder = new MovieImage (new Image ("file:Images/L_ladder_leap_1.png"), MovieType.LEAPING_LEFT_OFF_OF_LADDER, theLastImage, -CONSTANTS.LEAPING_FRAME_DISTANCE, 0);
+		// load the runner images for leaping off of a ladder into a movie strip (not a movie loop)
+		theLastImage = new MovieImage (new Image ("file:Images/runner_ladder_leap_1.png"), MovieType.LEAPING_OFF_OF_LADDER, RunnerRunning, CONSTANTS.LEAPING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/runner_ladder_leap_5.png"), MovieType.LEAPING_OFF_OF_LADDER, theLastImage, CONSTANTS.LEAPING_FRAME_DISTANCE, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/runner_ladder_leap_4.png"), MovieType.LEAPING_OFF_OF_LADDER, theLastImage, CONSTANTS.LEAPING_FRAME_DISTANCE, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/runner_ladder_leap_3.png"), MovieType.LEAPING_OFF_OF_LADDER, theLastImage, CONSTANTS.LEAPING_FRAME_DISTANCE, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/runner_ladder_leap_2.png"), MovieType.LEAPING_OFF_OF_LADDER, theLastImage, CONSTANTS.LEAPING_FRAME_DISTANCE, 0);
+		RunnerLeapingOffOfLadder = new MovieImage (new Image ("file:Images/runner_ladder_leap_1.png"), MovieType.LEAPING_OFF_OF_LADDER, theLastImage, CONSTANTS.LEAPING_FRAME_DISTANCE, 0);
 		
 		// load the runner images for climbing up a ladder into a movie loop
 		RunnerClimbingUp = new MovieImage (new Image ("file:Images/runner_climbing_1.png"), MovieType.CLIMBING_UP, null, 0, -CONSTANTS.CLIMBING_FRAME_DISTANCE);
@@ -348,47 +271,40 @@ enum MovieState {
 	PAUSED
 	}
 
-class Runner {
-	MovableLocationType theirLocation;
-	MovieImage theirImage;
-	MovieState movieState;
-   ImageView theirView;
+enum Direction {
+   RIGHT,
+   LEFT,
+   FACING
+   }
 
-	Runner (MovableLocationType location, MovieImage image) {
-		theirLocation = location;
-		theirImage = image;
+class Sprite {
+	MovableLocationType Location;
+	MovieImage Image;
+	MovieState movieState;
+   ImageView View;
+   Direction Orientation;
+
+	Sprite (MovableLocationType location, MovieImage image, Direction orientation) {
+		Location = location;
+		Image = image;
 		movieState = MovieState.PLAYING;
-      theirView = new ImageView (theirImage.theImage);
-      theirView.setX (theirLocation.getX());
-      theirView.setY (theirLocation.getY());
+      View = new ImageView (Image.theImage);
+      View.setX (Location.getX());
+      View.setY (Location.getY());
+      Orientation = orientation;
 		}
 
 	void setImage (MovieImage image) {
 		//System.err.println ("Runner.setImage: image type = " + image.movieType);
-		theirImage = image;
+		Image = image;
 		movieState = MovieState.PLAYING;
 		}
-	}
 
-class RaygunBlast {
-	MovableLocationType theLocation;
-	MovieImage theImage;
-	MovieState movieState;
-   ImageView theView;
-
-	RaygunBlast (MovableLocationType location, MovieImage image) {
-		theLocation = location;
-		theImage = image;
-		movieState = MovieState.PLAYING;
-      theView = new ImageView (theImage.theImage);
-      theView.setX (theLocation.getX());
-      theView.setY (theLocation.getY());
-		}
-
-	void setImage (MovieImage image) {
-		theImage = image;
-		movieState = MovieState.PLAYING;
-		}
+   int getScale () {
+      if (Orientation == Direction.LEFT)
+         return -1;
+      return 1;
+      }
 	}
 
 class BlockLocationType {
@@ -713,7 +629,7 @@ public class CaveRunner extends Application {
  		theStage.show();
  
 		// create editor palette window
-		runnerButton = new Button ("", new ImageView (Images.C_RunnerStanding.theImage));
+		runnerButton = new Button ("", new ImageView (Images.RunnerFacing.theImage));
 		runnerButton.setOnAction (e-> paletteButtonClicked(e));
 		digableButton = new Button ("", new ImageView (Images.single_digable_surface_on_nothing));	
 		digableButton.setOnAction (e-> paletteButtonClicked(e));
