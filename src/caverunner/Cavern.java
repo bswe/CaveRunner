@@ -81,7 +81,7 @@ class Cavern {
       View.getChildren().add (theRunner.theirView);
       }
    
-   public void LoadCavernIntoView () {
+   public int LoadCavernIntoView () {
       View.getChildren().clear();
       View.getChildren().add (new ImageView(Images.mossWorld));
       for (int x=0; x < Width; x++)
@@ -95,6 +95,7 @@ class Cavern {
                }
       View.getChildren().add (theRunner.theirView);
       //View.getChildren().add (Troll1.theirView);
+      return TotalGold;
       }
 
 	public void addRunner (MovableLocationType location) {
@@ -631,7 +632,7 @@ class Cavern {
          }
       }
 
-	public void frameHandler (ArrayList<String> keysPressed) {
+	public int frameHandler (ArrayList<String> keysPressed) {
 		// first process any runner changes that must happen (gravity has priority over user input)
 		// second update any active elements to their next state, along with any of their effects on the cavern
 		// third display the cavern with all of its the active elements
@@ -752,6 +753,8 @@ class Cavern {
       theRunner.theirView.setImage (theRunner.theirImage.theImage);
       theRunner.theirView.setX (theRunner.theirLocation.getX());
       theRunner.theirView.setY (theRunner.theirLocation.getY());
+      
+      return TotalGold;
 		}
 
 	public void display () {
