@@ -28,6 +28,7 @@ class Cavern {
 	private RaygunBlast raygunBlast;
 	private ArrayList<ActiveBlock> activeBlocks = new ArrayList<>();
    private Runner Troll1;
+   private int TotalGold = 0;
 
 	AudioClip pling = new AudioClip ("file:Pling.mp3");
 	AudioClip laserBlast = new AudioClip ("file:LaserBlast.mp3");
@@ -64,13 +65,34 @@ class Cavern {
       //Troll1 = new Runner (new MovableLocationType(0, 132), Images.R_TrollRunning);
 		}
    
+   private void DisplayEscape () {
+      View.getChildren().remove (theRunner.theirView);
+      for (int x=0; x < Width; x++)
+			for (int y=0; y < Height; y++)
+			   if (Blocks[x][y].blockImage != null) {
+               if (Blocks[x][y].Type == BlockTypes.EXIT)
+                  View.getChildren().add(Blocks[x][y].blockView);
+               if (Blocks[x][y].Type == BlockTypes.HIDDEN_LADDER) {
+                  Blocks[x][y].Type = BlockTypes.LADDER;
+						Blocks[x][y].blockView.setImage(Images.visableLadder);
+                  View.getChildren().add(Blocks[x][y].blockView);
+                  }
+               }
+      View.getChildren().add (theRunner.theirView);
+      }
+   
    public void LoadCavernIntoView () {
       View.getChildren().clear();
       View.getChildren().add (new ImageView(Images.mossWorld));
       for (int x=0; x < Width; x++)
 			for (int y=0; y < Height; y++)
-			   if (Blocks[x][y].blockImage != null) 
-               View.getChildren().add(Blocks[x][y].blockView);
+			   if (Blocks[x][y].blockImage != null) {
+               if ((Blocks[x][y].Type != BlockTypes.EXIT) &&
+                   (Blocks[x][y].Type != BlockTypes.HIDDEN_LADDER))
+                  View.getChildren().add(Blocks[x][y].blockView);
+               if (Blocks[x][y].Type == BlockTypes.GOLD_1) 
+                  TotalGold++;
+               }
       View.getChildren().add (theRunner.theirView);
       //View.getChildren().add (Troll1.theirView);
       }
@@ -352,6 +374,10 @@ class Cavern {
 			thisBlock.Type = BlockTypes.EMPTY;
 			thisBlock.blockImage = null;
 			View.getChildren().remove (thisBlock.blockView);
+         TotalGold--;
+         if (TotalGold == 0) {
+            DisplayEscape ();
+            }
 			}
 		}
 
@@ -773,7 +799,8 @@ class Cavern {
 						case LADDER: block.blockImage = Images.visableLadder; break;
 						case DIGABLE: block.blockImage = Images.single_digable_surface_on_nothing; break;
 						case ROPE: block.blockImage = Images.rope; break;
-						//case DOOR: block.blockImage = ; break;
+						case EXIT: block.blockImage = Images.exit; break;
+						case HIDDEN_LADDER: block.blockImage = Images.hiddenLadder; break;
 						case GOLD_1: block.blockImage = Images.gold1; break;
 						}
                if (block.blockImage != null) {
