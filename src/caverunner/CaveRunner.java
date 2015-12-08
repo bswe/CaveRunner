@@ -638,7 +638,8 @@ public class CaveRunner extends Application {
 		statusBar.setSpacing (10);
 		Text modeText = new Text ("Playing Game");
 		Text speedText = new Text ("speed 5");
-		statusBar.getChildren().addAll (modeText, speedText);
+		Text goldText = new Text ("");
+		statusBar.getChildren().addAll (modeText, speedText, goldText);
       // we set a background color on the status bar, because we can't rely on the scene background color 
 		// because, if the scene is sized small, the status bar will start to overlay the game view 
 		// and if we don't explicitly set the statusBar background the center view will start
@@ -707,9 +708,10 @@ public class CaveRunner extends Application {
 		Images.InitImages();
 		Cavern theCavern = createTestCavern (gameView);
 		theCavern.restore ("test.ser");
-      theCavern.LoadCavernIntoView ();
+      int TotalGold = theCavern.LoadCavernIntoView ();
+      goldText.setText ("Gold to get " + TotalGold);
  		theStage.show();
-
+ 
 		// create editor palette window
 		runnerButton = new Button ("", new ImageView (Images.C_RunnerStanding.theImage));
 		runnerButton.setOnAction (e-> paletteButtonClicked(e));
@@ -852,6 +854,7 @@ public class CaveRunner extends Application {
 		animationTimer = new AnimationTimer() {
 			int FrameCounter = 0;
 			int frameRateDivider = CONSTANTS.DEFAULT_FRAME_RATE_DIVIDER;
+         int TotalGold;
 
 			public void handle (long currentNanoTime) { 
 				// check for game control key presses
@@ -885,8 +888,10 @@ public class CaveRunner extends Application {
 					}
 				if (FrameCounter++ % frameRateDivider != 0)
 				    return;
-				if (!paused)
-					theCavern.frameHandler(keysPressed);
+				if (!paused) {
+					TotalGold = theCavern.frameHandler(keysPressed);
+               goldText.setText ("Gold to get " + TotalGold);
+               }
 				}
 			};
 	    
