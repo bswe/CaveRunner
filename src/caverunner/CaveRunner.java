@@ -44,6 +44,89 @@ enum ItemTypes {
    TRAP
    }
 
+enum BlockTypes {
+	RUNNER,    // this item is only used for conveying that runner is selected from palette in the level editor
+   ERASER,    // this item is only used to access the image in the Images class
+	EMPTY,
+	LADDER,
+	HIDDEN_LADDER,
+   SOFT_ON_NOTHING_R,
+   SOFT_ON_NOTHING_L,
+   SOFT_ON_NOTHING_C_1,
+   SOFT_ON_NOTHING_C_2,
+   SOFT_ON_NOTHING_ALONE,
+   SOFT_ON_TOP_ALONE,
+   SOFT_ON_TOP_C,
+   SOFT_ON_TOP_R,
+   SOFT_ON_TOP_L,
+	ROPE,
+	EXIT,
+	GOLD_1
+	}
+
+class Images {
+	static Image mossWorld;
+	private static Image soft_on_nothing_R;
+	private static Image soft_on_nothing_L;
+	private static Image soft_on_nothing_C_1;
+	private static Image soft_on_nothing_C_2;
+	private static Image soft_on_nothing_alone;
+	private static Image soft_on_top_alone;
+	private static Image soft_on_top_C;
+	private static Image soft_on_top_R;
+	private static Image soft_on_top_L;
+	private static Image visableLadder;
+	private static Image hiddenLadder;
+	private static Image rope;
+	private static Image gold1;
+	private static Image exit;
+	private static Image eraser;
+         
+	static void Init () {
+		// load backgrounds
+		mossWorld = new Image ("file:Images/moss_world.png");
+      
+		// load the various block images
+		soft_on_nothing_R = new Image ("file:Images/soft_on_nothing_R.png");
+		soft_on_nothing_L = new Image ("file:Images/soft_on_nothing_L.png");
+		soft_on_nothing_C_1 = new Image ("file:Images/soft_on_nothing_C_1.png");
+		soft_on_nothing_C_2 = new Image ("file:Images/soft_on_nothing_C_2.png");
+		soft_on_nothing_alone = new Image ("file:Images/soft_on_nothing_alone.png");
+		soft_on_top_alone = new Image ("file:Images/soft_on_top_alone.png");
+		soft_on_top_C = new Image ("file:Images/soft_on_top_C.png");
+		soft_on_top_R = new Image ("file:Images/soft_on_top_R.png");
+		soft_on_top_L = new Image ("file:Images/soft_on_top_L.png");
+		visableLadder = new Image ("file:Images/visable_ladder.png");
+		hiddenLadder = new Image ("file:Images/hidden_ladder.png");
+		rope = new Image ("file:Images/rope.png");
+		gold1 = new Image ("file:Images/gold1.png");
+		exit = new Image ("file:Images/exit.png");
+		eraser = new Image ("file:Images/eraser.png");
+      }
+   
+   static Image getImage (BlockTypes blockType) {
+      switch (blockType) {
+         case LADDER: return visableLadder;
+         case HIDDEN_LADDER: return hiddenLadder;
+         case SOFT_ON_NOTHING_R: return soft_on_nothing_R;
+         case SOFT_ON_NOTHING_L: return soft_on_nothing_L;
+         case SOFT_ON_NOTHING_C_1: return soft_on_nothing_C_1;
+         case SOFT_ON_NOTHING_C_2: return soft_on_nothing_C_2;
+         case SOFT_ON_NOTHING_ALONE: return soft_on_nothing_alone;
+         case SOFT_ON_TOP_ALONE: return soft_on_top_alone;
+         case SOFT_ON_TOP_C: return soft_on_top_C;
+         case SOFT_ON_TOP_R: return soft_on_top_R;
+         case SOFT_ON_TOP_L: return soft_on_top_L;
+         case ROPE: return rope;
+         case EXIT: return exit;
+         case GOLD_1: return gold1;
+         case ERASER: return eraser;
+         }
+      return null;
+      }
+
+   }
+      
 enum MovieType {
 	RUNNING,
 	STANDING,
@@ -75,51 +158,38 @@ class MovieImage {
 		}
 	}
 
-class Images {
-	static MovieImage RunnerRunning;
-	static MovieImage RunnerTurned;
-	static MovieImage RunnerFacing;
-	static MovieImage RunnerLeapingOntoLadder;
-	static MovieImage RunnerLeapingOffOfLadder;
-	static MovieImage firingRaygun;
-	static MovieImage raygunBlast;
-	static MovieImage RunnerHangingOnLadder;
-	static MovieImage RunnerClimbingDown;
-	static MovieImage RunnerClimbingUp;
-	static MovieImage RunnerFalling;
-	static MovieImage RunnerHangingOnRope;
-	static MovieImage R_TrollRunning;
-	static Image white;
-	static Image mossWorld;
-	static Image L_digable_surface_on_nothing;
-	static Image R_digable_surface_on_nothing;
-	static Image C_digable_surface_on_nothing1;
-	static Image C_digable_surface_on_nothing2;
-	static Image single_digable_surface_on_nothing;
-	static Image visableLadder;
-	static Image hiddenLadder;
-	static Image rope;
-	static Image gold1;
-	static Image exit;
-	static Image eraser;
-         
-	static void InitImages () {
-		// any MovieImage past into the MovieImage constructor should be already initialized before it is used or it will be null
-		MovieImage theLastImage;
+class Movies {
+   static MovieImage RunnerRunning;
+   static MovieImage RunnerTurned;
+   static MovieImage RunnerFacing;
+   static MovieImage RunnerLeapingOntoLadder;
+   static MovieImage RunnerLeapingOffOfLadder;
+   static MovieImage firingRaygun;
+   static MovieImage raygunBlast;
+   static MovieImage RunnerHangingOnLadder;
+   static MovieImage RunnerClimbingDown;
+   static MovieImage RunnerClimbingUp;
+   static MovieImage RunnerFalling;
+   static MovieImage RunnerHangingOnRope;
+   static MovieImage TrollRunning;
 
-		// load the troll running right images into a movie loop
-		R_TrollRunning = new MovieImage (new Image ("file:Images/R_troll_running_1.png"), MovieType.TROLL_RUNNING, null, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/R_troll_running_11.png"), MovieType.TROLL_RUNNING, R_TrollRunning, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/R_troll_running_10.png"), MovieType.TROLL_RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/R_troll_running_9.png"), MovieType.TROLL_RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/R_troll_running_8.png"), MovieType.TROLL_RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/R_troll_running_7.png"), MovieType.TROLL_RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/R_troll_running_6.png"), MovieType.TROLL_RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/R_troll_running_5.png"), MovieType.TROLL_RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/R_troll_running_4.png"), MovieType.TROLL_RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/R_troll_running_3.png"), MovieType.TROLL_RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/R_troll_running_2.png"), MovieType.TROLL_RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
-		R_TrollRunning.nextImage = theLastImage;
+	static void Init () {
+		// any MovieImage that is passed into the MovieImage constructor should be already initialized before it is used or it will be null
+		MovieImage theLastImage;
+		
+      // load the troll running right images into a movie loop
+		TrollRunning = new MovieImage (new Image ("file:Images/troll_running_1.png"), MovieType.TROLL_RUNNING, null, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_running_11.png"), MovieType.TROLL_RUNNING, TrollRunning, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_running_10.png"), MovieType.TROLL_RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_running_9.png"), MovieType.TROLL_RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_running_8.png"), MovieType.TROLL_RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_running_7.png"), MovieType.TROLL_RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_running_6.png"), MovieType.TROLL_RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_running_5.png"), MovieType.TROLL_RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_running_4.png"), MovieType.TROLL_RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_running_3.png"), MovieType.TROLL_RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_running_2.png"), MovieType.TROLL_RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
+		TrollRunning.nextImage = theLastImage;
 		
 		// load the runner images for running into a movie loop
 		RunnerRunning = new MovieImage (new Image ("file:Images/runner_running_1.png"), MovieType.RUNNING, null, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
@@ -213,23 +283,6 @@ class Images {
 		theLastImage = new MovieImage (new Image ("file:Images/runner_climbing_3.png"), MovieType.CLIMBING_UP, theLastImage, 0, -CONSTANTS.CLIMBING_FRAME_DISTANCE);
 		theLastImage = new MovieImage (new Image ("file:Images/runner_climbing_2.png"), MovieType.CLIMBING_UP, theLastImage, 0, -CONSTANTS.CLIMBING_FRAME_DISTANCE);
 		RunnerClimbingUp.nextImage = theLastImage;
-		
-		// load backgrounds
-		white = new Image ("file:Images/white_background.png");
-		mossWorld = new Image ("file:Images/moss_world.png");
-		
-		// load the various block images
-		L_digable_surface_on_nothing = new Image ("file:Images/L_digable_surface_on_nothing.png");
-		R_digable_surface_on_nothing = new Image ("file:Images/R_digable_surface_on_nothing.png");
-		C_digable_surface_on_nothing1 = new Image ("file:Images/C_digable_surface_on_nothing1.png");
-		C_digable_surface_on_nothing2 = new Image ("file:Images/C_digable_surface_on_nothing2.png");
-		single_digable_surface_on_nothing = new Image ("file:Images/single_digable_surface_on_nothing.png");
-		visableLadder = new Image ("file:Images/visable_ladder.png");
-		hiddenLadder = new Image ("file:Images/hidden_ladder.png");
-		rope = new Image ("file:Images/rope.png");
-		gold1 = new Image ("file:Images/gold1.png");
-		exit = new Image ("file:Images/exit.png");
-		eraser = new Image ("file:Images/eraser.png");
 		}
    }
 
@@ -307,12 +360,12 @@ class Sprite {
       }
 	}
 
-class BlockLocationType {
+class BlockLocation {
 	// the location of a image block within a cavern
 	// Location 0, 0 is upper left corner of cavern; each block is 44 x 44 pixels
 	private int xPos=0, yPos=0;
 
-	BlockLocationType (int x, int y) {
+	BlockLocation (int x, int y) {
 		xPos = x;
 		yPos = y;
 		}
@@ -325,58 +378,47 @@ class BlockLocationType {
 		return yPos;
 		}
 
-	public BlockLocationType locationToTheLeft () {
-		return new BlockLocationType (this.xPos-1, this.yPos);
+	public BlockLocation locationToTheLeft () {
+		return new BlockLocation (this.xPos-1, this.yPos);
 	   }
 
-	public BlockLocationType locationToTheRight () {
-		return new BlockLocationType (this.xPos+1, this.yPos);
+	public BlockLocation locationToTheRight () {
+		return new BlockLocation (this.xPos+1, this.yPos);
 	   }
 
-	public BlockLocationType locationAbove () {
-		return new BlockLocationType (this.xPos, this.yPos-1);
+	public BlockLocation locationAbove () {
+		return new BlockLocation (this.xPos, this.yPos-1);
 	   }
 
-	public BlockLocationType locationBelow () {
-		return new BlockLocationType (this.xPos, this.yPos+1);
+	public BlockLocation locationBelow () {
+		return new BlockLocation (this.xPos, this.yPos+1);
 	   }
 
-	public BlockLocationType locationToTheLowerRight () {
-		return new BlockLocationType (this.xPos+1, this.yPos+1);
+	public BlockLocation locationToTheLowerRight () {
+		return new BlockLocation (this.xPos+1, this.yPos+1);
 	   }
 
-	public BlockLocationType locationToTheLowerLeft () {
-		return new BlockLocationType (this.xPos-1, this.yPos+1);
+	public BlockLocation locationToTheLowerLeft () {
+		return new BlockLocation (this.xPos-1, this.yPos+1);
 	   }
 
-	public BlockLocationType locationToTheUpperRight () {
-		return new BlockLocationType (this.xPos+1, this.yPos-1);
+	public BlockLocation locationToTheUpperRight () {
+		return new BlockLocation (this.xPos+1, this.yPos-1);
 	   }
 
-	public BlockLocationType locationToTheUpperLeft () {
-		return new BlockLocationType (this.xPos-1, this.yPos-1);
+	public BlockLocation locationToTheUpperLeft () {
+		return new BlockLocation (this.xPos-1, this.yPos-1);
 	   }
 	}
 	
-enum BlockTypes {
-	RUNNER,    // only used for conveying that runner is selected from palette in the level editor
-	EMPTY,
-	LADDER,
-	HIDDEN_LADDER,
-	DIGABLE,
-	ROPE,
-	EXIT,
-	GOLD_1
-	}
-
-class BlockType {
+class Block {
 	BlockTypes Type = BlockTypes.EMPTY;
 	Image blockImage = null;
    ImageView blockView;
 	ItemTypes Item;
-	BlockLocationType Location;
+	BlockLocation Location;
 
-	BlockType (BlockType block) {
+	Block (Block block) {
 		Type = block.Type;
 		blockImage = block.blockImage;
       blockView = block.blockView;
@@ -384,20 +426,38 @@ class BlockType {
 		Location = block.Location;
 		}
 
-	BlockType () {
+	Block () {
 		Location = null;
 		}
 
-	BlockType (BlockLocationType location) {
+	Block (BlockLocation location) {
 		Location = location;
 		}
-	}
+   
+   boolean Laserable () {
+      if (Type == BlockTypes.EMPTY)
+         return false;
+      return true;
+      }
+   
+   boolean IsSolid () {
+      switch (Type) {
+         case EMPTY:
+         case LADDER:
+         case HIDDEN_LADDER:
+         case ROPE:
+         case EXIT:
+         case GOLD_1: return false;
+         }
+      return true;
+      }
+   }
 
 class ActiveBlock {
-	BlockType theBlock;
+	Block theBlock;
 	int delayAmount;
 
-	ActiveBlock (BlockType block, int delay) {
+	ActiveBlock (Block block, int delay) {
 		theBlock = block;
 		delayAmount = delay;
 		}
@@ -416,43 +476,45 @@ public class CaveRunner extends Application {
 	AnimationTimer animationTimer; 
 	Cavern editCavern;
 	GraphicsContext editGc;
-	BlockType editBlock = new BlockType();
+	Block editBlock = new Block();
 	boolean paused = false;
 
    public static void main (String[] args) {launch (args);}
 
 	void addGroundStrip (Cavern theCavern, int xPos, int yPos, int count, boolean sparse) {
-		BlockType block;
+		Block block;
 		int x = xPos;
-
+      /*
 		for (int Counter=0; Counter < count; Counter++) {
 			if (sparse && (Counter & 1) == 0) {
 				x++; continue;
 				}
-			block = theCavern.getBlock (new BlockLocationType (x++, yPos));
-			block.Type = BlockTypes.DIGABLE;
+			block = theCavern.getBlock (new BlockLocation (x++, yPos));
+			block.Type = BlockTypes.SOFT_ON_NOTHING_ALONE;
 			if (Counter == 0)
-				block.blockImage = Images.L_digable_surface_on_nothing;
+				block.blockImage = Images.soft_on_nothing_L;
 			else if (Counter == count-1)
-				block.blockImage = Images.R_digable_surface_on_nothing;
+				block.blockImage = Images.soft_on_nothing_R;
 			else if ((Counter & 1) == 0)
-				block.blockImage = Images.C_digable_surface_on_nothing2;
+				block.blockImage = Images.soft_on_nothing_C_2;
 			else
-				block.blockImage = Images.C_digable_surface_on_nothing1;
+				block.blockImage = Images.soft_on_nothing_C_1;
 			theCavern.setBlock (block);
 		   }
+      */
 		}
 
 	void addLadder (Cavern theCavern, int xPos, int yPos, int count) {
-		BlockType block;
+		Block block;
 		int y = yPos;
-
+      /*
 		for (int Counter=0; Counter < count; Counter++) {
-			block = theCavern.getBlock (new BlockLocationType (xPos, y++));
+			block = theCavern.getBlock (new BlockLocation (xPos, y++));
 			block.Type = BlockTypes.LADDER;
 			block.blockImage = Images.visableLadder;
 			theCavern.setBlock (block);
 		   }
+      */
 		}
 
 	Cavern createTestCavern (Group theView) {
@@ -490,43 +552,53 @@ public class CaveRunner extends Application {
 		if (e.getSource() == runnerButton) {
 			editBlock.Type = BlockTypes.RUNNER;   // indicate a runner for editor, no block is actually a runner in the game
 			//System.err.println ("edit block set to runner");
+         return;
 			}
 		else if (e.getSource() == digableButton) {
-			editBlock.Type = BlockTypes.DIGABLE;
-			editBlock.blockImage = Images.single_digable_surface_on_nothing;
+			editBlock.Type = BlockTypes.SOFT_ON_NOTHING_ALONE;
 			//System.err.println ("edit block set to diggable");
 			}
 		else if (e.getSource() == ladderButton) {
 			editBlock.Type = BlockTypes.LADDER;
-			editBlock.blockImage = Images.visableLadder;
 			//System.err.println ("edit block set to visable ladder");
 			}
 		else if (e.getSource() == hiddenLadderButton) {
 			editBlock.Type = BlockTypes.HIDDEN_LADDER;
-			editBlock.blockImage = Images.hiddenLadder;
 			//System.err.println ("edit block set to hidden ladder");
 			}
 		else if (e.getSource() == ropeButton) {
 			editBlock.Type = BlockTypes.ROPE;
-			editBlock.blockImage = Images.rope;
 			//System.err.println ("edit block set to roper");
 			}
 		else if (e.getSource() == gold1Button) {
 			editBlock.Type = BlockTypes.GOLD_1;
-			editBlock.blockImage = Images.gold1;
 			//System.err.println ("edit block set to gold");
 			}
 		else if (e.getSource() == exitButton) {
 			editBlock.Type = BlockTypes.EXIT;
-			editBlock.blockImage = Images.exit;
 			//System.err.println ("edit block set to exit");
 			}
 		else if (e.getSource() == eraserButton) {
 			editBlock.Type = BlockTypes.EMPTY;
 			editBlock.blockImage = null;
 			//System.err.println ("edit block set to eraser");
+         return;
 			}
+		editBlock.blockImage = Images.getImage(editBlock.Type);
 		}
+   
+   void AddBlockToCavern (Block block) {
+      if (editBlock.IsSolid()) {
+         BlockTypes type;
+         type = BlockTypes.SOFT_ON_NOTHING_C_1;
+         block.Type = type;
+         block.blockImage = Images.getImage(block.Type);  
+         }
+      else {
+         block.Type = editBlock.Type;
+         block.blockImage = editBlock.blockImage;  
+         }
+      }
 
 	public void start (Stage theStage) {
 		//AudioClip sound = new AudioClip("file:LaserBlast.mp3");
@@ -621,7 +693,8 @@ public class CaveRunner extends Application {
          );
                    
 		// init graphics and cavern
-		Images.InitImages();
+      Movies.Init();
+		Images.Init();
 		Cavern theCavern = createTestCavern (gameView);
 		theCavern.restore ("test.ser");
       int TotalGold = theCavern.LoadCavernIntoView ();
@@ -629,21 +702,21 @@ public class CaveRunner extends Application {
  		theStage.show();
  
 		// create editor palette window
-		runnerButton = new Button ("", new ImageView (Images.RunnerFacing.theImage));
+		runnerButton = new Button ("", new ImageView (Movies.RunnerFacing.theImage));
 		runnerButton.setOnAction (e-> paletteButtonClicked(e));
-		digableButton = new Button ("", new ImageView (Images.single_digable_surface_on_nothing));	
+		digableButton = new Button ("", new ImageView (Images.getImage(BlockTypes.SOFT_ON_NOTHING_ALONE)));	
 		digableButton.setOnAction (e-> paletteButtonClicked(e));
-		ladderButton = new Button ("", new ImageView (Images.visableLadder));	
+		ladderButton = new Button ("", new ImageView (Images.getImage(BlockTypes.LADDER)));	
 		ladderButton.setOnAction (e-> paletteButtonClicked(e));
-		hiddenLadderButton = new Button ("", new ImageView (Images.hiddenLadder));	
+		hiddenLadderButton = new Button ("", new ImageView (Images.getImage(BlockTypes.HIDDEN_LADDER)));	
 		hiddenLadderButton.setOnAction (e-> paletteButtonClicked(e));
-		ropeButton = new Button ("", new ImageView (Images.rope));	
+		ropeButton = new Button ("", new ImageView (Images.getImage(BlockTypes.ROPE)));	
 		ropeButton.setOnAction (e-> paletteButtonClicked(e));
-		gold1Button = new Button ("", new ImageView (Images.gold1));	
+		gold1Button = new Button ("", new ImageView (Images.getImage(BlockTypes.GOLD_1)));	
 		gold1Button.setOnAction (e-> paletteButtonClicked(e));
-		exitButton = new Button ("", new ImageView (Images.exit));	
+		exitButton = new Button ("", new ImageView (Images.getImage(BlockTypes.EXIT)));	
 		exitButton.setOnAction (e-> paletteButtonClicked(e));
-		eraserButton = new Button ("", new ImageView (Images.eraser));	
+		eraserButton = new Button ("", new ImageView (Images.getImage(BlockTypes.ERASER)));	
 		eraserButton.setOnAction (e-> paletteButtonClicked(e));
 		FlowPane palettePane = new FlowPane();
 		palettePane.getChildren().addAll (runnerButton, digableButton, ladderButton, hiddenLadderButton, ropeButton, gold1Button, exitButton, eraserButton);
@@ -662,10 +735,9 @@ public class CaveRunner extends Application {
 					editCavern.addRunner (new MovableLocationType (((int)event.getSceneX() / CONSTANTS.BLOCK_WIDTH) * CONSTANTS.BLOCK_WIDTH, 
                                                               (((int)event.getSceneY() - 26) / CONSTANTS.BLOCK_HEIGHT) * CONSTANTS.BLOCK_HEIGHT));
 				else {
-					BlockType block = editCavern.getBlock (new BlockLocationType ((int)event.getSceneX() / CONSTANTS.BLOCK_WIDTH, 
+					Block block = editCavern.getBlock (new BlockLocation ((int)event.getSceneX() / CONSTANTS.BLOCK_WIDTH, 
                                                                              ((int)event.getSceneY() - 26) / CONSTANTS.BLOCK_HEIGHT));
-					block.Type = editBlock.Type;
-					block.blockImage = editBlock.blockImage;
+               AddBlockToCavern (block);
 					}
 				editCavern.display();
 				}
@@ -681,7 +753,7 @@ public class CaveRunner extends Application {
 			@Override public void handle (MouseEvent event) {
 				//System.err.println ("mouse drag detected at " + event.getSceneX() + ", " + event.getSceneY());
 				if (editBlock.Type != BlockTypes.RUNNER) {
-					BlockType block = editCavern.getBlock (new BlockLocationType ((int)event.getSceneX() / CONSTANTS.BLOCK_WIDTH, 
+					Block block = editCavern.getBlock (new BlockLocation ((int)event.getSceneX() / CONSTANTS.BLOCK_WIDTH, 
                                                                              ((int)event.getSceneY() - 26) / CONSTANTS.BLOCK_HEIGHT));
 					block.Type = editBlock.Type;
 					block.blockImage = editBlock.blockImage;
