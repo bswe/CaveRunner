@@ -161,7 +161,7 @@ class Cavern {
 		thisBlock = getBlockRunnerIsIn (theRunner.Location);
 		location = thisBlock.Location.locationToTheRight();
 		nextBlock = getBlock (location);
-		if ((nextBlock == null) || (nextBlock.Type == BlockTypes.SOFT_ON_NOTHING_ALONE)) 
+		if ((nextBlock == null) || (nextBlock.IsStructural())) 
 			return false;
 		else
 			return true;
@@ -174,7 +174,7 @@ class Cavern {
 		thisBlock = getBlockRunnerIsIn (theRunner.Location);
 		location = thisBlock.Location.locationToTheLeft();
 		nextBlock = getBlock (location);
-		if ((nextBlock == null) || (nextBlock.Type == BlockTypes.SOFT_ON_NOTHING_ALONE)) 
+		if ((nextBlock == null) || (nextBlock.IsStructural())) 
 			return false;
 		else
 			return true;
@@ -187,7 +187,7 @@ class Cavern {
 		thisBlock = getBlockRunnerIsIn (theRunner.Location);
 		location = thisBlock.Location.locationBelow();
 		nextBlock = getBlock (location);
-		if ((nextBlock == null) || (nextBlock.Type == BlockTypes.SOFT_ON_NOTHING_ALONE)) 
+		if ((nextBlock == null) || (nextBlock.IsStructural())) 
 			return false;
 		else
 			return true;
@@ -200,7 +200,7 @@ class Cavern {
 		thisBlock = getBlockRunnerIsIn (theRunner.Location);
 		location = thisBlock.Location.locationAbove();
 		nextBlock = getBlock (location);
-		if ((nextBlock == null) || (nextBlock.Type == BlockTypes.SOFT_ON_NOTHING_ALONE)) 
+		if ((nextBlock == null) || (nextBlock.IsStructural())) 
 			return false;
 		else
 			return true;
@@ -295,7 +295,7 @@ class Cavern {
 		thisBlock = getBlockRunnerIsIn (theRunner.Location);
 		location = thisBlock.Location.locationToTheLowerRight();
 		nextBlock = getBlock (location);
-		if ((nextBlock == null) || (nextBlock.Type == BlockTypes.SOFT_ON_NOTHING_ALONE))
+		if ((nextBlock == null) || (nextBlock.IsStructural()))
 			return true;
 		else
 			return false;
@@ -334,7 +334,7 @@ class Cavern {
 		thisBlock = getBlockRunnerIsIn (theRunner.Location);
 		location = thisBlock.Location.locationToTheLowerLeft();
 		nextBlock = getBlock (location);
-		if ((nextBlock == null) || (nextBlock.Type == BlockTypes.SOFT_ON_NOTHING_ALONE))
+		if ((nextBlock == null) || (nextBlock.IsStructural()))
 			return true;
 		else
 			return false;
@@ -383,7 +383,7 @@ class Cavern {
 		if (!objectIsOnBlockFloor(theRunner.Location)) 
 			return false;
 		if ((blockBelow != null) && 
-			((blockBelow.Type != BlockTypes.LADDER) && (blockBelow.Type != BlockTypes.SOFT_ON_NOTHING_ALONE)))
+			((blockBelow.Type != BlockTypes.LADDER) && (!blockBelow.IsStructural())))
 			return false;
 		putRunnerOnBlock (theRunner);
 		return true;
