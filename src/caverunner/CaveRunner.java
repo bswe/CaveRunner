@@ -37,6 +37,7 @@ import javafx.stage.FileChooser;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import java.util.Iterator;
+import javafx.util.Pair;
 
 enum ItemTypes {
    GOLD,
@@ -44,37 +45,70 @@ enum ItemTypes {
    TRAP
    }
 
-enum BlockTypes {
+enum EnvironmentCodes {
+   N,        // ord(0) 
+   T,        // ord(1)
+   R,        // ord(2)
+   TR,       // ord(3)
+   B,        // ord(4)
+   TB,       // ord(5)
+   BR,       // ord(6)
+   TBR,      // ord(7)
+   L,        // ord(8)
+   TL,       // ord(9)
+   LR,       // ord(10)
+   TLR,      // ord(11)
+   BL,       // ord(12)
+   TBL,      // ord(13)
+   BLR,      // ord(14)
+   TBLR,     // ord(15)
+   }
+
+enum BlockTypes {  
+   SOFT,          // ord(0) 
+   SOFT_T,        // ord(1)
+   SOFT_R,        // ord(2)
+   SOFT_TR,       // ord(3)
+   SOFT_B,        // ord(4)
+   SOFT_TB,       // ord(5)
+   SOFT_BR,       // ord(6)
+   SOFT_TBR,      // ord(7)
+   SOFT_L,        // ord(8)
+   SOFT_TL,       // ord(9)
+   SOFT_LR,       // ord(10)
+   SOFT_TLR,      // ord(11)
+   SOFT_BL,       // ord(12)
+   SOFT_TBL,      // ord(13)
+   SOFT_BLR,      // ord(14)
+   SOFT_TBLR,     // ord(15)
 	RUNNER,    // this item is only used for conveying that runner is selected from palette in the level editor
    ERASER,    // this item is only used to access the image in the Images class
 	EMPTY,
 	LADDER,
 	HIDDEN_LADDER,
-   SOFT_ON_NOTHING_R,
-   SOFT_ON_NOTHING_L,
-   SOFT_ON_NOTHING_C_1,
-   SOFT_ON_NOTHING_C_2,
-   SOFT_ON_NOTHING_ALONE,
-   SOFT_ON_TOP_ALONE,
-   SOFT_ON_TOP_C,
-   SOFT_ON_TOP_R,
-   SOFT_ON_TOP_L,
 	ROPE,
 	EXIT,
 	GOLD_1
-	}
+   }
 
 class Images {
 	static Image mossWorld;
-	private static Image soft_on_nothing_R;
-	private static Image soft_on_nothing_L;
-	private static Image soft_on_nothing_C_1;
-	private static Image soft_on_nothing_C_2;
-	private static Image soft_on_nothing_alone;
-	private static Image soft_on_top_alone;
-	private static Image soft_on_top_C;
-	private static Image soft_on_top_R;
-	private static Image soft_on_top_L;
+	private static Image soft;
+	private static Image soft_T;
+	private static Image soft_R;
+	private static Image soft_TR;
+	private static Image soft_B;
+	private static Image soft_TB;
+	private static Image soft_BR;
+	private static Image soft_TBR;
+	private static Image soft_L;
+	private static Image soft_TL;
+	private static Image soft_LR;
+	private static Image soft_TLR;
+	private static Image soft_BL;
+	private static Image soft_TBL;
+	private static Image soft_BLR;
+	private static Image soft_TBLR;
 	private static Image visableLadder;
 	private static Image hiddenLadder;
 	private static Image rope;
@@ -87,15 +121,22 @@ class Images {
 		mossWorld = new Image ("file:Images/moss_world.png");
       
 		// load the various block images
-		soft_on_nothing_R = new Image ("file:Images/soft_on_nothing_R.png");
-		soft_on_nothing_L = new Image ("file:Images/soft_on_nothing_L.png");
-		soft_on_nothing_C_1 = new Image ("file:Images/soft_on_nothing_C_1.png");
-		soft_on_nothing_C_2 = new Image ("file:Images/soft_on_nothing_C_2.png");
-		soft_on_nothing_alone = new Image ("file:Images/soft_on_nothing_alone.png");
-		soft_on_top_alone = new Image ("file:Images/soft_on_top_alone.png");
-		soft_on_top_C = new Image ("file:Images/soft_on_top_C.png");
-		soft_on_top_R = new Image ("file:Images/soft_on_top_R.png");
-		soft_on_top_L = new Image ("file:Images/soft_on_top_L.png");
+		soft = new Image ("file:Images/soft.png");
+		soft_T = new Image ("file:Images/soft_T.png");
+		soft_R = new Image ("file:Images/soft_R.png");
+		soft_TR = new Image ("file:Images/soft_TR.png");
+		soft_B = new Image ("file:Images/soft_B.png");
+		soft_TB = new Image ("file:Images/soft_TB.png");
+		soft_BR = new Image ("file:Images/soft_BR.png");
+		soft_TBR = new Image ("file:Images/soft_TBR.png");
+		soft_L = new Image ("file:Images/soft_L.png");
+		soft_TL = new Image ("file:Images/soft_TL.png");
+		soft_LR = new Image ("file:Images/soft_LR_1.png");
+		soft_TLR = new Image ("file:Images/soft_TLR.png");
+		soft_BL = new Image ("file:Images/soft_BL.png");
+		soft_TBL = new Image ("file:Images/soft_TBL.png");
+		soft_BLR = new Image ("file:Images/soft_BLR.png");
+		soft_TBLR = new Image ("file:Images/soft_TBLR.png");
 		visableLadder = new Image ("file:Images/visable_ladder.png");
 		hiddenLadder = new Image ("file:Images/hidden_ladder.png");
 		rope = new Image ("file:Images/rope.png");
@@ -108,15 +149,22 @@ class Images {
       switch (blockType) {
          case LADDER: return visableLadder;
          case HIDDEN_LADDER: return hiddenLadder;
-         case SOFT_ON_NOTHING_R: return soft_on_nothing_R;
-         case SOFT_ON_NOTHING_L: return soft_on_nothing_L;
-         case SOFT_ON_NOTHING_C_1: return soft_on_nothing_C_1;
-         case SOFT_ON_NOTHING_C_2: return soft_on_nothing_C_2;
-         case SOFT_ON_NOTHING_ALONE: return soft_on_nothing_alone;
-         case SOFT_ON_TOP_ALONE: return soft_on_top_alone;
-         case SOFT_ON_TOP_C: return soft_on_top_C;
-         case SOFT_ON_TOP_R: return soft_on_top_R;
-         case SOFT_ON_TOP_L: return soft_on_top_L;
+         case SOFT: return soft;
+         case SOFT_T: return soft_T;
+         case SOFT_R: return soft_R;
+         case SOFT_TR: return soft_TR;
+         case SOFT_B: return soft_B;
+         case SOFT_TB: return soft_TB;
+         case SOFT_BR: return soft_BR;
+         case SOFT_TBR: return soft_TBR;
+         case SOFT_L: return soft_L;
+         case SOFT_TL: return soft_TL;
+         case SOFT_LR: return soft_LR;
+         case SOFT_TLR: return soft_TLR;
+         case SOFT_BL: return soft_BL;
+         case SOFT_TBL: return soft_TBL;
+         case SOFT_BLR: return soft_BLR;
+         case SOFT_TBLR: return soft_TBLR;
          case ROPE: return rope;
          case EXIT: return exit;
          case GOLD_1: return gold1;
@@ -124,7 +172,6 @@ class Images {
          }
       return null;
       }
-
    }
       
 enum MovieType {
@@ -440,7 +487,7 @@ class Block {
       return true;
       }
    
-   boolean IsSolid () {
+   boolean IsStructural () {
       switch (Type) {
          case EMPTY:
          case LADDER:
@@ -555,7 +602,7 @@ public class CaveRunner extends Application {
          return;
 			}
 		else if (e.getSource() == digableButton) {
-			editBlock.Type = BlockTypes.SOFT_ON_NOTHING_ALONE;
+			editBlock.Type = BlockTypes.SOFT;
 			//System.err.println ("edit block set to diggable");
 			}
 		else if (e.getSource() == ladderButton) {
@@ -587,12 +634,75 @@ public class CaveRunner extends Application {
 		editBlock.blockImage = Images.getImage(editBlock.Type);
 		}
    
+   BlockTypes MapEnvironmentCodeToBlockType (EnvironmentCodes code) {
+      switch (code) {
+         case N:    return BlockTypes.SOFT;
+         case T:    return BlockTypes.SOFT_T;
+         case R:    return BlockTypes.SOFT_R;
+         case TR:   return BlockTypes.SOFT_TR;
+         case B:    return BlockTypes.SOFT_B;
+         case TB:   return BlockTypes.SOFT_TB;
+         case BR:   return BlockTypes.SOFT_BR;
+         case TBR:  return BlockTypes.SOFT_TBR;
+         case L:    return BlockTypes.SOFT_L;
+         case TL:   return BlockTypes.SOFT_TL;
+         case LR:   return BlockTypes.SOFT_LR;
+         case TLR:  return BlockTypes.SOFT_TLR;
+         case BL:   return BlockTypes.SOFT_BL;
+         case TBL:  return BlockTypes.SOFT_TBL;
+         case BLR:  return BlockTypes.SOFT_BLR;
+         case TBLR: return BlockTypes.SOFT_TBLR;
+      }
+     return null;
+   }
+   
+   Pair<BlockTypes, ArrayList<Block>> getStructureType (Block block) {
+      ArrayList<Block> blocks = new ArrayList();
+      Block adjacentBlock;
+		BlockLocation location;
+      int environmentCode = 0;
+      BlockTypes blockType;
+      
+      location = block.Location.locationAbove();
+		adjacentBlock = editCavern.getBlock (location);
+      if (adjacentBlock.IsStructural()) {
+         blocks.add(adjacentBlock);
+         environmentCode += 1;
+         }
+      location = block.Location.locationToTheRight();
+		adjacentBlock = editCavern.getBlock (location);
+      if (adjacentBlock.IsStructural()) {
+         blocks.add(adjacentBlock);
+         environmentCode += 2;
+         }
+      location = block.Location.locationBelow();
+		adjacentBlock = editCavern.getBlock (location);
+      if (adjacentBlock.IsStructural()) {
+         blocks.add(adjacentBlock);
+         environmentCode += 4;
+         }
+      location = block.Location.locationToTheLeft();
+		adjacentBlock = editCavern.getBlock (location);
+      if (adjacentBlock.IsStructural()) {
+         blocks.add(adjacentBlock);
+         environmentCode += 8;
+         }
+      blockType = MapEnvironmentCodeToBlockType (EnvironmentCodes.values()[environmentCode]);
+      return new Pair<BlockTypes, ArrayList<Block>>(blockType, blocks);
+      }
+   
    void AddBlockToCavern (Block block) {
-      if (editBlock.IsSolid()) {
-         BlockTypes type;
-         type = BlockTypes.SOFT_ON_NOTHING_C_1;
-         block.Type = type;
-         block.blockImage = Images.getImage(block.Type);  
+      if (editBlock.IsStructural()) {
+         Pair<BlockTypes, ArrayList<Block>> structureInfo = getStructureType (block);
+         //System.err.println ("AddBlockToCavern: structureInfo = " + structureInfo.toString());
+         block.Type = structureInfo.getKey();
+         block.blockImage = Images.getImage(block.Type); 
+         ArrayList<Block> adjacentBlocks = structureInfo.getValue();
+         for (Block theBlock : adjacentBlocks) {
+            structureInfo = getStructureType (theBlock);
+            theBlock.Type = structureInfo.getKey();
+            theBlock.blockImage = Images.getImage(theBlock.Type); 
+             }
          }
       else {
          block.Type = editBlock.Type;
@@ -603,7 +713,7 @@ public class CaveRunner extends Application {
 	public void start (Stage theStage) {
 		//AudioClip sound = new AudioClip("file:LaserBlast.mp3");
 		//sound.play();
-
+      
 		theStage.setTitle ("Cave Runner");
          
 		// create the mode menu
@@ -704,7 +814,7 @@ public class CaveRunner extends Application {
 		// create editor palette window
 		runnerButton = new Button ("", new ImageView (Movies.RunnerFacing.theImage));
 		runnerButton.setOnAction (e-> paletteButtonClicked(e));
-		digableButton = new Button ("", new ImageView (Images.getImage(BlockTypes.SOFT_ON_NOTHING_ALONE)));	
+		digableButton = new Button ("", new ImageView (Images.getImage(BlockTypes.SOFT)));	
 		digableButton.setOnAction (e-> paletteButtonClicked(e));
 		ladderButton = new Button ("", new ImageView (Images.getImage(BlockTypes.LADDER)));	
 		ladderButton.setOnAction (e-> paletteButtonClicked(e));
@@ -755,8 +865,7 @@ public class CaveRunner extends Application {
 				if (editBlock.Type != BlockTypes.RUNNER) {
 					Block block = editCavern.getBlock (new BlockLocation ((int)event.getSceneX() / CONSTANTS.BLOCK_WIDTH, 
                                                                              ((int)event.getSceneY() - 26) / CONSTANTS.BLOCK_HEIGHT));
-					block.Type = editBlock.Type;
-					block.blockImage = editBlock.blockImage;
+               AddBlockToCavern (block);
 					}
 				editCavern.display();
 				}
