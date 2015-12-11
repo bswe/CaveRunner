@@ -665,25 +665,25 @@ public class CaveRunner extends Application {
       
       location = block.Location.locationAbove();
 		adjacentBlock = editCavern.getBlock (location);
-      if (adjacentBlock.IsStructural()) {
+      if ((adjacentBlock != null) && adjacentBlock.IsStructural()) {
          blocks.add(adjacentBlock);
          environmentCode += 1;
          }
       location = block.Location.locationToTheRight();
 		adjacentBlock = editCavern.getBlock (location);
-      if (adjacentBlock.IsStructural()) {
+      if ((adjacentBlock != null) && adjacentBlock.IsStructural()) {
          blocks.add(adjacentBlock);
          environmentCode += 2;
          }
       location = block.Location.locationBelow();
 		adjacentBlock = editCavern.getBlock (location);
-      if (adjacentBlock.IsStructural()) {
+      if ((adjacentBlock != null) && adjacentBlock.IsStructural()) {
          blocks.add(adjacentBlock);
          environmentCode += 4;
          }
       location = block.Location.locationToTheLeft();
 		adjacentBlock = editCavern.getBlock (location);
-      if (adjacentBlock.IsStructural()) {
+      if ((adjacentBlock != null) && adjacentBlock.IsStructural()) {
          blocks.add(adjacentBlock);
          environmentCode += 8;
          }
@@ -705,8 +705,18 @@ public class CaveRunner extends Application {
              }
          }
       else {
+         boolean wasStructural = block.IsStructural();
          block.Type = editBlock.Type;
          block.blockImage = editBlock.blockImage;  
+         if (wasStructural) {
+            Pair<BlockTypes, ArrayList<Block>> structureInfo = getStructureType (block);
+            ArrayList<Block> adjacentBlocks = structureInfo.getValue();
+            for (Block theBlock : adjacentBlocks) {
+               structureInfo = getStructureType (theBlock);
+               theBlock.Type = structureInfo.getKey();
+               theBlock.blockImage = Images.getImage(theBlock.Type); 
+             }
+            }
          }
       }
 
