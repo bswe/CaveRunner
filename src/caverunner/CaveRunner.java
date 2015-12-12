@@ -82,6 +82,7 @@ enum BlockTypes {
    SOFT_BLR,      // ord(14)
    SOFT_TBLR,     // ord(15)
 	RUNNER,    // this item is only used for conveying that runner is selected from palette in the level editor
+	TROLL,     // this item is only used for conveying that troll is selected from palette in the level editor
    ERASER,    // this item is only used to access the image in the Images class
 	EMPTY,
 	LADDER,
@@ -93,6 +94,9 @@ enum BlockTypes {
 
 class Images {
 	static Image mossWorld;
+	static Image hard;
+   static Image runner;
+   static Image troll;
 	private static Image soft;
 	private static Image soft_T;
 	private static Image soft_R;
@@ -120,7 +124,12 @@ class Images {
 		// load backgrounds
 		mossWorld = new Image ("file:Images/moss_world.png");
       
+      // load the actor images for the editor 
+		runner = new Image ("file:Images/runner_facing.png");
+		troll = new Image ("file:Images/troll_running_6.png");
+      
 		// load the various block images
+		hard = new Image ("file:Images/hard.png");
 		soft = new Image ("file:Images/soft.png");
 		soft_T = new Image ("file:Images/soft_T.png");
 		soft_R = new Image ("file:Images/soft_R.png");
@@ -186,9 +195,8 @@ enum MovieType {
 	LEAPING_OFF_OF_LADDER,
 	FIRING_RAYGUN,
 	RAYGUN_BLAST,
-	HANGING_ON_ROPE,
-	TROLL_RUNNING
-	}
+	HANGING_ON_ROPE
+   }
 
 class MovieImage {
 	MovieType movieType;
@@ -205,42 +213,30 @@ class MovieImage {
 		}
 	}
 
-class Movies {
-   static MovieImage RunnerRunning;
-   static MovieImage RunnerTurned;
-   static MovieImage RunnerFacing;
-   static MovieImage RunnerLeapingOntoLadder;
-   static MovieImage RunnerLeapingOffOfLadder;
-   static MovieImage firingRaygun;
-   static MovieImage raygunBlast;
-   static MovieImage RunnerHangingOnLadder;
-   static MovieImage RunnerClimbingDown;
-   static MovieImage RunnerClimbingUp;
-   static MovieImage RunnerFalling;
-   static MovieImage RunnerHangingOnRope;
-   static MovieImage TrollRunning;
+class ActorMovies {
+   MovieImage Running;
+   MovieImage Turned;
+   MovieImage Facing;
+   MovieImage LeapingOntoLadder;
+   MovieImage LeapingOffOfLadder;
+   MovieImage HangingOnLadder;
+   MovieImage ClimbingDown;
+   MovieImage ClimbingUp;
+   MovieImage Falling;
+   MovieImage HangingOnRope;
+   }
 
-	static void Init () {
+class RunnerMovies extends ActorMovies {
+   MovieImage firingRaygun;
+   MovieImage raygunBlast;
+
+	RunnerMovies () {
 		// any MovieImage that is passed into the MovieImage constructor should be already initialized before it is used or it will be null
 		MovieImage theLastImage;
 		
-      // load the troll running right images into a movie loop
-		TrollRunning = new MovieImage (new Image ("file:Images/troll_running_1.png"), MovieType.TROLL_RUNNING, null, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/troll_running_11.png"), MovieType.TROLL_RUNNING, TrollRunning, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/troll_running_10.png"), MovieType.TROLL_RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/troll_running_9.png"), MovieType.TROLL_RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/troll_running_8.png"), MovieType.TROLL_RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/troll_running_7.png"), MovieType.TROLL_RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/troll_running_6.png"), MovieType.TROLL_RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/troll_running_5.png"), MovieType.TROLL_RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/troll_running_4.png"), MovieType.TROLL_RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/troll_running_3.png"), MovieType.TROLL_RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/troll_running_2.png"), MovieType.TROLL_RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
-		TrollRunning.nextImage = theLastImage;
-		
 		// load the runner images for running into a movie loop
-		RunnerRunning = new MovieImage (new Image ("file:Images/runner_running_1.png"), MovieType.RUNNING, null, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/runner_running_11.png"), MovieType.RUNNING, RunnerRunning, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
+		Running = new MovieImage (new Image ("file:Images/runner_running_1.png"), MovieType.RUNNING, null, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/runner_running_11.png"), MovieType.RUNNING, Running, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
 		theLastImage = new MovieImage (new Image ("file:Images/runner_running_10.png"), MovieType.RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
 		theLastImage = new MovieImage (new Image ("file:Images/runner_running_9.png"), MovieType.RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
 		theLastImage = new MovieImage (new Image ("file:Images/runner_running_8.png"), MovieType.RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
@@ -250,39 +246,39 @@ class Movies {
 		theLastImage = new MovieImage (new Image ("file:Images/runner_running_4.png"), MovieType.RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
 		theLastImage = new MovieImage (new Image ("file:Images/runner_running_3.png"), MovieType.RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
 		theLastImage = new MovieImage (new Image ("file:Images/runner_running_2.png"), MovieType.RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
-		RunnerRunning.nextImage = theLastImage;
+		Running.nextImage = theLastImage;
 		
 		// load the runner images for hanging on rope into a movie loop
-		RunnerHangingOnRope = new MovieImage (new Image ("file:Images/runner_on_rope_1.png"), MovieType.HANGING_ON_ROPE, null, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/runner_on_rope_6.png"), MovieType.HANGING_ON_ROPE, RunnerHangingOnRope, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
+		HangingOnRope = new MovieImage (new Image ("file:Images/runner_on_rope_1.png"), MovieType.HANGING_ON_ROPE, null, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/runner_on_rope_6.png"), MovieType.HANGING_ON_ROPE, HangingOnRope, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
 		theLastImage = new MovieImage (new Image ("file:Images/runner_on_rope_5.png"), MovieType.HANGING_ON_ROPE, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
 		theLastImage = new MovieImage (new Image ("file:Images/runner_on_rope_4.png"), MovieType.HANGING_ON_ROPE, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
 		theLastImage = new MovieImage (new Image ("file:Images/runner_on_rope_3.png"), MovieType.HANGING_ON_ROPE, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
 		theLastImage = new MovieImage (new Image ("file:Images/runner_on_rope_2.png"), MovieType.HANGING_ON_ROPE, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
-		RunnerHangingOnRope.nextImage = theLastImage;
+		HangingOnRope.nextImage = theLastImage;
 		
 		// load the runner falling images into a movie loop
-		RunnerFalling = new MovieImage (new Image("file:Images/runner_falling_1.png"), MovieType.FALLING, null, 0, CONSTANTS.FALLING_FRAME_DISTANCE);
-		theLastImage = new MovieImage (new Image ("file:Images/runner_falling_5.png"), MovieType.FALLING, RunnerFalling, 0, CONSTANTS.FALLING_FRAME_DISTANCE);
+		Falling = new MovieImage (new Image("file:Images/runner_falling_1.png"), MovieType.FALLING, null, 0, CONSTANTS.FALLING_FRAME_DISTANCE);
+		theLastImage = new MovieImage (new Image ("file:Images/runner_falling_5.png"), MovieType.FALLING, Falling, 0, CONSTANTS.FALLING_FRAME_DISTANCE);
 		theLastImage = new MovieImage (new Image ("file:Images/runner_falling_4.png"), MovieType.FALLING, theLastImage, 0, CONSTANTS.FALLING_FRAME_DISTANCE);
 		theLastImage = new MovieImage (new Image ("file:Images/runner_falling_1.png"), MovieType.FALLING, theLastImage, 0, CONSTANTS.FALLING_FRAME_DISTANCE);
 		theLastImage = new MovieImage (new Image ("file:Images/runner_falling_3.png"), MovieType.FALLING, theLastImage, 0, CONSTANTS.FALLING_FRAME_DISTANCE);
 		theLastImage = new MovieImage (new Image ("file:Images/runner_falling_2.png"), MovieType.FALLING, theLastImage, 0, CONSTANTS.FALLING_FRAME_DISTANCE);
-		RunnerFalling.nextImage = theLastImage;
+		Falling.nextImage = theLastImage;
 		
 		// load the runner standing still images and have them point to themselves because they aren't moving (one image movie)
-		RunnerTurned = new MovieImage (new Image("file:Images/runner_turned.png"), MovieType.STANDING, null, 0, 0);
-		RunnerTurned.nextImage = RunnerTurned;
-		RunnerFacing = new MovieImage (new Image("file:Images/runner_facing.png"), MovieType.FACING_YOU, null, 0, 0);
-		RunnerFacing.nextImage = RunnerFacing;
+		Turned = new MovieImage (new Image("file:Images/runner_turned.png"), MovieType.STANDING, null, 0, 0);
+		Turned.nextImage = Turned;
+		Facing = new MovieImage (new Image("file:Images/runner_facing.png"), MovieType.FACING_YOU, null, 0, 0);
+		Facing.nextImage = Facing;
 		
 		// load the runner climbing down image and have it point to itself because it doesn't change
-		RunnerClimbingDown = new MovieImage (new Image("file:Images/runner_down_ladder.png"), MovieType.CLIMBING_DOWN, null, 0, CONSTANTS.CLIMBING_FRAME_DISTANCE);
-		RunnerClimbingDown.nextImage = RunnerClimbingDown;
+		ClimbingDown = new MovieImage (new Image("file:Images/runner_down_ladder.png"), MovieType.CLIMBING_DOWN, null, 0, CONSTANTS.CLIMBING_FRAME_DISTANCE);
+		ClimbingDown.nextImage = ClimbingDown;
 
 		// load the runner hanging on the ladder image and have it point to itself because it doesn't change; set the delta to 0 because it doesn't move
-		RunnerHangingOnLadder = new MovieImage (new Image("file:Images/runner_down_ladder.png"), MovieType.HANGING_ON_LADDER, null, 0, 0);
-		RunnerHangingOnLadder.nextImage = RunnerHangingOnLadder;
+		HangingOnLadder = new MovieImage (new Image("file:Images/runner_down_ladder.png"), MovieType.HANGING_ON_LADDER, null, 0, 0);
+		HangingOnLadder.nextImage = HangingOnLadder;
 		
 		// load the raygun blast into a movie strip (not a movie loop)
 		theLastImage = new MovieImage (new Image ("file:Images/raygun_blast_8.png"), MovieType.RAYGUN_BLAST, null, 0, 0);
@@ -295,7 +291,7 @@ class Movies {
 		raygunBlast = theLastImage = new MovieImage (new Image ("file:Images/raygun_blast_1.png"), MovieType.RAYGUN_BLAST, theLastImage, 0, 8);
 		
 		// load the runner images for firing raygun into a movie strip (not a movie loop)
-		theLastImage = new MovieImage (new Image ("file:Images/raygun_runner_10.png"), MovieType.FIRING_RAYGUN, RunnerTurned, 0, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/raygun_runner_10.png"), MovieType.FIRING_RAYGUN, Turned, 0, 0);
 		theLastImage = new MovieImage (new Image ("file:Images/raygun_runner_9.png"), MovieType.FIRING_RAYGUN, theLastImage, 0, 0);
 		theLastImage = new MovieImage (new Image ("file:Images/raygun_runner_8.png"), MovieType.FIRING_RAYGUN, theLastImage, 0, 0);
 		theLastImage = new MovieImage (new Image ("file:Images/raygun_runner_7.png"), MovieType.FIRING_RAYGUN, theLastImage, 0, 0);
@@ -307,29 +303,120 @@ class Movies {
 		firingRaygun = theLastImage = new MovieImage (new Image ("file:Images/raygun_runner_1.png"), MovieType.FIRING_RAYGUN, theLastImage, 0, 0);
 		
 		// load the runner images for leaping onto a ladder into a movie strip (not a movie loop)
-		theLastImage = new MovieImage (new Image ("file:Images/runner_ladder_leap_1.png"), MovieType.LEAPING_ONTO_LADDER, RunnerHangingOnLadder, CONSTANTS.LEAPING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/runner_ladder_leap_1.png"), MovieType.LEAPING_ONTO_LADDER, HangingOnLadder, CONSTANTS.LEAPING_FRAME_DISTANCE/2, 0);
 		theLastImage = new MovieImage (new Image ("file:Images/runner_ladder_leap_5.png"), MovieType.LEAPING_ONTO_LADDER, theLastImage, CONSTANTS.LEAPING_FRAME_DISTANCE, 0);
 		theLastImage = new MovieImage (new Image ("file:Images/runner_ladder_leap_4.png"), MovieType.LEAPING_ONTO_LADDER, theLastImage, CONSTANTS.LEAPING_FRAME_DISTANCE, 0);
 		theLastImage = new MovieImage (new Image ("file:Images/runner_ladder_leap_3.png"), MovieType.LEAPING_ONTO_LADDER, theLastImage, CONSTANTS.LEAPING_FRAME_DISTANCE, 0);
 		theLastImage = new MovieImage (new Image ("file:Images/runner_ladder_leap_2.png"), MovieType.LEAPING_ONTO_LADDER, theLastImage, CONSTANTS.LEAPING_FRAME_DISTANCE, 0);
-		RunnerLeapingOntoLadder = new MovieImage (new Image ("file:Images/runner_ladder_leap_1.png"), MovieType.LEAPING_ONTO_LADDER, theLastImage, CONSTANTS.LEAPING_FRAME_DISTANCE, 0);
+		LeapingOntoLadder = new MovieImage (new Image ("file:Images/runner_ladder_leap_1.png"), MovieType.LEAPING_ONTO_LADDER, theLastImage, CONSTANTS.LEAPING_FRAME_DISTANCE, 0);
 		
 		// load the runner images for leaping off of a ladder into a movie strip (not a movie loop)
-		theLastImage = new MovieImage (new Image ("file:Images/runner_ladder_leap_1.png"), MovieType.LEAPING_OFF_OF_LADDER, RunnerRunning, CONSTANTS.LEAPING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/runner_ladder_leap_1.png"), MovieType.LEAPING_OFF_OF_LADDER, Running, CONSTANTS.LEAPING_FRAME_DISTANCE/2, 0);
 		theLastImage = new MovieImage (new Image ("file:Images/runner_ladder_leap_5.png"), MovieType.LEAPING_OFF_OF_LADDER, theLastImage, CONSTANTS.LEAPING_FRAME_DISTANCE, 0);
 		theLastImage = new MovieImage (new Image ("file:Images/runner_ladder_leap_4.png"), MovieType.LEAPING_OFF_OF_LADDER, theLastImage, CONSTANTS.LEAPING_FRAME_DISTANCE, 0);
 		theLastImage = new MovieImage (new Image ("file:Images/runner_ladder_leap_3.png"), MovieType.LEAPING_OFF_OF_LADDER, theLastImage, CONSTANTS.LEAPING_FRAME_DISTANCE, 0);
 		theLastImage = new MovieImage (new Image ("file:Images/runner_ladder_leap_2.png"), MovieType.LEAPING_OFF_OF_LADDER, theLastImage, CONSTANTS.LEAPING_FRAME_DISTANCE, 0);
-		RunnerLeapingOffOfLadder = new MovieImage (new Image ("file:Images/runner_ladder_leap_1.png"), MovieType.LEAPING_OFF_OF_LADDER, theLastImage, CONSTANTS.LEAPING_FRAME_DISTANCE, 0);
+		LeapingOffOfLadder = new MovieImage (new Image ("file:Images/runner_ladder_leap_1.png"), MovieType.LEAPING_OFF_OF_LADDER, theLastImage, CONSTANTS.LEAPING_FRAME_DISTANCE, 0);
 		
 		// load the runner images for climbing up a ladder into a movie loop
-		RunnerClimbingUp = new MovieImage (new Image ("file:Images/runner_climbing_1.png"), MovieType.CLIMBING_UP, null, 0, -CONSTANTS.CLIMBING_FRAME_DISTANCE);
-		theLastImage = new MovieImage (new Image ("file:Images/runner_climbing_6.png"), MovieType.CLIMBING_UP, RunnerClimbingUp, 0, -CONSTANTS.CLIMBING_FRAME_DISTANCE);
+		ClimbingUp = new MovieImage (new Image ("file:Images/runner_climbing_1.png"), MovieType.CLIMBING_UP, null, 0, -CONSTANTS.CLIMBING_FRAME_DISTANCE);
+		theLastImage = new MovieImage (new Image ("file:Images/runner_climbing_6.png"), MovieType.CLIMBING_UP, ClimbingUp, 0, -CONSTANTS.CLIMBING_FRAME_DISTANCE);
 		theLastImage = new MovieImage (new Image ("file:Images/runner_climbing_5.png"), MovieType.CLIMBING_UP, theLastImage, 0, -CONSTANTS.CLIMBING_FRAME_DISTANCE);
 		theLastImage = new MovieImage (new Image ("file:Images/runner_climbing_4.png"), MovieType.CLIMBING_UP, theLastImage, 0, -CONSTANTS.CLIMBING_FRAME_DISTANCE);
 		theLastImage = new MovieImage (new Image ("file:Images/runner_climbing_3.png"), MovieType.CLIMBING_UP, theLastImage, 0, -CONSTANTS.CLIMBING_FRAME_DISTANCE);
 		theLastImage = new MovieImage (new Image ("file:Images/runner_climbing_2.png"), MovieType.CLIMBING_UP, theLastImage, 0, -CONSTANTS.CLIMBING_FRAME_DISTANCE);
-		RunnerClimbingUp.nextImage = theLastImage;
+		ClimbingUp.nextImage = theLastImage;
+		}
+   }
+
+class TrollMovies extends ActorMovies {
+
+   TrollMovies () {
+		// any MovieImage that is passed into the MovieImage constructor should be already initialized before it is used or it will be null
+		MovieImage theLastImage;
+		
+		// load the runner images for running into a movie loop
+		Running = new MovieImage (new Image ("file:Images/troll_running_1.png"), MovieType.RUNNING, null, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_running_11.png"), MovieType.RUNNING, Running, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_running_10.png"), MovieType.RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_running_9.png"), MovieType.RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_running_8.png"), MovieType.RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_running_7.png"), MovieType.RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_running_6.png"), MovieType.RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_running_5.png"), MovieType.RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_running_4.png"), MovieType.RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_running_3.png"), MovieType.RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_running_2.png"), MovieType.RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
+		Running.nextImage = theLastImage;
+		
+      /*
+		// load the runner images for hanging on rope into a movie loop
+		HangingOnRope = new MovieImage (new Image ("file:Images/runner_on_rope_1.png"), MovieType.HANGING_ON_ROPE, null, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/runner_on_rope_6.png"), MovieType.HANGING_ON_ROPE, HangingOnRope, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/runner_on_rope_5.png"), MovieType.HANGING_ON_ROPE, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/runner_on_rope_4.png"), MovieType.HANGING_ON_ROPE, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/runner_on_rope_3.png"), MovieType.HANGING_ON_ROPE, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/runner_on_rope_2.png"), MovieType.HANGING_ON_ROPE, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
+		HangingOnRope.nextImage = theLastImage;
+      */
+		
+		// load the runner falling images into a movie loop
+		Falling = new MovieImage (new Image("file:Images/troll_falling_1.png"), MovieType.FALLING, null, 0, CONSTANTS.FALLING_FRAME_DISTANCE/2);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_falling_6.png"), MovieType.FALLING, Falling, 0, CONSTANTS.FALLING_FRAME_DISTANCE/2);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_falling_5.png"), MovieType.FALLING, theLastImage, 0, CONSTANTS.FALLING_FRAME_DISTANCE/2);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_falling_4.png"), MovieType.FALLING, theLastImage, 0, CONSTANTS.FALLING_FRAME_DISTANCE/2);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_falling_3.png"), MovieType.FALLING, theLastImage, 0, CONSTANTS.FALLING_FRAME_DISTANCE/2);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_falling_2.png"), MovieType.FALLING, theLastImage, 0, CONSTANTS.FALLING_FRAME_DISTANCE/2);
+		Falling.nextImage = theLastImage;
+		
+
+		// load the runner standing still images and have them point to themselves because they aren't moving (one image movie)
+		Turned = new MovieImage (new Image("file:Images/troll_turned.png"), MovieType.STANDING, null, 0, 0);
+		Turned.nextImage = Turned;
+      // need this for movie updater to work, but troll never faces you so set him to turned
+		Facing = new MovieImage (new Image("file:Images/troll_turned.png"), MovieType.FACING_YOU, null, 0, 0);
+		Facing.nextImage = Facing;
+      
+		// load the runner images for leaping onto a ladder into a movie strip (not a movie loop)
+		theLastImage = new MovieImage (new Image ("file:Images/troll_ladder_leap_1.png"), MovieType.LEAPING_ONTO_LADDER, HangingOnLadder, CONSTANTS.LEAPING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_ladder_leap_11.png"), MovieType.LEAPING_ONTO_LADDER, theLastImage, CONSTANTS.LEAPING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_ladder_leap_10.png"), MovieType.LEAPING_ONTO_LADDER, theLastImage, CONSTANTS.LEAPING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_ladder_leap_9.png"), MovieType.LEAPING_ONTO_LADDER, theLastImage, CONSTANTS.LEAPING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_ladder_leap_8.png"), MovieType.LEAPING_ONTO_LADDER, theLastImage, CONSTANTS.LEAPING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_ladder_leap_7.png"), MovieType.LEAPING_ONTO_LADDER, theLastImage, CONSTANTS.LEAPING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_ladder_leap_6.png"), MovieType.LEAPING_ONTO_LADDER, theLastImage, CONSTANTS.LEAPING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_ladder_leap_5.png"), MovieType.LEAPING_ONTO_LADDER, theLastImage, CONSTANTS.LEAPING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_ladder_leap_4.png"), MovieType.LEAPING_ONTO_LADDER, theLastImage, CONSTANTS.LEAPING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_ladder_leap_3.png"), MovieType.LEAPING_ONTO_LADDER, theLastImage, CONSTANTS.LEAPING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_ladder_leap_2.png"), MovieType.LEAPING_ONTO_LADDER, theLastImage, CONSTANTS.LEAPING_FRAME_DISTANCE/2, 0);
+		LeapingOntoLadder = new MovieImage (new Image ("file:Images/troll_ladder_leap_1.png"), MovieType.LEAPING_ONTO_LADDER, theLastImage, CONSTANTS.LEAPING_FRAME_DISTANCE/2, 0);
+		
+		// load the runner images for leaping off of a ladder into a movie strip (not a movie loop)
+		theLastImage = new MovieImage (new Image ("file:Images/troll_ladder_leap_1.png"), MovieType.LEAPING_OFF_OF_LADDER, Running, CONSTANTS.LEAPING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_ladder_leap_11.png"), MovieType.LEAPING_OFF_OF_LADDER, theLastImage, CONSTANTS.LEAPING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_ladder_leap_10.png"), MovieType.LEAPING_OFF_OF_LADDER, theLastImage, CONSTANTS.LEAPING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_ladder_leap_9.png"), MovieType.LEAPING_OFF_OF_LADDER, theLastImage, CONSTANTS.LEAPING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_ladder_leap_8.png"), MovieType.LEAPING_OFF_OF_LADDER, theLastImage, CONSTANTS.LEAPING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_ladder_leap_7.png"), MovieType.LEAPING_OFF_OF_LADDER, theLastImage, CONSTANTS.LEAPING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_ladder_leap_6.png"), MovieType.LEAPING_OFF_OF_LADDER, theLastImage, CONSTANTS.LEAPING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_ladder_leap_5.png"), MovieType.LEAPING_OFF_OF_LADDER, theLastImage, CONSTANTS.LEAPING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_ladder_leap_4.png"), MovieType.LEAPING_OFF_OF_LADDER, theLastImage, CONSTANTS.LEAPING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_ladder_leap_3.png"), MovieType.LEAPING_OFF_OF_LADDER, theLastImage, CONSTANTS.LEAPING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_ladder_leap_2.png"), MovieType.LEAPING_OFF_OF_LADDER, theLastImage, CONSTANTS.LEAPING_FRAME_DISTANCE/2, 0);
+		LeapingOffOfLadder = new MovieImage (new Image ("file:Images/troll_ladder_leap_1.png"), MovieType.LEAPING_OFF_OF_LADDER, theLastImage, CONSTANTS.LEAPING_FRAME_DISTANCE/2, 0);
+		
+		// load the runner images for climbing a ladder into a movie loop
+		ClimbingUp = new MovieImage (new Image ("file:Images/troll_climbing_1.png"), MovieType.CLIMBING_UP, null, 0, -CONSTANTS.CLIMBING_FRAME_DISTANCE/2);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_climbing_10.png"), MovieType.CLIMBING_UP, ClimbingUp, 0, -CONSTANTS.CLIMBING_FRAME_DISTANCE/2);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_climbing_9.png"), MovieType.CLIMBING_UP, theLastImage, 0, -CONSTANTS.CLIMBING_FRAME_DISTANCE/2);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_climbing_8.png"), MovieType.CLIMBING_UP, theLastImage, 0, -CONSTANTS.CLIMBING_FRAME_DISTANCE/2);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_climbing_7.png"), MovieType.CLIMBING_UP, theLastImage, 0, -CONSTANTS.CLIMBING_FRAME_DISTANCE/2);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_climbing_6.png"), MovieType.CLIMBING_UP, theLastImage, 0, -CONSTANTS.CLIMBING_FRAME_DISTANCE/2);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_climbing_5.png"), MovieType.CLIMBING_UP, theLastImage, 0, -CONSTANTS.CLIMBING_FRAME_DISTANCE/2);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_climbing_4.png"), MovieType.CLIMBING_UP, theLastImage, 0, -CONSTANTS.CLIMBING_FRAME_DISTANCE/2);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_climbing_3.png"), MovieType.CLIMBING_UP, theLastImage, 0, -CONSTANTS.CLIMBING_FRAME_DISTANCE/2);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_climbing_2.png"), MovieType.CLIMBING_UP, theLastImage, 0, -CONSTANTS.CLIMBING_FRAME_DISTANCE/2);
+		ClimbingUp.nextImage = theLastImage;
 		}
    }
 
@@ -372,10 +459,42 @@ enum MovieState {
 	}
 
 enum Direction {
+   UP,
+   DOWN,
    RIGHT,
    LEFT,
-   FACING
+   FACING,
+   AWAY;
+
+   static public Direction HorizontalDirection (int value) {
+      if (value < 0)
+         return LEFT;
+      else
+         return RIGHT;
    }
+   
+   static public Direction VerticalDirection (int value) {
+      if (value < 0)
+         return UP;
+      else
+         return DOWN;
+   }
+   
+   static public Direction Opposite (Direction theDirection) {
+      if (theDirection == UP)
+         return DOWN;
+      else if (theDirection == DOWN)
+         return UP;
+      else if (theDirection == RIGHT)
+         return LEFT;
+      else if (theDirection == LEFT)
+         return RIGHT;
+      else if (theDirection == FACING)
+         return AWAY;
+      else 
+         return FACING;
+      }   
+   } 
 
 class Sprite {
 	MovableLocationType Location;
@@ -513,6 +632,7 @@ class ActiveBlock {
 public class CaveRunner extends Application {
 	Stage paletteStage;
 	Button runnerButton, 
+          trollButton,
 		    digableButton, 
 		    ladderButton, 
 		    gold1Button,
@@ -531,37 +651,31 @@ public class CaveRunner extends Application {
 	void addGroundStrip (Cavern theCavern, int xPos, int yPos, int count, boolean sparse) {
 		Block block;
 		int x = xPos;
-      /*
 		for (int Counter=0; Counter < count; Counter++) {
 			if (sparse && (Counter & 1) == 0) {
 				x++; continue;
 				}
 			block = theCavern.getBlock (new BlockLocation (x++, yPos));
-			block.Type = BlockTypes.SOFT_ON_NOTHING_ALONE;
-			if (Counter == 0)
-				block.blockImage = Images.soft_on_nothing_L;
+			if (Counter == 0) 
+            block.Type = BlockTypes.SOFT_R;            
 			else if (Counter == count-1)
-				block.blockImage = Images.soft_on_nothing_R;
-			else if ((Counter & 1) == 0)
-				block.blockImage = Images.soft_on_nothing_C_2;
+            block.Type = BlockTypes.SOFT_L;            
 			else
-				block.blockImage = Images.soft_on_nothing_C_1;
+	         block.Type = BlockTypes.SOFT_LR;            
+         block.blockImage = Images.getImage(block.Type);
 			theCavern.setBlock (block);
 		   }
-      */
 		}
 
 	void addLadder (Cavern theCavern, int xPos, int yPos, int count) {
 		Block block;
 		int y = yPos;
-      /*
 		for (int Counter=0; Counter < count; Counter++) {
 			block = theCavern.getBlock (new BlockLocation (xPos, y++));
 			block.Type = BlockTypes.LADDER;
-			block.blockImage = Images.visableLadder;
+			block.blockImage = Images.getImage(block.Type);
 			theCavern.setBlock (block);
 		   }
-      */
 		}
 
 	Cavern createTestCavern (Group theView) {
@@ -570,7 +684,7 @@ public class CaveRunner extends Application {
 		addGroundStrip (theCavern, 0, 2, 2, false);
 		addGroundStrip (theCavern, 3, 2, 24, false);
 		addGroundStrip (theCavern, 0, 4, 27, false);
-		addGroundStrip (theCavern, 0, 6, 27, false);
+		addGroundStrip (theCavern, 0, 6, 27, true);
 		addGroundStrip (theCavern, 0, 8, 27, false);
 		addGroundStrip (theCavern, 0, 10, 27, false);
 		addGroundStrip (theCavern, 0, 12, 27, false);
@@ -581,6 +695,7 @@ public class CaveRunner extends Application {
 		addLadder (theCavern, 4, 0, 2);
 		//theCavern.addRunner (new MovableLocationType(1100, 44));
 		theCavern.addRunner (new MovableLocationType(324, 132));
+      theCavern.addTroll (new MovableLocationType(88, 420));
 		return theCavern;
 		}
    
@@ -599,6 +714,11 @@ public class CaveRunner extends Application {
 		if (e.getSource() == runnerButton) {
 			editBlock.Type = BlockTypes.RUNNER;   // indicate a runner for editor, no block is actually a runner in the game
 			//System.err.println ("edit block set to runner");
+         return;
+			}
+		if (e.getSource() == trollButton) {
+			editBlock.Type = BlockTypes.TROLL;   // indicate a troll for editor, no block is actually a runner in the game
+			//System.err.println ("edit block set to troll");
          return;
 			}
 		else if (e.getSource() == digableButton) {
@@ -813,17 +933,18 @@ public class CaveRunner extends Application {
          );
                    
 		// init graphics and cavern
-      Movies.Init();
 		Images.Init();
 		Cavern theCavern = createTestCavern (gameView);
-		theCavern.restore ("test.ser");
+		//theCavern.restore ("test.ser");
       int TotalGold = theCavern.LoadCavernIntoView ();
       goldText.setText ("Gold to get " + TotalGold);
  		theStage.show();
  
 		// create editor palette window
-		runnerButton = new Button ("", new ImageView (Movies.RunnerFacing.theImage));
+		runnerButton = new Button ("", new ImageView (Images.runner));
 		runnerButton.setOnAction (e-> paletteButtonClicked(e));
+		trollButton = new Button ("", new ImageView (Images.troll));
+		trollButton.setOnAction (e-> paletteButtonClicked(e));
 		digableButton = new Button ("", new ImageView (Images.getImage(BlockTypes.SOFT)));	
 		digableButton.setOnAction (e-> paletteButtonClicked(e));
 		ladderButton = new Button ("", new ImageView (Images.getImage(BlockTypes.LADDER)));	
@@ -839,7 +960,7 @@ public class CaveRunner extends Application {
 		eraserButton = new Button ("", new ImageView (Images.getImage(BlockTypes.ERASER)));	
 		eraserButton.setOnAction (e-> paletteButtonClicked(e));
 		FlowPane palettePane = new FlowPane();
-		palettePane.getChildren().addAll (runnerButton, digableButton, ladderButton, hiddenLadderButton, ropeButton, gold1Button, exitButton, eraserButton);
+		palettePane.getChildren().addAll (runnerButton, trollButton, digableButton, ladderButton, hiddenLadderButton, ropeButton, gold1Button, exitButton, eraserButton);
 		Scene paletteScene = new Scene (palettePane, 170, 146);
 		paletteStage = new Stage();
 		paletteStage.initOwner (theStage);
@@ -853,6 +974,9 @@ public class CaveRunner extends Application {
 				//System.err.println ("mouse press detected at " + event.getSceneX() + ", " + event.getSceneY());
 				if (editBlock.Type == BlockTypes.RUNNER)
 					editCavern.addRunner (new MovableLocationType (((int)event.getSceneX() / CONSTANTS.BLOCK_WIDTH) * CONSTANTS.BLOCK_WIDTH, 
+                                                              (((int)event.getSceneY() - 26) / CONSTANTS.BLOCK_HEIGHT) * CONSTANTS.BLOCK_HEIGHT));
+            else if (editBlock.Type == BlockTypes.TROLL)
+					editCavern.addTroll (new MovableLocationType (((int)event.getSceneX() / CONSTANTS.BLOCK_WIDTH) * CONSTANTS.BLOCK_WIDTH, 
                                                               (((int)event.getSceneY() - 26) / CONSTANTS.BLOCK_HEIGHT) * CONSTANTS.BLOCK_HEIGHT));
 				else {
 					Block block = editCavern.getBlock (new BlockLocation ((int)event.getSceneX() / CONSTANTS.BLOCK_WIDTH, 
@@ -872,7 +996,7 @@ public class CaveRunner extends Application {
 		theScene.setOnMouseDragged (new EventHandler<MouseEvent>() {
 			@Override public void handle (MouseEvent event) {
 				//System.err.println ("mouse drag detected at " + event.getSceneX() + ", " + event.getSceneY());
-				if (editBlock.Type != BlockTypes.RUNNER) {
+				if ((editBlock.Type != BlockTypes.RUNNER) && (editBlock.Type != BlockTypes.TROLL)) {
 					Block block = editCavern.getBlock (new BlockLocation ((int)event.getSceneX() / CONSTANTS.BLOCK_WIDTH, 
                                                                              ((int)event.getSceneY() - 26) / CONSTANTS.BLOCK_HEIGHT));
                AddBlockToCavern (block);
