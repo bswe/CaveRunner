@@ -11,7 +11,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.media.AudioClip;
 import javafx.scene.image.ImageView;
 import javafx.scene.Group;
-
+import static java.lang.Math.abs;
 /**
  *
  * @author wcb
@@ -32,17 +32,8 @@ class Cavern {
 
 	AudioClip pling = new AudioClip ("file:Pling.mp3");
 	AudioClip laserBlast = new AudioClip ("file:LaserBlast.mp3");
-
-	//Runner Troll1 = new Sprite (new MovableLocationType(0, 132), Images.R_TrollRunning);
-	// test runners
-	/*
-	Runner Runner3 = new Sprite (new MovableLocationType(0, 220), Images.R_RunnerImages);
-	Runner Runner4 = new Sprite (new MovableLocationType(1188, 308), Images.L_RunnerImages);
-	Runner Runner5 = new Sprite (new MovableLocationType(0, 396), Images.R_RunnerImages);
-	Runner Runner6 = new Sprite (new MovableLocationType(1188, 484), Images.L_RunnerImages);
-	Runner Runner7 = new Sprite (new MovableLocationType(0, 572), Images.R_RunnerImages);
-	Runner Runner8 = new Sprite (new MovableLocationType(1188, 660), Images.L_RunnerImages);
-	*/
+   private RunnerMovies theRunnerMovies = new RunnerMovies();
+   private TrollMovies theTrollMovies = new TrollMovies();
 
 	Cavern (int width, int height, GraphicsContext gc) {
 		Gc = gc;
@@ -62,7 +53,6 @@ class Cavern {
 		for (int x=0; x < Width; x++)
 			for (int y=0; y < Height; y++) 
 				Blocks [x] [y] = new Block (new BlockLocation (x, y));
-      //Troll1 = new Sprite (new MovableLocationType(0, 132), Images.R_TrollRunning);
 		}
    
    private void DisplayEscape () {
@@ -91,17 +81,29 @@ class Cavern {
                if ((Blocks[x][y].Type != BlockTypes.EXIT) &&
                    (Blocks[x][y].Type != BlockTypes.HIDDEN_LADDER))
                   View.getChildren().add(Blocks[x][y].blockView);
+               /*
+               if (Blocks[x][y].IsStructural()) {
+                  ImageView aView = new ImageView (Images.hard);
+                  aView.setX (Blocks[x][y].Location.getX()*44);
+                  aView.setY (Blocks[x][y].Location.getY()*44);
+                  View.getChildren().add(aView);                  
+                  }
+               */
                if (Blocks[x][y].Type == BlockTypes.GOLD_1) 
                   TotalGold++;
                }
       View.getChildren().add (theRunner.View);
-      //View.getChildren().add (Troll1.View);
+      View.getChildren().add (Troll1.View);
       return TotalGold;
       }
 
 	public void addRunner (MovableLocationType location) {
-		theRunner = new Sprite (location, Movies.RunnerFacing, Direction.FACING);
+		theRunner = new Sprite (location, theRunnerMovies.Facing, Direction.FACING);
 		}
+
+	public void addTroll (MovableLocationType location) {
+		Troll1 = new Sprite (location, theTrollMovies.Facing, Direction.RIGHT);
+	}
 
 	public Sprite getRunner () {
 		return theRunner;
@@ -405,158 +407,158 @@ class Cavern {
 			}
 		}
 
-	private void upDateMovie (Sprite theRunner) {
-		//System.err.println ("upDateMovie: entering with movie type " + theRunner.Image.movieType);
-		if (theRunner.movieState == MovieState.PAUSED) 
+	private void upDateMovie (Sprite theActor, ActorMovies theMovies) {
+		//System.err.println ("upDateMovie: entering with movie type " + theActor.Image.movieType);
+		if (theActor.movieState == MovieState.PAUSED) 
 			return;
-		if (theRunner.Image.movieType == MovieType.RUNNING) {
-         if (theRunner.Orientation == Direction.RIGHT) {
-            if (!canRunnerMoveRight (theRunner)) {
-               theRunner.setImage (Movies.RunnerTurned);
-               centerRunnerInBlock (theRunner);
-               theRunner.Location.setX (theRunner.Location.getX() - 8);
+		if (theActor.Image.movieType == MovieType.RUNNING) {
+         if (theActor.Orientation == Direction.RIGHT) {
+            if (!canRunnerMoveRight (theActor)) {
+               theActor.setImage (theMovies.Turned);
+               centerRunnerInBlock (theActor);
+               theActor.Location.setX (theActor.Location.getX() - 8);
                return;
                }
-            else if (IsRunnerAtRope (theRunner)) {
+            else if (IsRunnerAtRope (theActor)) {
                // force runner to use rope if it is present, which is how MMR did it.
-               theRunner.setImage (Movies.RunnerHangingOnRope);
-               theRunner.Location.setX (theRunner.Location.getX() + 16);
+               theActor.setImage (theMovies.HangingOnRope);
+               theActor.Location.setX (theActor.Location.getX() + 16);
                return;
                }
-            else if (!RunnerIsOnSomethingSolid (theRunner)) {
-               theRunner.setImage (Movies.RunnerFalling);
-               theRunner.Orientation = Direction.FACING;
-               centerRunnerInBlock (theRunner);
+            else if (!RunnerIsOnSomethingSolid (theActor)) {
+               theActor.setImage (theMovies.Falling);
+               theActor.Orientation = Direction.FACING;
+               centerRunnerInBlock (theActor);
                return;
                }
-            else if (!IsThereSolidGroundOnTheRight (theRunner)) {
-               if (IsRunnerNextToLadderOnTheRight (theRunner)) { 
-                  theRunner.setImage (Movies.RunnerLeapingOntoLadder);
-                  centerRunnerInBlock (theRunner);
+            else if (!IsThereSolidGroundOnTheRight (theActor)) {
+               if (IsRunnerNextToLadderOnTheRight (theActor)) { 
+                  theActor.setImage (theMovies.LeapingOntoLadder);
+                  centerRunnerInBlock (theActor);
                   return;
                   }
                }
             }
 		   else {
-            if (!canRunnerMoveLeft (theRunner)) {
-               theRunner.setImage (Movies.RunnerTurned);
-               centerRunnerInBlock (theRunner);
-               theRunner.Location.setX (theRunner.Location.getX() + 8);
+            if (!canRunnerMoveLeft (theActor)) {
+               theActor.setImage (theMovies.Turned);
+               centerRunnerInBlock (theActor);
+               theActor.Location.setX (theActor.Location.getX() + 8);
                return;
                }
-            else if (IsRunnerAtRope (theRunner)) {
+            else if (IsRunnerAtRope (theActor)) {
                // force runner to use rope if it is present, which is how MMR did it.
-               theRunner.setImage (Movies.RunnerHangingOnRope);
-               theRunner.Location.setX (theRunner.Location.getX() - 16);
+               theActor.setImage (theMovies.HangingOnRope);
+               theActor.Location.setX (theActor.Location.getX() - 16);
                return;
                }
-            else if (!RunnerIsOnSomethingSolid (theRunner)) {
-               theRunner.setImage (Movies.RunnerFalling);
-               theRunner.Orientation = Direction.FACING;
-               centerRunnerInBlock (theRunner);
+            else if (!RunnerIsOnSomethingSolid (theActor)) {
+               theActor.setImage (theMovies.Falling);
+               theActor.Orientation = Direction.FACING;
+               centerRunnerInBlock (theActor);
                return;
                }
-            else if (!IsThereSolidGroundOnTheLeft (theRunner)) {
-               if (IsRunnerNextToLadderOnTheLeft (theRunner)) {
-                  theRunner.setImage (Movies.RunnerLeapingOntoLadder);
-                  centerRunnerInBlock (theRunner);
+            else if (!IsThereSolidGroundOnTheLeft (theActor)) {
+               if (IsRunnerNextToLadderOnTheLeft (theActor)) {
+                  theActor.setImage (theMovies.LeapingOntoLadder);
+                  centerRunnerInBlock (theActor);
                   return;
                   }
                }
             }
          }
-		else if (theRunner.Image.movieType == MovieType.CLIMBING_DOWN) {
-			if (!canRunnerMoveDown (theRunner)) {
-				theRunner.movieState = MovieState.PAUSED;
-				putRunnerOnBlock (theRunner);
+		else if (theActor.Image.movieType == MovieType.CLIMBING_DOWN) {
+			if (!canRunnerMoveDown (theActor)) {
+				theActor.movieState = MovieState.PAUSED;
+				putRunnerOnBlock (theActor);
 				return;
 				}
-			else if (!IsRunnerAtLadder (theRunner) && !IsThereLadderBelow (theRunner)) {
-				theRunner.setImage (Movies.RunnerFalling);
-            theRunner.Orientation = Direction.FACING;
-				return;
-				}
-			}
-		else if (theRunner.Image.movieType == MovieType.CLIMBING_UP) {
-			if (!IsRunnerAtLadder (theRunner)) {
-				theRunner.setImage (Movies.RunnerFacing);
-				putRunnerOnBlock (theRunner);
-				return;
-				}
-			else if (!canRunnerMoveUp (theRunner)) {
-				theRunner.movieState = MovieState.PAUSED;
+			else if (!IsRunnerAtLadder (theActor) && !IsThereLadderBelow (theActor)) {
+				theActor.setImage (theMovies.Falling);
+            theActor.Orientation = Direction.FACING;
 				return;
 				}
 			}
-		else if (theRunner.Image.movieType == MovieType.HANGING_ON_ROPE) {
-         if (theRunner.Orientation == Direction.RIGHT) {
-            if (!IsRunnerAtRope (theRunner)) {
-               if (RunnerIsOnSomethingSolid (theRunner)) {
-                  theRunner.setImage (Movies.RunnerRunning);
-                  putRunnerOnBlock (theRunner);
+		else if (theActor.Image.movieType == MovieType.CLIMBING_UP) {
+			if (!IsRunnerAtLadder (theActor)) {
+				theActor.setImage (theMovies.Facing);
+				putRunnerOnBlock (theActor);
+				return;
+				}
+			else if (!canRunnerMoveUp (theActor)) {
+				theActor.movieState = MovieState.PAUSED;
+				return;
+				}
+			}
+		else if (theActor.Image.movieType == MovieType.HANGING_ON_ROPE) {
+         if (theActor.Orientation == Direction.RIGHT) {
+            if (!IsRunnerAtRope (theActor)) {
+               if (RunnerIsOnSomethingSolid (theActor)) {
+                  theActor.setImage (theMovies.Running);
+                  putRunnerOnBlock (theActor);
                   return;
                   }
                else {
-                  theRunner.setImage (Movies.RunnerFalling);
-                  theRunner.Orientation = Direction.FACING;
-                  centerRunnerInBlock (theRunner);
+                  theActor.setImage (theMovies.Falling);
+                  theActor.Orientation = Direction.FACING;
+                  centerRunnerInBlock (theActor);
                   return;
                   }
                }
-            else if (!canRunnerMoveRight (theRunner)) {
-               theRunner.movieState = MovieState.PAUSED;
-               theRunner.Location.setX (theRunner.Location.getX() + 16);
+            else if (!canRunnerMoveRight (theActor)) {
+               theActor.movieState = MovieState.PAUSED;
+               theActor.Location.setX (theActor.Location.getX() + 16);
                return;
                }
-            else if (!IsThereSolidGroundOnTheRight (theRunner)) {
-               if (IsRunnerNextToLadderOnTheRight (theRunner)) { 
-                  theRunner.setImage (Movies.RunnerLeapingOntoLadder);
-                  centerRunnerInBlock (theRunner);
+            else if (!IsThereSolidGroundOnTheRight (theActor)) {
+               if (IsRunnerNextToLadderOnTheRight (theActor)) { 
+                  theActor.setImage (theMovies.LeapingOntoLadder);
+                  centerRunnerInBlock (theActor);
                   return;
                   }
                }
             }
          else {
-            if (!IsRunnerAtRope (theRunner)) {
-               if (RunnerIsOnSomethingSolid (theRunner)) {
-                  theRunner.setImage (Movies.RunnerRunning);
-                  putRunnerOnBlock (theRunner);
+            if (!IsRunnerAtRope (theActor)) {
+               if (RunnerIsOnSomethingSolid (theActor)) {
+                  theActor.setImage (theMovies.Running);
+                  putRunnerOnBlock (theActor);
                   return;
                   }
                else {
-                  theRunner.setImage (Movies.RunnerFalling);
-                  theRunner.Orientation = Direction.FACING;
-                  centerRunnerInBlock (theRunner);
+                  theActor.setImage (theMovies.Falling);
+                  theActor.Orientation = Direction.FACING;
+                  centerRunnerInBlock (theActor);
                   return;
                   }
                }
-            else if (!canRunnerMoveLeft (theRunner)) {
-               theRunner.movieState = MovieState.PAUSED;
-               theRunner.Location.setX (theRunner.Location.getX() - 16);
+            else if (!canRunnerMoveLeft (theActor)) {
+               theActor.movieState = MovieState.PAUSED;
+               theActor.Location.setX (theActor.Location.getX() - 16);
                return;
                }
-            else if (!IsThereSolidGroundOnTheLeft (theRunner)) {
-               if (IsRunnerNextToLadderOnTheLeft (theRunner)) {
-                  theRunner.setImage (Movies.RunnerLeapingOntoLadder);
-                  centerRunnerInBlock (theRunner);
+            else if (!IsThereSolidGroundOnTheLeft (theActor)) {
+               if (IsRunnerNextToLadderOnTheLeft (theActor)) {
+                  theActor.setImage (theMovies.LeapingOntoLadder);
+                  centerRunnerInBlock (theActor);
                   return;
                   }
                }
             }
          }
-		else if (theRunner.Image.movieType == MovieType.HANGING_ON_LADDER) {
+		else if (theActor.Image.movieType == MovieType.HANGING_ON_LADDER) {
          // set the last key to null to cause the key processor to reprocess any key held down before the end of the leap onto the ladder 
          lastKeyCode = null;
          }
-      else if ((theRunner.Image.movieType != MovieType.FALLING) && !RunnerIsOnSomethingSolid (theRunner)) {
-			theRunner.setImage (Movies.RunnerFalling);
-         theRunner.Orientation = Direction.FACING;
-			centerRunnerInBlock (theRunner);
+      else if ((theActor.Image.movieType != MovieType.FALLING) && !RunnerIsOnSomethingSolid (theActor)) {
+			theActor.setImage (theMovies.Falling);
+         theActor.Orientation = Direction.FACING;
+			centerRunnerInBlock (theActor);
 			return;
 			}
-		theRunner.Location.setX (theRunner.Location.getX() + (theRunner.Image.xDelta * theRunner.getScale()));
-		theRunner.Location.setY (theRunner.Location.getY() + (theRunner.Image.yDelta * theRunner.getScale()));
-		theRunner.Image = theRunner.Image.nextImage;
+		theActor.Location.setX (theActor.Location.getX() + (theActor.Image.xDelta * theActor.getScale()));
+		theActor.Location.setY (theActor.Location.getY() + (theActor.Image.yDelta * theActor.getScale()));
+		theActor.Image = theActor.Image.nextImage;
       
 		//System.err.println ("upDateMovie: leaving with movie type " + theRunner.Image.movieType);
 		}
@@ -578,7 +580,7 @@ class Cavern {
 				keysPressed.add(CONSTANTS.NO_KEY_PRESSED);
 			}
 		}
-
+   
    private void processKeyPresses (ArrayList<String> keysPressed) {
       // use the key that is on the front of the input fifo (oldest pressed key that is still pressed)
       String code = keysPressed.get (0);
@@ -589,7 +591,7 @@ class Cavern {
       // user changed the keyboard input so
 		// if the runner is moving in response to the last user keypress user stop him where he is
       if (theRunner.Image.movieType == MovieType.RUNNING) 
-         theRunner.setImage (Movies.RunnerTurned);
+         theRunner.setImage (theRunnerMovies.Turned);
       else if ((theRunner.Image.movieType == MovieType.CLIMBING_DOWN) ||
                (theRunner.Image.movieType == MovieType.CLIMBING_UP) ||
                (theRunner.Image.movieType == MovieType.HANGING_ON_ROPE))
@@ -598,20 +600,20 @@ class Cavern {
       if (code == CONSTANTS.PAGE_UP) {  // right side ray gun
          if (IsThereSomethingToBlastOnTheRight (theRunner)) {
             laserBlast.play();
-            theRunner.setImage (Movies.firingRaygun);
+            theRunner.setImage (theRunnerMovies.firingRaygun);
             theRunner.Orientation = Direction.RIGHT;
             centerRunnerInBlock (theRunner);
-            raygunBlast = new Sprite (new MovableLocationType(theRunner.Location.getX()+44, theRunner.Location.getY()), Movies.raygunBlast, Direction.RIGHT);
+            raygunBlast = new Sprite (new MovableLocationType(theRunner.Location.getX()+44, theRunner.Location.getY()), theRunnerMovies.raygunBlast, Direction.RIGHT);
             View.getChildren().add (raygunBlast.View);
             }
          }
       if (code == CONSTANTS.HOME) {     // left side ray gun
          if (IsThereSomethingToBlastOnTheLeft (theRunner)) {
             laserBlast.play();
-            theRunner.setImage (Movies.firingRaygun);
+            theRunner.setImage (theRunnerMovies.firingRaygun);
             theRunner.Orientation = Direction.LEFT;
             centerRunnerInBlock (theRunner);
-            raygunBlast = new Sprite (new MovableLocationType(theRunner.Location.getX()-44, theRunner.Location.getY()), Movies.raygunBlast, Direction.LEFT);
+            raygunBlast = new Sprite (new MovableLocationType(theRunner.Location.getX()-44, theRunner.Location.getY()), theRunnerMovies.raygunBlast, Direction.LEFT);
             View.getChildren().add (raygunBlast.View);
             }
          }
@@ -620,7 +622,7 @@ class Cavern {
             if ((theRunner.Image.movieType == MovieType.CLIMBING_DOWN) ||
                 (theRunner.Image.movieType == MovieType.CLIMBING_UP) ||
                 (theRunner.Image.movieType == MovieType.HANGING_ON_LADDER)) {
-               theRunner.setImage (Movies.RunnerLeapingOffOfLadder);
+               theRunner.setImage (theRunnerMovies.LeapingOffOfLadder);
                theRunner.Orientation = Direction.RIGHT;
                putRunnerOnBlock (theRunner);
                }
@@ -629,7 +631,7 @@ class Cavern {
                theRunner.Orientation = Direction.RIGHT;
                }
             else {
-               theRunner.setImage (Movies.RunnerRunning);
+               theRunner.setImage (theRunnerMovies.Running);
                theRunner.Orientation = Direction.RIGHT;
                }
             }
@@ -639,7 +641,7 @@ class Cavern {
             if ((theRunner.Image.movieType == MovieType.CLIMBING_DOWN) ||
                 (theRunner.Image.movieType == MovieType.CLIMBING_UP) ||
                 (theRunner.Image.movieType == MovieType.HANGING_ON_LADDER)) {
-               theRunner.setImage (Movies.RunnerLeapingOffOfLadder);
+               theRunner.setImage (theRunnerMovies.LeapingOffOfLadder);
                theRunner.Orientation = Direction.LEFT;
                putRunnerOnBlock (theRunner);
                }
@@ -648,7 +650,7 @@ class Cavern {
                theRunner.Orientation = Direction.LEFT;
                }
             else {
-               theRunner.setImage (Movies.RunnerRunning);
+               theRunner.setImage (theRunnerMovies.Running);
                theRunner.Orientation = Direction.LEFT;
                }
             }
@@ -656,12 +658,12 @@ class Cavern {
       else if (code == CONSTANTS.CLEAR) {
          if (theRunner.Image.movieType != MovieType.CLIMBING_DOWN) {
             if (IsRunnerAtLadder (theRunner) || IsThereLadderBelow (theRunner)) {
-               theRunner.setImage (Movies.RunnerClimbingDown);
+               theRunner.setImage (theRunnerMovies.ClimbingDown);
                theRunner.Orientation = Direction.RIGHT;
                centerRunnerInBlock (theRunner);
                }
             else if (canRunnerMoveDown (theRunner)) {
-               theRunner.setImage (Movies.RunnerFalling);
+               theRunner.setImage (theRunnerMovies.Falling);
                theRunner.Orientation = Direction.FACING;
                centerRunnerInBlock (theRunner);
                }
@@ -672,7 +674,7 @@ class Cavern {
       else if (code == CONSTANTS.UP_ARROW) {
          if (theRunner.Image.movieType != MovieType.CLIMBING_UP) {
             if (IsRunnerAtLadder (theRunner)) {
-               theRunner.setImage (Movies.RunnerClimbingUp);
+               theRunner.setImage (theRunnerMovies.ClimbingUp);
                theRunner.Orientation = Direction.RIGHT;
                centerRunnerInBlock (theRunner);
                }
@@ -682,27 +684,17 @@ class Cavern {
          }
       }
 
-	public int frameHandler (ArrayList<String> keysPressed) {
-		// first process any runner changes that must happen (gravity has priority over user input)
-		// second update any active elements to their next state, along with any of their effects on the cavern
-		// third display the cavern with all of its the active elements
-
-      // check for debugging key presses before doing anything to the runner
-		processDebuggingKeyPresses (keysPressed);
-
-      // check for any gold to get
-		checkForGold (theRunner);
-
-		// FIRST: process falling runner (only gravaty is in control) and then any user input runner control change
+   void ProcessRunner (ArrayList<String> keysPressed) {
+      // FIRST: process falling runner (only gravaty is in control) and then any user input runner control change
 		if (theRunner.Image.movieType == MovieType.FALLING) {
 			if (RunnerIsOnSomethingSolid (theRunner)) {
-				theRunner.setImage (Movies.RunnerFacing);
+				theRunner.setImage (theRunnerMovies.Facing);
             // set the last key to null to cause the key processor to reprocess any key held down before the end of the fall 
             lastKeyCode = null;
             }
          else if (IsRunnerAtRope (theRunner) && objectIsOnBlockFloor(theRunner.Location)) {
             // falling runner always grabs a rope if he has the opportunity
-            theRunner.setImage (Movies.RunnerHangingOnRope);
+            theRunner.setImage (theRunnerMovies.HangingOnRope);
             theRunner.movieState = MovieState.PAUSED;
             // set the last key to null to cause the key processor to reprocess any key held down before the end of the fall 
             lastKeyCode = null;
@@ -721,10 +713,151 @@ class Cavern {
          // check for runner control keys
 		   processKeyPresses (keysPressed);
          }
+      }
+   
+   void ProcessTrolls() {
+      ArrayList<Direction> PrefferredDirections = new ArrayList();
+			
+      System.err.println ("ProcessTrolls: Enterring - MovieType = " + Troll1.Image.movieType);
+      
+		if (Troll1.Image.movieType == MovieType.FALLING) {
+			if (RunnerIsOnSomethingSolid (Troll1)) 
+				Troll1.setImage (theTrollMovies.Turned);
+         else if (IsRunnerAtRope (Troll1) && objectIsOnBlockFloor(Troll1.Location)) {
+            // falling troll always grabs a rope if they has the opportunity
+            Troll1.setImage (theTrollMovies.HangingOnRope);
+            Troll1.movieState = MovieState.PAUSED;
+            }
+         else
+            return;
+         }
+		else if (Troll1.Image.movieType == MovieType.LEAPING_OFF_OF_LADDER) {
+			// Let movie play out before processing any keyboard input
+         return;
+			}
+		else if (Troll1.Image.movieType == MovieType.LEAPING_ONTO_LADDER) {
+			// Let movie play out before processing any keyboard input
+         return;
+			}
+      int xDelta = theRunner.Location.getX() - Troll1.Location.getX();
+      Direction PreferredX = Direction.HorizontalDirection(xDelta);
+      int yDelta = theRunner.Location.getY() - Troll1.Location.getY();
+      Direction PreferredY = Direction.VerticalDirection(yDelta);
+      if (abs(xDelta) > abs(yDelta)) {
+         PrefferredDirections.add (PreferredX);
+         PrefferredDirections.add (PreferredY);
+         }
+      else {
+         PrefferredDirections.add (PreferredY);
+         PrefferredDirections.add (PreferredX);
+         }
+      PrefferredDirections.add(Direction.Opposite(PrefferredDirections.get(1)));
+      PrefferredDirections.add(Direction.Opposite(PrefferredDirections.get(0)));
+      System.err.println ("ProcessTrolls: PrefferredDirections = " + PrefferredDirections);
+      for (Direction direction : PrefferredDirections) {
+         System.err.println ("ProcessTrolls: for loop - direction = " + direction);
+         boolean KeepChecking = false;
+         switch (direction) {
+            case RIGHT:
+               if (canRunnerMoveRight (Troll1)) {
+                  if ((Troll1.Image.movieType == MovieType.CLIMBING_DOWN) ||
+                      (Troll1.Image.movieType == MovieType.CLIMBING_UP) ||
+                      (Troll1.Image.movieType == MovieType.HANGING_ON_LADDER)) {
+                     Troll1.setImage (theTrollMovies.LeapingOffOfLadder);
+                     Troll1.Orientation = Direction.RIGHT;
+                     putRunnerOnBlock (Troll1);
+                     }
+                  else if (Troll1.Image.movieType == MovieType.HANGING_ON_ROPE) {
+                     Troll1.movieState = MovieState.PLAYING;
+                     Troll1.Orientation = Direction.RIGHT;
+                     }
+                  else {
+                     if (Troll1.Image.movieType != MovieType.RUNNING) 
+                        Troll1.setImage (theTrollMovies.Running);
+                     Troll1.movieState = MovieState.PLAYING;
+                     Troll1.Orientation = Direction.RIGHT;
+                     }
+                  }
+               else
+                  KeepChecking = true;
+               break;
+            case LEFT:
+               if (canRunnerMoveLeft (Troll1)) {
+                  if ((Troll1.Image.movieType == MovieType.CLIMBING_DOWN) ||
+                      (Troll1.Image.movieType == MovieType.CLIMBING_UP) ||
+                      (Troll1.Image.movieType == MovieType.HANGING_ON_LADDER)) {
+                     Troll1.setImage (theTrollMovies.LeapingOffOfLadder);
+                     Troll1.Orientation = Direction.LEFT;
+                     putRunnerOnBlock (Troll1);
+                     }
+                  else if (Troll1.Image.movieType == MovieType.HANGING_ON_ROPE) {
+                     Troll1.movieState = MovieState.PLAYING;
+                     Troll1.Orientation = Direction.LEFT;
+                     }
+                  else {
+                     if (Troll1.Image.movieType != MovieType.RUNNING) 
+                        Troll1.setImage (theTrollMovies.Running);
+                     Troll1.movieState = MovieState.PLAYING;
+                     Troll1.Orientation = Direction.LEFT;
+                     }
+                  }
+               else
+                  KeepChecking = true;
+               break;
+            case DOWN:
+               if (Troll1.Image.movieType != MovieType.CLIMBING_DOWN) {
+                  if (IsRunnerAtLadder (Troll1) || IsThereLadderBelow (Troll1)) {
+                     Troll1.setImage (theTrollMovies.ClimbingDown);
+                     Troll1.Orientation = Direction.RIGHT;
+                     centerRunnerInBlock (Troll1);
+                     }
+                  else if (canRunnerMoveDown (Troll1)) {
+                     Troll1.setImage (theTrollMovies.Falling);
+                     Troll1.Orientation = Direction.FACING;
+                     centerRunnerInBlock (Troll1);
+                     }
+                  }
+               else if (canRunnerMoveDown (Troll1))
+                  Troll1.movieState = MovieState.PLAYING;
+               break;
+            case UP:
+               if (canRunnerMoveUp (Troll1) && IsRunnerAtLadder (Troll1)) {
+                  if (Troll1.Image.movieType != MovieType.CLIMBING_UP) {
+                     Troll1.setImage (theTrollMovies.ClimbingUp);
+                     Troll1.Orientation = Direction.RIGHT;
+                     centerRunnerInBlock (Troll1);
+                     }
+                  else 
+                     Troll1.movieState = MovieState.PLAYING;
+                  }
+               else
+                  KeepChecking = true;
+            }
+         if (!KeepChecking)
+            break;
+         }         
+      System.err.println ("ProcessTrolls: Leaving - MovieType = " + Troll1.Image.movieType);
+      }
 
-		// SECOND: update any active elements in the cavern
-		upDateMovie (theRunner);
-		//upDateMovie (Troll1);
+	public int frameHandler (ArrayList<String> keysPressed) {
+		// first process any runner changes that must happen (gravity has priority over user input)
+		// second update any active elements to their next state, along with any of their effects on the cavern
+		// third display the cavern with all of its the active elements
+
+      // check for debugging key presses before doing anything to the runner
+		processDebuggingKeyPresses (keysPressed);
+
+      // check for any gold to get
+		checkForGold (theRunner);
+
+      // FIRST: process the actors
+      ProcessRunner(keysPressed);
+      ProcessTrolls();
+       
+      // SECOND: update any active elements in the cavern
+		upDateMovie (theRunner, theRunnerMovies);
+      //if ((frameCounter++ % 1) == 0)
+      upDateMovie (Troll1, theTrollMovies);
 		/*
 		upDateMovie (Runner3);
 		upDateMovie (Runner4);
@@ -761,7 +894,6 @@ class Cavern {
 
 		// display any raygun blast before displaying the runner so raygun that the runner is holding displays on top of the blast
 		if (raygunBlast != null) {
-			//Gc.drawImage (raygunBlast.Image.Image, raygunBlast.Location.getX(), raygunBlast.Location.getY());
 			if (raygunBlast.Image.nextImage != null) {      // still showing the blast
 				raygunBlast.Image = raygunBlast.Image.nextImage;
 				raygunBlast.Location.setX (raygunBlast.Location.getX() + raygunBlast.Image.xDelta);
@@ -785,11 +917,10 @@ class Cavern {
 			}
 		
 		// update the troll in the View
-      /*
-      Troll1.View.setImage (Troll1.Image.Image);
+      Troll1.View.setImage (Troll1.Image.theImage);
       Troll1.View.setX (Troll1.Location.getX());
       Troll1.View.setY (Troll1.Location.getY());
-      */
+      Troll1.View.setScaleX (Troll1.getScale());
 
 		// update the user controlled runner in the View
       theRunner.View.setImage (theRunner.Image.theImage);
@@ -810,6 +941,8 @@ class Cavern {
 									  Blocks[x][y].Location.getY()*CONSTANTS.BLOCK_HEIGHT);
 		if (theRunner != null)
 			Gc.drawImage (theRunner.Image.theImage, theRunner.Location.getX(), theRunner.Location.getY());
+		if (Troll1 != null)
+			Gc.drawImage (Troll1.Image.theImage, Troll1.Location.getX(), Troll1.Location.getY());
 		}
 
 	public void save (String fileName) {
@@ -852,7 +985,7 @@ class Cavern {
 					}
 			MovableLocationType location = (MovableLocationType)input.readObject();
 			if (theRunner == null)
-				theRunner = new Sprite (location, Movies.RunnerFacing, Direction.FACING);
+				theRunner = new Sprite (location, theRunnerMovies.Facing, Direction.FACING);
 			else
 				theRunner.Location = location;
 			}
