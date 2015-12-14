@@ -718,7 +718,7 @@ class Cavern {
    void ProcessTrolls() {
       ArrayList<Direction> PrefferredDirections = new ArrayList();
 			
-      System.err.println ("ProcessTrolls: Enterring - MovieType = " + Troll1.Image.movieType);
+      //System.err.println ("ProcessTrolls: Enterring - MovieType = " + Troll1.Image.movieType);
       
 		if (Troll1.Image.movieType == MovieType.FALLING) {
 			if (RunnerIsOnSomethingSolid (Troll1)) 
@@ -743,7 +743,13 @@ class Cavern {
       Direction PreferredX = Direction.HorizontalDirection(xDelta);
       int yDelta = theRunner.Location.getY() - Troll1.Location.getY();
       Direction PreferredY = Direction.VerticalDirection(yDelta);
-      if (abs(xDelta) > abs(yDelta)) {
+      if ((abs(xDelta) < 8) && (abs(yDelta) < 8)) {
+         // TODO: runner caught, add game over code
+         Troll1.movieState = MovieState.PAUSED;
+         return;
+         }
+      if (abs(yDelta) < 8) {
+         // always prefer climbing unless troll is at the same level as the runner
          PrefferredDirections.add (PreferredX);
          PrefferredDirections.add (PreferredY);
          }
@@ -759,7 +765,9 @@ class Cavern {
          boolean KeepChecking = false;
          switch (direction) {
             case RIGHT:
-               if (canRunnerMoveRight (Troll1)) {
+               if (abs(xDelta) < 8) 
+                  Troll1.movieState = MovieState.PAUSED;
+               else if (canRunnerMoveRight (Troll1)) {
                   if ((Troll1.Image.movieType == MovieType.CLIMBING_DOWN) ||
                       (Troll1.Image.movieType == MovieType.CLIMBING_UP) ||
                       (Troll1.Image.movieType == MovieType.HANGING_ON_LADDER)) {
@@ -782,7 +790,9 @@ class Cavern {
                   KeepChecking = true;
                break;
             case LEFT:
-               if (canRunnerMoveLeft (Troll1)) {
+               if (abs(xDelta) < 8) 
+                  Troll1.movieState = MovieState.PAUSED;
+               else if (canRunnerMoveLeft (Troll1)) {
                   if ((Troll1.Image.movieType == MovieType.CLIMBING_DOWN) ||
                       (Troll1.Image.movieType == MovieType.CLIMBING_UP) ||
                       (Troll1.Image.movieType == MovieType.HANGING_ON_LADDER)) {
@@ -805,23 +815,31 @@ class Cavern {
                   KeepChecking = true;
                break;
             case DOWN:
-               if (Troll1.Image.movieType != MovieType.CLIMBING_DOWN) {
+               if (abs(yDelta) < 8) 
+                  Troll1.movieState = MovieState.PAUSED;
+               else if (canRunnerMoveDown (Troll1)) {
                   if (IsRunnerAtLadder (Troll1) || IsThereLadderBelow (Troll1)) {
-                     Troll1.setImage (theTrollMovies.ClimbingDown);
-                     Troll1.Orientation = Direction.RIGHT;
-                     centerRunnerInBlock (Troll1);
+                     if (Troll1.Image.movieType != MovieType.CLIMBING_DOWN) {
+                        Troll1.setImage (theTrollMovies.ClimbingDown);
+                        Troll1.Orientation = Direction.RIGHT;
+                        centerRunnerInBlock (Troll1);
+                        }
+                     else
+                        Troll1.movieState = MovieState.PLAYING;
                      }
-                  else if (canRunnerMoveDown (Troll1)) {
+                  else {
                      Troll1.setImage (theTrollMovies.Falling);
                      Troll1.Orientation = Direction.FACING;
                      centerRunnerInBlock (Troll1);
                      }
                   }
-               else if (canRunnerMoveDown (Troll1))
-                  Troll1.movieState = MovieState.PLAYING;
+               else 
+                  KeepChecking = true;
                break;
             case UP:
-               if (canRunnerMoveUp (Troll1) && IsRunnerAtLadder (Troll1)) {
+               if (abs(yDelta) < 8) 
+                  Troll1.movieState = MovieState.PAUSED;
+               else if (canRunnerMoveUp (Troll1) && IsRunnerAtLadder (Troll1)) {
                   if (Troll1.Image.movieType != MovieType.CLIMBING_UP) {
                      Troll1.setImage (theTrollMovies.ClimbingUp);
                      Troll1.Orientation = Direction.RIGHT;
@@ -957,6 +975,8 @@ class Cavern {
 					output.writeObject (Blocks[x][y].Type);
                }
 			output.writeObject (theRunner.Location);
+         if (Troll1 != null)
+            output.writeObject (Troll1.Location);
 			}
 		catch (IOException ex) {
 			System.err.println ("IO exception occured in save: " + ex.toString());
@@ -988,6 +1008,11 @@ class Cavern {
 				theRunner = new Sprite (location, theRunnerMovies.Facing, Direction.FACING);
 			else
 				theRunner.Location = location;
+			location = (MovableLocationType)input.readObject();
+			if (Troll1 == null)
+				Troll1 = new Sprite (location, theTrollMovies.Facing, Direction.FACING);
+			else
+				Troll1.Location = location;
 			}
 		catch (ClassNotFoundException ex) {
 			System.err.println ("ClassNotFoundException exception occured");
