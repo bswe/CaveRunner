@@ -349,16 +349,18 @@ class TrollMovies extends ActorMovies {
 		theLastImage = new MovieImage (new Image ("file:Images/troll_running_2.png"), MovieType.RUNNING, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
 		Running.nextImage = theLastImage;
 		
-      /*
 		// load the troll images for hanging on rope into a movie loop
-		HangingOnRope = new MovieImage (new Image ("file:Images/runner_on_rope_1.png"), MovieType.HANGING_ON_ROPE, null, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/runner_on_rope_6.png"), MovieType.HANGING_ON_ROPE, HangingOnRope, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/runner_on_rope_5.png"), MovieType.HANGING_ON_ROPE, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/runner_on_rope_4.png"), MovieType.HANGING_ON_ROPE, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/runner_on_rope_3.png"), MovieType.HANGING_ON_ROPE, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
-		theLastImage = new MovieImage (new Image ("file:Images/runner_on_rope_2.png"), MovieType.HANGING_ON_ROPE, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE, 0);
+		HangingOnRope = new MovieImage (new Image ("file:Images/troll_on_rope_1.png"), MovieType.HANGING_ON_ROPE, null, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_on_rope_10.png"), MovieType.HANGING_ON_ROPE, HangingOnRope, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_on_rope_9.png"), MovieType.HANGING_ON_ROPE, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_on_rope_8.png"), MovieType.HANGING_ON_ROPE, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_on_rope_7.png"), MovieType.HANGING_ON_ROPE, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_on_rope_6.png"), MovieType.HANGING_ON_ROPE, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_on_rope_5.png"), MovieType.HANGING_ON_ROPE, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_on_rope_4.png"), MovieType.HANGING_ON_ROPE, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_on_rope_3.png"), MovieType.HANGING_ON_ROPE, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
+		theLastImage = new MovieImage (new Image ("file:Images/troll_on_rope_2.png"), MovieType.HANGING_ON_ROPE, theLastImage, CONSTANTS.RUNNING_FRAME_DISTANCE/2, 0);
 		HangingOnRope.nextImage = theLastImage;
-      */
 		
 		// load the troll falling images into a movie loop
 		Falling = new MovieImage (new Image("file:Images/troll_falling_1.png"), MovieType.FALLING, null, 0, CONSTANTS.FALLING_FRAME_DISTANCE/2);
