@@ -757,8 +757,8 @@ class Cavern {
          PrefferredDirections.add (PreferredY);
          PrefferredDirections.add (PreferredX);
          }
-      PrefferredDirections.add(Direction.Opposite(PrefferredDirections.get(1)));
-      PrefferredDirections.add(Direction.Opposite(PrefferredDirections.get(0)));
+      //PrefferredDirections.add(Direction.Opposite(PrefferredDirections.get(1)));
+      //PrefferredDirections.add(Direction.Opposite(PrefferredDirections.get(0)));
       System.err.println ("ProcessTrolls: PrefferredDirections = " + PrefferredDirections);
       for (Direction direction : PrefferredDirections) {
          System.err.println ("ProcessTrolls: for loop - direction = " + direction);
