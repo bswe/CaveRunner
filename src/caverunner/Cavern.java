@@ -787,6 +787,9 @@ class Cavern {
          case LADDER:
             if (thisBlock.Type == BlockTypes.LADDER)
                return true;
+         case HOLE:
+            if (canActorMoveDown (Troll))
+               return true;
         }
       return false;
       }
