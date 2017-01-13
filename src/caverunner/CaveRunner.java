@@ -81,9 +81,10 @@ enum BlockTypes {
    SOFT_TBL,      // ord(13)
    SOFT_BLR,      // ord(14)
    SOFT_TBLR,     // ord(15)
-	RUNNER,    // this item is only used for conveying that runner is selected from palette in the level editor
-	TROLL,     // this item is only used for conveying that troll is selected from palette in the level editor
-   ERASER,    // this item is only used to access the image in the Images class
+	RUNNER,        // this item is only used for conveying that runner is selected from palette in the level editor
+	TROLL,         // this item is only used for conveying that troll is selected from palette in the level editor
+   ERASER,        // this item is only used to access the image in the Images class
+   HOLE,          // this is used by trolls when searching for a way to drop down
 	EMPTY,
 	LADDER,
 	HIDDEN_LADDER,
@@ -514,14 +515,21 @@ enum Direction {
       }   
    } 
 
+enum SpriteType {
+   RUNNER,
+   TROLL,
+   RAYGUN_BLAST
+}
+
 class Sprite {
 	MovableLocationType Location;
 	MovieImage Image;
 	MovieState movieState;
    ImageView View;
    Direction Orientation;
+   SpriteType Type;
 
-	Sprite (MovableLocationType location, MovieImage image, Direction orientation) {
+	Sprite (MovableLocationType location, MovieImage image, Direction orientation, SpriteType type) {
 		Location = location;
 		Image = image;
 		movieState = MovieState.PLAYING;
@@ -529,6 +537,7 @@ class Sprite {
       View.setX (Location.getX());
       View.setY (Location.getY());
       Orientation = orientation;
+      Type = type;
 		}
 
 	void setImage (MovieImage image) {
