@@ -795,9 +795,11 @@ class Cavern {
          case LADDER:
             if (thisBlock.Type == BlockTypes.LADDER)
                return true;
+            break;
          case HOLE:
             if (canActorMoveDown (Troll))
                return true;
+         break;
         }
       return false;
       }
@@ -851,7 +853,6 @@ class Cavern {
          Troll.Orientation = direction;
          }
       }
-
    
    void ProcessTroll(Sprite Troll) {			
       //System.err.println ("ProcessTrolls: Enterring - MovieType = " + Troll1.Image.movieType);
@@ -904,7 +905,7 @@ class Cavern {
                return;  // took an action, so quit
                }
             }
-         else {   // preferred Y direction is DOWN
+         else {   // preferred Y direction is set to DOWN
             if (canActorMoveDown (Troll)) {
                if (IsActorAtLadder (Troll) || IsThereLadderBelow (Troll)) {
                   if (Troll.Image.movieType != MovieType.CLIMBING_DOWN) {
@@ -1056,7 +1057,7 @@ class Cavern {
 			}			
 		}
 	
-	public void restore (String fileName) {
+	public boolean restore (String fileName) {
 		if (!fileName.contains (".ser"))
 			fileName = fileName + ".ser";
 		try (InputStream file = new FileInputStream (fileName);
@@ -1090,6 +1091,7 @@ class Cavern {
                }
             }
          catch (IOException e) {}
+         return true;
 			}
 		catch (ClassNotFoundException ex) {
 			System.err.println ("ClassNotFoundException exception occured");
@@ -1097,6 +1099,7 @@ class Cavern {
 		catch (IOException ex) {
 			System.err.println ("IO exception occured in restore: " + ex.toString());
 			}
+      return false;
 		}
 
 	}
