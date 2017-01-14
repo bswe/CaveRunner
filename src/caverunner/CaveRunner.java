@@ -705,8 +705,7 @@ public class CaveRunner extends Application {
 		   }
 		}
 
-	Cavern createTestCavern (Group theView) {
-		Cavern theCavern = new Cavern (28, 16, theView);
+	void createTestCavern (Cavern theCavern) {
 		addGroundStrip (theCavern, 0, 0, 27, true);
 		addGroundStrip (theCavern, 0, 2, 2, false);
 		addGroundStrip (theCavern, 3, 2, 24, false);
@@ -723,7 +722,6 @@ public class CaveRunner extends Application {
 		//theCavern.addRunner (new MovableLocationType(1100, 44));
 		theCavern.addRunner (new MovableLocationType(324, 132));
       theCavern.addTroll (new MovableLocationType(88, 420));
-		return theCavern;
 		}
    
 	public void paletteButtonClicked (ActionEvent e) {
@@ -961,8 +959,13 @@ public class CaveRunner extends Application {
                    
 		// init graphics and cavern
 		Images.Init();
-		Cavern theCavern = createTestCavern (gameView);
-		//theCavern.restore ("test.ser");
+      Cavern theCavern = new Cavern (28, 16, gameView);
+		//createTestCavern (theCavern);
+      String fileName = "test6.ser";
+		if (theCavern.restore (fileName) == false) {
+         System.out.println ("Cavern file " + fileName + " does not exist");
+         return;
+         }
       int TotalGold = theCavern.LoadCavernIntoView ();
       goldText.setText ("Gold to get " + TotalGold);
  		theStage.show();
