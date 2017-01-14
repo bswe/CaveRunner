@@ -1004,10 +1004,14 @@ public class CaveRunner extends Application {
                                                               (((int)event.getSceneY() - 26) / CONSTANTS.BLOCK_HEIGHT) * CONSTANTS.BLOCK_HEIGHT));
             else if (editBlock.Type == BlockTypes.TROLL)
 					editCavern.addTroll (new MovableLocationType (((int)event.getSceneX() / CONSTANTS.BLOCK_WIDTH) * CONSTANTS.BLOCK_WIDTH, 
-                                                              (((int)event.getSceneY() - 26) / CONSTANTS.BLOCK_HEIGHT) * CONSTANTS.BLOCK_HEIGHT));
+                                                             (((int)event.getSceneY() - 26) / CONSTANTS.BLOCK_HEIGHT) * CONSTANTS.BLOCK_HEIGHT));
 				else {
+               if (editBlock.Type == BlockTypes.EMPTY) 
+                  // check for erasure of a troll
+                  editCavern.removeTroll (new MovableLocationType (((int)event.getSceneX() / CONSTANTS.BLOCK_WIDTH) * CONSTANTS.BLOCK_WIDTH, 
+                                                                   (((int)event.getSceneY() - 26) / CONSTANTS.BLOCK_HEIGHT) * CONSTANTS.BLOCK_HEIGHT));
 					Block block = editCavern.getBlock (new BlockLocation ((int)event.getSceneX() / CONSTANTS.BLOCK_WIDTH, 
-                                                                             ((int)event.getSceneY() - 26) / CONSTANTS.BLOCK_HEIGHT));
+                                                                     ((int)event.getSceneY() - 26) / CONSTANTS.BLOCK_HEIGHT));
                AddBlockToCavern (block);
 					}
 				editCavern.display();
