@@ -107,6 +107,14 @@ class Cavern {
       Trolls.add(newTroll);
 	}
 
+	public void removeTroll (MovableLocationType location) {
+      for (Sprite troll : Trolls) 
+         if ((troll.Location.getX() == location.getX()) && (troll.Location.getY() == location.getY())) {
+            Trolls.remove(troll);
+            break;
+            }
+      }
+
 	public Sprite getRunner () {
 		return theRunner;
 		}
