@@ -961,8 +961,8 @@ public class CaveRunner extends Application {
 		Images.Init();
       Cavern theCavern = new Cavern (28, 16, gameView);
 		//createTestCavern (theCavern);
-      String fileName = "test6.ser";
-		if (theCavern.restore (fileName) == false) {
+      String fileName = "test2.ser";
+		if (!theCavern.restore (fileName)) {
          System.out.println ("Cavern file " + fileName + " does not exist");
          return;
          }
