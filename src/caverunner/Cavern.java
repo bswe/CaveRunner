@@ -166,35 +166,48 @@ class Cavern {
 		theActor.Location.setY (blockLocation.getY()*CONSTANTS.BLOCK_HEIGHT);
 		}
    
-   private boolean TrollNextToTroll (Sprite theActor, Direction direction) {
-      if (theActor.Type != SpriteType.TROLL) 
+   private boolean TrollNextToTroll (Sprite thisTroll, Direction direction) {
+      if (thisTroll.Type != SpriteType.TROLL) 
          return false;
-      MovableLocationType location1 = theActor.Location;
-      for (Sprite troll : Trolls) {
-         if (theActor == troll)
+      MovableLocationType thisTrollLocation = thisTroll.Location;
+      for (Sprite otherTroll : Trolls) {
+         if (otherTroll == thisTroll)
+            // looking for any other trolls, not this troll
             continue;
          int Delta;
-         MovableLocationType location2 = troll.Location;
+         MovableLocationType otherTrollLocation = otherTroll.Location;
          switch (direction) {
             case RIGHT:
-               Delta = location1.getX() - location2.getX();
-               if ((Delta < 0) && (Delta > -30))
-                  return true;
+               Delta = thisTrollLocation.getY() - otherTrollLocation.getY();
+               if ((abs(Delta) < 30)) {                  
+                  Delta = thisTrollLocation.getX() - otherTrollLocation.getX();
+                  if ((Delta < 0) && (Delta > -30))
+                     return true;
+                  }
                break;
             case LEFT:
-               Delta = location2.getX() - location1.getX();
-               if ((Delta < 0) && (Delta > -30))
-                  return true;
+               Delta = thisTrollLocation.getY() - otherTrollLocation.getY();
+               if ((abs(Delta) < 30)) {                  
+                  Delta = otherTrollLocation.getX() - thisTrollLocation.getX();
+                  if ((Delta < 0) && (Delta > -30))
+                     return true;
+                  }
                break;
             case DOWN:
-               Delta = location1.getY() - location2.getY();
-               if ((Delta < 0) && (Delta > -30))
-                  return true;
+               Delta = thisTrollLocation.getX() - otherTrollLocation.getX();
+               if ((abs(Delta) < 30)) {                  
+                  Delta = thisTrollLocation.getY() - otherTrollLocation.getY();
+                  if ((Delta < 0) && (Delta > -30))
+                     return true;
+                  }
                break;
             case UP:
-               Delta = location2.getY() - location1.getY();
-               if ((Delta < 0) && (Delta > -30))
-                  return true;
+               Delta = thisTrollLocation.getX() - otherTrollLocation.getX();
+               if ((abs(Delta) < 30)) {                  
+                  Delta = otherTrollLocation.getY() - thisTrollLocation.getY();
+                  if ((Delta < 0) && (Delta > -30))
+                     return true;
+                  }
                break;
             }
          }
@@ -1006,7 +1019,7 @@ class Cavern {
 				}
 			}
 		
-		// update the troll in the View
+		// update the trolls in the View
       for (Sprite troll : Trolls) {
          troll.View.setImage (troll.Image.theImage);
          troll.View.setX (troll.Location.getX());
