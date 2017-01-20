@@ -753,8 +753,11 @@ class Cavern {
       }
 
    void ProcessRunner (ArrayList<String> keysPressed) {
+      if (theRunner.Image.movieType == MovieType.BEING_CAPTURED) {
+			// Let movie play out before processing any keyboard input
+			}
       // FIRST: process falling runner (only gravaty is in control) and then any user input runner control change
-		if (theRunner.Image.movieType == MovieType.FALLING) {
+		else if (theRunner.Image.movieType == MovieType.FALLING) {
 			if (ActorIsOnSomethingSolid (theRunner)) {
 				theRunner.setImage (theRunnerMovies.Facing);
             // set the last key to null to cause the key processor to reprocess any key held down before the end of the fall 
@@ -894,7 +897,13 @@ class Cavern {
       int yDelta = theRunner.Location.getY() - Troll.Location.getY();
       if ((abs(xDelta) < 8) && (abs(yDelta) < 8)) {
          // TODO: runner caught, add game over code
+         Troll.Image.theImage = Images.empty;
          Troll.movieState = MovieState.PAUSED;
+         if (theRunner.Image.movieType != MovieType.BEING_CAPTURED) {
+            theRunner.setImage (theRunnerMovies.Captured);
+            theRunner.Orientation = Direction.RIGHT;
+            theRunner.movieState = MovieState.PLAYING;
+            }
          return;
          }
       Direction PreferredX = Direction.HorizontalDirection(xDelta);
@@ -967,6 +976,13 @@ class Cavern {
       // check for debugging key presses before doing anything to the runner
 		processDebuggingKeyPresses (keysPressed);
 
+      /*
+      if (theRunner.Image.movieType == MovieType.BEING_CAPTURED)
+         // play capture movie at half speed
+         if ((frameCounter++ % 2) == 1) 
+            return TotalGold;
+      */
+
       // check for any gold to get
 		checkForGold (theRunner);
 
@@ -977,7 +993,6 @@ class Cavern {
        
       // SECOND: update any active elements in the cavern
 		upDateMovie (theRunner, theRunnerMovies);
-      //if ((frameCounter++ % 1) == 0)
       for (Sprite troll : Trolls)
          upDateMovie (troll, theTrollMovies);
 
