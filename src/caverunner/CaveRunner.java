@@ -98,6 +98,7 @@ class Images {
 	static Image hard;
    static Image runner;
    static Image troll;
+   static Image empty;
 	private static Image soft;
 	private static Image soft_T;
 	private static Image soft_R;
@@ -153,6 +154,9 @@ class Images {
 		gold1 = new Image ("file:Images/gold1.png");
 		exit = new Image ("file:Images/exit.png");
 		eraser = new Image ("file:Images/eraser.png");
+      
+      // load the empty image for the troll that captures the runner
+		empty = new Image ("file:Images/empty.png");      
       }
    
    static Image getImage (BlockTypes blockType) {
@@ -196,7 +200,8 @@ enum MovieType {
 	LEAPING_OFF_OF_LADDER,
 	FIRING_RAYGUN,
 	RAYGUN_BLAST,
-	HANGING_ON_ROPE
+	HANGING_ON_ROPE,
+   BEING_CAPTURED
    }
 
 class MovieImage {
@@ -204,6 +209,7 @@ class MovieImage {
 	Image theImage;
 	MovieImage nextImage;
 	int xDelta, yDelta;
+   int RepeatCount;
 
 	MovieImage (Image image, MovieType type, MovieImage next, int x, int y) {
 		movieType = type;
@@ -211,6 +217,16 @@ class MovieImage {
 		nextImage = next;
 		xDelta = x;
 		yDelta = y;
+      RepeatCount = 0;
+		}
+   
+   	MovieImage (Image image, MovieType type, MovieImage next, int x, int y, int repeatCount) {
+		movieType = type;
+		theImage = image;
+		nextImage = next;
+		xDelta = x;
+		yDelta = y;
+      RepeatCount = repeatCount;
 		}
 	}
 
@@ -230,6 +246,7 @@ class ActorMovies {
 class RunnerMovies extends ActorMovies {
    MovieImage firingRaygun;
    MovieImage raygunBlast;
+   MovieImage Captured;
 
 	RunnerMovies () {
 		// any MovieImage that is passed into the MovieImage constructor should be already initialized before it is used or it will be null
@@ -327,6 +344,41 @@ class RunnerMovies extends ActorMovies {
 		theLastImage = new MovieImage (new Image ("file:Images/runner_climbing_3.png"), MovieType.CLIMBING_UP, theLastImage, 0, -CONSTANTS.CLIMBING_FRAME_DISTANCE);
 		theLastImage = new MovieImage (new Image ("file:Images/runner_climbing_2.png"), MovieType.CLIMBING_UP, theLastImage, 0, -CONSTANTS.CLIMBING_FRAME_DISTANCE);
 		ClimbingUp.nextImage = theLastImage;
+      
+      // load the images for the runner being captured by troll into a movie strip, and run at half speed (not a movie loop)
+		theLastImage = new MovieImage (new Image ("file:Images/Death33.png"), MovieType.BEING_CAPTURED, null, 0, 0, 1);
+		theLastImage = new MovieImage (new Image ("file:Images/Death32.png"), MovieType.BEING_CAPTURED, theLastImage, 0, 0, 1);
+		theLastImage = new MovieImage (new Image ("file:Images/Death31.png"), MovieType.BEING_CAPTURED, theLastImage, 0, 0, 1);
+		theLastImage = new MovieImage (new Image ("file:Images/Death30.png"), MovieType.BEING_CAPTURED, theLastImage, 0, 0, 1);
+		theLastImage = new MovieImage (new Image ("file:Images/Death29.png"), MovieType.BEING_CAPTURED, theLastImage, 0, 0, 1);
+		theLastImage = new MovieImage (new Image ("file:Images/Death28.png"), MovieType.BEING_CAPTURED, theLastImage, 0, 0, 1);
+		theLastImage = new MovieImage (new Image ("file:Images/Death27.png"), MovieType.BEING_CAPTURED, theLastImage, 0, 0, 1);
+		theLastImage = new MovieImage (new Image ("file:Images/Death26.png"), MovieType.BEING_CAPTURED, theLastImage, 0, 0, 1);
+		theLastImage = new MovieImage (new Image ("file:Images/Death25.png"), MovieType.BEING_CAPTURED, theLastImage, 0, 0, 1);
+		theLastImage = new MovieImage (new Image ("file:Images/Death24.png"), MovieType.BEING_CAPTURED, theLastImage, 0, 0, 1);
+		theLastImage = new MovieImage (new Image ("file:Images/Death23.png"), MovieType.BEING_CAPTURED, theLastImage, 0, 0, 1);
+		theLastImage = new MovieImage (new Image ("file:Images/Death22.png"), MovieType.BEING_CAPTURED, theLastImage, 0, 0, 1);
+		theLastImage = new MovieImage (new Image ("file:Images/Death21.png"), MovieType.BEING_CAPTURED, theLastImage, 0, 0, 1);
+		theLastImage = new MovieImage (new Image ("file:Images/Death20.png"), MovieType.BEING_CAPTURED, theLastImage, 0, 0, 1);
+		theLastImage = new MovieImage (new Image ("file:Images/Death19.png"), MovieType.BEING_CAPTURED, theLastImage, 0, 0, 1);
+		theLastImage = new MovieImage (new Image ("file:Images/Death18.png"), MovieType.BEING_CAPTURED, theLastImage, 0, 0, 1);
+		theLastImage = new MovieImage (new Image ("file:Images/Death17.png"), MovieType.BEING_CAPTURED, theLastImage, 0, 0, 1);
+		theLastImage = new MovieImage (new Image ("file:Images/Death16.png"), MovieType.BEING_CAPTURED, theLastImage, 0, 0, 1);
+		theLastImage = new MovieImage (new Image ("file:Images/Death15.png"), MovieType.BEING_CAPTURED, theLastImage, 0, 0, 1);
+		theLastImage = new MovieImage (new Image ("file:Images/Death14.png"), MovieType.BEING_CAPTURED, theLastImage, 0, 0, 1);
+		theLastImage = new MovieImage (new Image ("file:Images/Death13.png"), MovieType.BEING_CAPTURED, theLastImage, 0, 0, 1);
+		theLastImage = new MovieImage (new Image ("file:Images/Death12.png"), MovieType.BEING_CAPTURED, theLastImage, 0, 0, 1);
+		theLastImage = new MovieImage (new Image ("file:Images/Death11.png"), MovieType.BEING_CAPTURED, theLastImage, 0, 0, 1);
+		theLastImage = new MovieImage (new Image ("file:Images/Death10.png"), MovieType.BEING_CAPTURED, theLastImage, 0, 0, 1);
+		theLastImage = new MovieImage (new Image ("file:Images/Death9.png"), MovieType.BEING_CAPTURED, theLastImage, 0, 0, 1);
+		theLastImage = new MovieImage (new Image ("file:Images/Death8.png"), MovieType.BEING_CAPTURED, theLastImage, 0, 0, 1);
+		theLastImage = new MovieImage (new Image ("file:Images/Death7.png"), MovieType.BEING_CAPTURED, theLastImage, 0, 0, 1);
+		theLastImage = new MovieImage (new Image ("file:Images/Death6.png"), MovieType.BEING_CAPTURED, theLastImage, 0, 0, 1);
+		theLastImage = new MovieImage (new Image ("file:Images/Death5.png"), MovieType.BEING_CAPTURED, theLastImage, 0, 0, 1);
+		theLastImage = new MovieImage (new Image ("file:Images/Death4.png"), MovieType.BEING_CAPTURED, theLastImage, 0, 0, 1);
+		theLastImage = new MovieImage (new Image ("file:Images/Death3.png"), MovieType.BEING_CAPTURED, theLastImage, 0, 0, 1);
+		theLastImage = new MovieImage (new Image ("file:Images/Death2.png"), MovieType.BEING_CAPTURED, theLastImage, 0, 0, 1);
+		Captured = new MovieImage (new Image ("file:Images/Death1.png"), MovieType.BEING_CAPTURED, theLastImage, 0, 0, 1);
 		}
    }
 
