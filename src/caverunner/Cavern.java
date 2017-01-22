@@ -29,9 +29,12 @@ class Cavern {
 	private ArrayList<ActiveBlock> activeBlocks = new ArrayList<>();
    private ArrayList<Sprite> Trolls = new ArrayList();
    private int TotalGold = 0;
+   private boolean Running = false;
 
 	AudioClip pling = new AudioClip ("file:Pling.mp3");
 	AudioClip laserBlast = new AudioClip ("file:LaserBlast.mp3");
+	AudioClip bumpIntoSomething = new AudioClip ("file:BumpIntoSomething.mp3");
+	AudioClip runnerCapture = new AudioClip ("file:LodeRunnerCapture.mp3");
    private RunnerMovies theRunnerMovies = new RunnerMovies();
    private TrollMovies theTrollMovies = new TrollMovies();
 
@@ -896,13 +899,14 @@ class Cavern {
       int xDelta = theRunner.Location.getX() - Troll.Location.getX();
       int yDelta = theRunner.Location.getY() - Troll.Location.getY();
       if ((abs(xDelta) < 8) && (abs(yDelta) < 8)) {
-         // TODO: runner caught, add game over code
+         // runner caught, execute game over code
          Troll.Image.theImage = Images.empty;
          Troll.movieState = MovieState.PAUSED;
          if (theRunner.Image.movieType != MovieType.BEING_CAPTURED) {
             theRunner.setImage (theRunnerMovies.Captured);
             theRunner.Orientation = Direction.RIGHT;
             theRunner.movieState = MovieState.PLAYING;
+            runnerCapture.play();
             }
          return;
          }
@@ -1108,8 +1112,11 @@ class Cavern {
 			MovableLocationType location = (MovableLocationType)input.readObject();
 			if (theRunner == null)
 				theRunner = new Sprite (location, theRunnerMovies.Facing, Direction.FACING, SpriteType.RUNNER);
-			else
+         else {
 				theRunner.Location = location;
+            theRunner.Image = theRunnerMovies.Facing;
+            theRunner.Orientation = Direction.FACING;
+            }
          Trolls.clear();
          try {
             while (true) {
