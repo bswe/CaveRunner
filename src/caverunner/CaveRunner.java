@@ -709,7 +709,6 @@ class ActiveBlock {
 	}
  
 public class CaveRunner extends Application {
-	Stage paletteStage;
 	Button runnerButton, 
           trollButton,
 		    digableButton, 
@@ -724,8 +723,6 @@ public class CaveRunner extends Application {
 	GraphicsContext editGc;
 	Block editBlock = new Block();
 	boolean paused = false;
-
-   public static void main (String[] args) {launch (args);}
 
 	void addGroundStrip (Cavern theCavern, int xPos, int yPos, int count, boolean sparse) {
 		Block block;
@@ -916,14 +913,17 @@ public class CaveRunner extends Application {
             }
          }
       }
+   
+   public static void main (String[] args) {launch (args);}
 
 	public void start (Stage theStage) {
-		//AudioClip sound = new AudioClip("file:LaserBlast.mp3");
+      // some earlier test code not ready to delete just yet
+      //System.out.println ("Enterring start method");
+		//AudioClip sound = new AudioClip("file:LodeRunnerCapture.mp3");
 		//sound.play();
       
-		theStage.setTitle ("Cave Runner");
-         
-		// create the mode menu
+		// create the menu bar and its menu items
+      // create the mode menu
 		Menu modeMenu = new Menu ("Mode");
 		MenuItem playGameItem = new MenuItem ("Play Game");
 		MenuItem levelEditItem = new MenuItem ("Edit Levels");
@@ -938,7 +938,7 @@ public class CaveRunner extends Application {
 		// load all menus into menu bar
 		menuBar.getMenus().addAll (fileMenu, modeMenu);
     
-		// create a status bar from a horizontal box
+		// create the status bar from a horizontal box and load the text items into it
 		HBox statusBar = new HBox();
 		statusBar.setSpacing (10);
 		Text modeText = new Text ("Playing Game");
@@ -951,33 +951,21 @@ public class CaveRunner extends Application {
 		// to bleed through the transparent background of the statusBar.
 		statusBar.setStyle ("-fx-background-color: cornsilk"); 
 
-      // create game view
-		//Canvas gameCanvas = new Canvas (CONSTANTS.WINDOW_WIDTH, CONSTANTS.WINDOW_HEIGHT);
-		Group gameView = new Group();
-		//gameView.getChildren().add (gameCanvas);
-		//GraphicsContext gameGc = gameCanvas.getGraphicsContext2D();
-
-		// create level editor view
-		Canvas editCanvas = new Canvas (CONSTANTS.WINDOW_WIDTH, CONSTANTS.WINDOW_HEIGHT);
-		Group EditView = new Group();
-		EditView.getChildren().add (editCanvas);
-		editGc = editCanvas.getGraphicsContext2D();
-		editCavern = new Cavern (28, 16, editGc);
-
-		// create main window view that holds the main window, status bar, and menu bar
-		BorderPane gameLayout = new BorderPane();
-		VBox centerView = new VBox();
-		gameLayout.setCenter (centerView); // we add the centerview first and we never change it, instead we put it's changeable contents in a vbox and change out the vbox content.
-		gameLayout.setBottom (statusBar);
+		// create the application window that holds the main game window, status bar, and menu bar
+		VBox centerView = new VBox();    // main game window
+		BorderPane gameLayout = new BorderPane();     //application window
 		gameLayout.setRight (null);
 		gameLayout.setLeft (null);
-		gameLayout.setTop (menuBar);   // note the game layout is the last thing added to the borderpane so it will always stay on top if the border pane is resized.
+		gameLayout.setCenter (centerView); // we add the centerview first and we never change it, instead we put it's changeable contents in a vbox and change out the vbox content.
+		gameLayout.setBottom (statusBar);
+		gameLayout.setTop (menuBar);   // note: the game layout is the last thing added to the borderpane so it will always stay on top if the border pane is resized.
 
-		// now load scene into the stage
+		// now load the scene into the stage and initialize the the stage
 		Scene theScene = new Scene (gameLayout, CONSTANTS.WINDOW_WIDTH-10, CONSTANTS.WINDOW_HEIGHT+31);
 		theStage.setScene (theScene);
 		theStage.setResizable(false);
-		
+		theStage.setTitle ("Cave Runner");
+         		
       // create fifo queue for holding key presses, and initialize it to empty
 		ArrayList<String> keysPressed = new ArrayList<String>();
 		keysPressed.add(CONSTANTS.NO_KEY_PRESSED);
@@ -1009,19 +997,71 @@ public class CaveRunner extends Application {
             }
          );
                    
-		// init graphics and cavern
+		// create level editor view
+		Canvas editCanvas = new Canvas (CONSTANTS.WINDOW_WIDTH, CONSTANTS.WINDOW_HEIGHT);
+		Group EditView = new Group();
+		EditView.getChildren().add (editCanvas);
+		editGc = editCanvas.getGraphicsContext2D();
+		editCavern = new Cavern (28, 16, editGc);
+
+		// init graphics
 		Images.Init();
+      
+      // init cavern
+      // create game view
+		Group gameView = new Group();
       Cavern theCavern = new Cavern (28, 16, gameView);
-		//createTestCavern (theCavern);
-      String fileName = "test2.ser";
-		if (!theCavern.restore (fileName)) {
-         System.out.println ("Cavern file " + fileName + " does not exist");
-         return;
-         }
-      int TotalGold = theCavern.LoadCavernIntoView ();
-      goldText.setText ("Gold to get " + TotalGold);
- 		theStage.show();
  
+		// handle mouse input from the scene in the editor mode
+		theScene.setOnMousePressed (new EventHandler<MouseEvent>() {
+			@Override public void handle (MouseEvent event) {
+				//System.err.println ("mouse press detected at " + event.getSceneX() + ", " + event.getSceneY());
+            if (modeText.getText() == "Playing Game")
+               // mouse not valid input device while in play mode
+               return;
+				if (editBlock.Type == BlockTypes.RUNNER)
+					editCavern.addRunner (new MovableLocationType (((int)event.getSceneX() / CONSTANTS.BLOCK_WIDTH) * CONSTANTS.BLOCK_WIDTH, 
+                                                              (((int)event.getSceneY() - 26) / CONSTANTS.BLOCK_HEIGHT) * CONSTANTS.BLOCK_HEIGHT));
+            else if (editBlock.Type == BlockTypes.TROLL)
+					editCavern.addTroll (new MovableLocationType (((int)event.getSceneX() / CONSTANTS.BLOCK_WIDTH) * CONSTANTS.BLOCK_WIDTH, 
+                                                             (((int)event.getSceneY() - 26) / CONSTANTS.BLOCK_HEIGHT) * CONSTANTS.BLOCK_HEIGHT));
+				else {
+               if (editBlock.Type == BlockTypes.EMPTY) 
+                  // check for erasure of a troll
+                  editCavern.removeTroll (new MovableLocationType (((int)event.getSceneX() / CONSTANTS.BLOCK_WIDTH) * CONSTANTS.BLOCK_WIDTH, 
+                                                                   (((int)event.getSceneY() - 26) / CONSTANTS.BLOCK_HEIGHT) * CONSTANTS.BLOCK_HEIGHT));
+					Block block = editCavern.getBlock (new BlockLocation ((int)event.getSceneX() / CONSTANTS.BLOCK_WIDTH, 
+                                                                     ((int)event.getSceneY() - 26) / CONSTANTS.BLOCK_HEIGHT));
+               AddBlockToCavern (block);
+					}
+				editCavern.display();
+				}
+		   });
+
+		// debugging code, can delete this later if not needed
+      /*
+      theScene.setOnMouseReleased (new EventHandler<MouseEvent>() {
+			@Override public void handle (MouseEvent event) {
+				//System.err.println ("mouse release detected at " + event.getSceneX() + ", " + event.getSceneY());
+				}
+		   });
+      */
+
+		theScene.setOnMouseDragged (new EventHandler<MouseEvent>() {
+			@Override public void handle (MouseEvent event) {
+				//System.err.println ("mouse drag detected at " + event.getSceneX() + ", " + event.getSceneY());
+            if (modeText.getText() == "Playing Game")
+               // mouse not valid input device while in play mode
+               return;
+				if ((editBlock.Type != BlockTypes.RUNNER) && (editBlock.Type != BlockTypes.TROLL)) {
+					Block block = editCavern.getBlock (new BlockLocation ((int)event.getSceneX() / CONSTANTS.BLOCK_WIDTH, 
+                                                                             ((int)event.getSceneY() - 26) / CONSTANTS.BLOCK_HEIGHT));
+               AddBlockToCavern (block);
+					}
+				editCavern.display();
+				}
+		   });
+
 		// create editor palette window
 		runnerButton = new Button ("", new ImageView (Images.runner));
 		runnerButton.setOnAction (e-> paletteButtonClicked(e));
@@ -1044,53 +1084,12 @@ public class CaveRunner extends Application {
 		FlowPane palettePane = new FlowPane();
 		palettePane.getChildren().addAll (runnerButton, trollButton, digableButton, ladderButton, hiddenLadderButton, ropeButton, gold1Button, exitButton, eraserButton);
 		Scene paletteScene = new Scene (palettePane, 170, 146);
-		paletteStage = new Stage();
+		Stage paletteStage = new Stage();
 		paletteStage.initOwner (theStage);
 		paletteStage.setScene (paletteScene);
 		paletteStage.setTitle ("Editor Palette");
 		paletteStage.setResizable(false);
 		
-		// handle mouse input
-		theScene.setOnMousePressed (new EventHandler<MouseEvent>() {
-			@Override public void handle (MouseEvent event) {
-				//System.err.println ("mouse press detected at " + event.getSceneX() + ", " + event.getSceneY());
-				if (editBlock.Type == BlockTypes.RUNNER)
-					editCavern.addRunner (new MovableLocationType (((int)event.getSceneX() / CONSTANTS.BLOCK_WIDTH) * CONSTANTS.BLOCK_WIDTH, 
-                                                              (((int)event.getSceneY() - 26) / CONSTANTS.BLOCK_HEIGHT) * CONSTANTS.BLOCK_HEIGHT));
-            else if (editBlock.Type == BlockTypes.TROLL)
-					editCavern.addTroll (new MovableLocationType (((int)event.getSceneX() / CONSTANTS.BLOCK_WIDTH) * CONSTANTS.BLOCK_WIDTH, 
-                                                             (((int)event.getSceneY() - 26) / CONSTANTS.BLOCK_HEIGHT) * CONSTANTS.BLOCK_HEIGHT));
-				else {
-               if (editBlock.Type == BlockTypes.EMPTY) 
-                  // check for erasure of a troll
-                  editCavern.removeTroll (new MovableLocationType (((int)event.getSceneX() / CONSTANTS.BLOCK_WIDTH) * CONSTANTS.BLOCK_WIDTH, 
-                                                                   (((int)event.getSceneY() - 26) / CONSTANTS.BLOCK_HEIGHT) * CONSTANTS.BLOCK_HEIGHT));
-					Block block = editCavern.getBlock (new BlockLocation ((int)event.getSceneX() / CONSTANTS.BLOCK_WIDTH, 
-                                                                     ((int)event.getSceneY() - 26) / CONSTANTS.BLOCK_HEIGHT));
-               AddBlockToCavern (block);
-					}
-				editCavern.display();
-				}
-		   });
-
-		theScene.setOnMouseReleased (new EventHandler<MouseEvent>() {
-			@Override public void handle (MouseEvent event) {
-				//System.err.println ("mouse release detected at " + event.getSceneX() + ", " + event.getSceneY());
-				}
-		   });
-
-		theScene.setOnMouseDragged (new EventHandler<MouseEvent>() {
-			@Override public void handle (MouseEvent event) {
-				//System.err.println ("mouse drag detected at " + event.getSceneX() + ", " + event.getSceneY());
-				if ((editBlock.Type != BlockTypes.RUNNER) && (editBlock.Type != BlockTypes.TROLL)) {
-					Block block = editCavern.getBlock (new BlockLocation ((int)event.getSceneX() / CONSTANTS.BLOCK_WIDTH, 
-                                                                             ((int)event.getSceneY() - 26) / CONSTANTS.BLOCK_HEIGHT));
-               AddBlockToCavern (block);
-					}
-				editCavern.display();
-				}
-		   });
-
 		// don't allow user to close the palette window
 		paletteStage.setOnCloseRequest (new EventHandler<WindowEvent>() { 
 			@Override public void handle (final WindowEvent windowEvent) { 
@@ -1098,7 +1097,7 @@ public class CaveRunner extends Application {
             } 
 			});
 		
-		// process menu item selections
+		// create the methods to process menu item selections
 		saveItem.setOnAction (new EventHandler<ActionEvent>() {
 			public void handle (ActionEvent event) {
 				if (editCavern == null) {
@@ -1219,6 +1218,17 @@ public class CaveRunner extends Application {
 				}
 			};
 	    
+		
+      //createTestCavern (theCavern);
+      String fileName = "test2.ser";
+		if (!theCavern.restore (fileName)) {
+         System.out.println ("Cavern file " + fileName + " does not exist");
+         return;
+         }
+      int TotalGold = theCavern.LoadCavernIntoView ();
+      goldText.setText ("Gold to get " + TotalGold);
+ 		theStage.show();
+      
 		// start the app with the "playing game" window
 		playGameItem.fire();
 		}
