@@ -708,6 +708,110 @@ class ActiveBlock {
 		}
 	}
  
+class EditorPalette extends Stage {
+	Button runnerButton, 
+          trollButton,
+		    digableButton, 
+		    ladderButton, 
+		    gold1Button,
+		    hiddenLadderButton,
+		    ropeButton,
+		    exitButton,
+		    eraserButton;
+   Block editBlock;
+   
+   EditorPalette (Stage parentStage, Block editorBlock) {
+      editBlock = editorBlock;
+      runnerButton = new Button ("", new ImageView (Images.runner));
+      runnerButton.setOnAction (e-> paletteButtonClicked(e));
+      trollButton = new Button ("", new ImageView (Images.troll));
+      trollButton.setOnAction (e-> paletteButtonClicked(e));
+      digableButton = new Button ("", new ImageView (Images.getImage(BlockTypes.SOFT)));	
+      digableButton.setOnAction (e-> paletteButtonClicked(e));
+      ladderButton = new Button ("", new ImageView (Images.getImage(BlockTypes.LADDER)));	
+      ladderButton.setOnAction (e-> paletteButtonClicked(e));
+      hiddenLadderButton = new Button ("", new ImageView (Images.getImage(BlockTypes.HIDDEN_LADDER)));	
+      hiddenLadderButton.setOnAction (e-> paletteButtonClicked(e));
+      ropeButton = new Button ("", new ImageView (Images.getImage(BlockTypes.ROPE)));	
+      ropeButton.setOnAction (e-> paletteButtonClicked(e));
+      gold1Button = new Button ("", new ImageView (Images.getImage(BlockTypes.GOLD_1)));	
+      gold1Button.setOnAction (e-> paletteButtonClicked(e));
+      exitButton = new Button ("", new ImageView (Images.getImage(BlockTypes.EXIT)));	
+      exitButton.setOnAction (e-> paletteButtonClicked(e));
+      eraserButton = new Button ("", new ImageView (Images.getImage(BlockTypes.ERASER)));	
+      eraserButton.setOnAction (e-> paletteButtonClicked(e));
+      FlowPane palettePane = new FlowPane();
+      palettePane.getChildren().addAll (runnerButton, trollButton, digableButton, ladderButton, hiddenLadderButton, ropeButton, gold1Button, exitButton, eraserButton);
+      Scene paletteScene = new Scene (palettePane, 170, 146);
+      this.initOwner (parentStage);
+      this.setScene (paletteScene);
+      this.setTitle ("Editor Palette");
+      this.setResizable(false);
+
+      // don't allow user to close the palette window
+      this.setOnCloseRequest (new EventHandler<WindowEvent>() { 
+         @Override public void handle (final WindowEvent windowEvent) { 
+            windowEvent.consume();
+            } 
+         });
+      }
+		        
+	void paletteButtonClicked (ActionEvent e) {
+		//System.err.println ("processing event " + e.toString());
+		runnerButton.setStyle ("");
+		digableButton.setStyle ("");
+		ladderButton.setStyle ("");
+		hiddenLadderButton.setStyle ("");
+		ropeButton.setStyle ("");
+		gold1Button.setStyle ("");
+		exitButton.setStyle ("");
+		eraserButton.setStyle ("");
+		((Button)e.getSource()).setStyle ("-fx-base: #00ff00;");
+		
+		if (e.getSource() == runnerButton) {
+			editBlock.Type = BlockTypes.RUNNER;   // indicate a runner for editor, no block is actually a runner in the game
+			//System.err.println ("edit block set to runner");
+         return;
+			}
+		if (e.getSource() == trollButton) {
+			editBlock.Type = BlockTypes.TROLL;   // indicate a troll for editor, no block is actually a runner in the game
+			//System.err.println ("edit block set to troll");
+         return;
+			}
+		else if (e.getSource() == digableButton) {
+			editBlock.Type = BlockTypes.SOFT;
+			//System.err.println ("edit block set to diggable");
+			}
+		else if (e.getSource() == ladderButton) {
+			editBlock.Type = BlockTypes.LADDER;
+			//System.err.println ("edit block set to visable ladder");
+			}
+		else if (e.getSource() == hiddenLadderButton) {
+			editBlock.Type = BlockTypes.HIDDEN_LADDER;
+			//System.err.println ("edit block set to hidden ladder");
+			}
+		else if (e.getSource() == ropeButton) {
+			editBlock.Type = BlockTypes.ROPE;
+			//System.err.println ("edit block set to roper");
+			}
+		else if (e.getSource() == gold1Button) {
+			editBlock.Type = BlockTypes.GOLD_1;
+			//System.err.println ("edit block set to gold");
+			}
+		else if (e.getSource() == exitButton) {
+			editBlock.Type = BlockTypes.EXIT;
+			//System.err.println ("edit block set to exit");
+			}
+		else if (e.getSource() == eraserButton) {
+			editBlock.Type = BlockTypes.EMPTY;
+			editBlock.blockImage = null;
+			//System.err.println ("edit block set to eraser");
+         return;
+			}
+		editBlock.blockImage = Images.getImage(editBlock.Type);
+		}
+   }
+   
 public class CaveRunner extends Application {
 	Button runnerButton, 
           trollButton,
@@ -773,62 +877,12 @@ public class CaveRunner extends Application {
       theCavern.addTroll (new MovableLocationType(88, 420));
 		}
    
-	public void paletteButtonClicked (ActionEvent e) {
-		//System.err.println ("processing event " + e.toString());
-		runnerButton.setStyle ("");
-		digableButton.setStyle ("");
-		ladderButton.setStyle ("");
-		hiddenLadderButton.setStyle ("");
-		ropeButton.setStyle ("");
-		gold1Button.setStyle ("");
-		exitButton.setStyle ("");
-		eraserButton.setStyle ("");
-		((Button)e.getSource()).setStyle ("-fx-base: #00ff00;");
+	public Stage CreatePaletteStage (Stage theStage) {
+      Stage paletteStage = new EditorPalette (theStage, editBlock);
+      return paletteStage;
+      }
 		
-		if (e.getSource() == runnerButton) {
-			editBlock.Type = BlockTypes.RUNNER;   // indicate a runner for editor, no block is actually a runner in the game
-			//System.err.println ("edit block set to runner");
-         return;
-			}
-		if (e.getSource() == trollButton) {
-			editBlock.Type = BlockTypes.TROLL;   // indicate a troll for editor, no block is actually a runner in the game
-			//System.err.println ("edit block set to troll");
-         return;
-			}
-		else if (e.getSource() == digableButton) {
-			editBlock.Type = BlockTypes.SOFT;
-			//System.err.println ("edit block set to diggable");
-			}
-		else if (e.getSource() == ladderButton) {
-			editBlock.Type = BlockTypes.LADDER;
-			//System.err.println ("edit block set to visable ladder");
-			}
-		else if (e.getSource() == hiddenLadderButton) {
-			editBlock.Type = BlockTypes.HIDDEN_LADDER;
-			//System.err.println ("edit block set to hidden ladder");
-			}
-		else if (e.getSource() == ropeButton) {
-			editBlock.Type = BlockTypes.ROPE;
-			//System.err.println ("edit block set to roper");
-			}
-		else if (e.getSource() == gold1Button) {
-			editBlock.Type = BlockTypes.GOLD_1;
-			//System.err.println ("edit block set to gold");
-			}
-		else if (e.getSource() == exitButton) {
-			editBlock.Type = BlockTypes.EXIT;
-			//System.err.println ("edit block set to exit");
-			}
-		else if (e.getSource() == eraserButton) {
-			editBlock.Type = BlockTypes.EMPTY;
-			editBlock.blockImage = null;
-			//System.err.println ("edit block set to eraser");
-         return;
-			}
-		editBlock.blockImage = Images.getImage(editBlock.Type);
-		}
-   
-   BlockTypes MapEnvironmentCodeToBlockType (EnvironmentCodes code) {
+      BlockTypes MapEnvironmentCodeToBlockType (EnvironmentCodes code) {
       switch (code) {
          case N:    return BlockTypes.SOFT;
          case T:    return BlockTypes.SOFT_T;
@@ -884,8 +938,8 @@ public class CaveRunner extends Application {
       blockType = MapEnvironmentCodeToBlockType (EnvironmentCodes.values()[environmentCode]);
       return new Pair<BlockTypes, ArrayList<Block>>(blockType, blocks);
       }
-   
-   void AddBlockToCavern (Block block) {
+
+   void AddBlockToEditorCavern (Block block) {
       if (editBlock.IsStructural()) {
          Pair<BlockTypes, ArrayList<Block>> structureInfo = getStructureType (block);
          //System.err.println ("AddBlockToCavern: structureInfo = " + structureInfo.toString());
@@ -1032,7 +1086,7 @@ public class CaveRunner extends Application {
                                                                    (((int)event.getSceneY() - 26) / CONSTANTS.BLOCK_HEIGHT) * CONSTANTS.BLOCK_HEIGHT));
 					Block block = editCavern.getBlock (new BlockLocation ((int)event.getSceneX() / CONSTANTS.BLOCK_WIDTH, 
                                                                      ((int)event.getSceneY() - 26) / CONSTANTS.BLOCK_HEIGHT));
-               AddBlockToCavern (block);
+               AddBlockToEditorCavern (block);
 					}
 				editCavern.display();
 				}
@@ -1056,47 +1110,15 @@ public class CaveRunner extends Application {
 				if ((editBlock.Type != BlockTypes.RUNNER) && (editBlock.Type != BlockTypes.TROLL)) {
 					Block block = editCavern.getBlock (new BlockLocation ((int)event.getSceneX() / CONSTANTS.BLOCK_WIDTH, 
                                                                              ((int)event.getSceneY() - 26) / CONSTANTS.BLOCK_HEIGHT));
-               AddBlockToCavern (block);
+               AddBlockToEditorCavern (block);
 					}
 				editCavern.display();
 				}
 		   });
 
 		// create editor palette window
-		runnerButton = new Button ("", new ImageView (Images.runner));
-		runnerButton.setOnAction (e-> paletteButtonClicked(e));
-		trollButton = new Button ("", new ImageView (Images.troll));
-		trollButton.setOnAction (e-> paletteButtonClicked(e));
-		digableButton = new Button ("", new ImageView (Images.getImage(BlockTypes.SOFT)));	
-		digableButton.setOnAction (e-> paletteButtonClicked(e));
-		ladderButton = new Button ("", new ImageView (Images.getImage(BlockTypes.LADDER)));	
-		ladderButton.setOnAction (e-> paletteButtonClicked(e));
-		hiddenLadderButton = new Button ("", new ImageView (Images.getImage(BlockTypes.HIDDEN_LADDER)));	
-		hiddenLadderButton.setOnAction (e-> paletteButtonClicked(e));
-		ropeButton = new Button ("", new ImageView (Images.getImage(BlockTypes.ROPE)));	
-		ropeButton.setOnAction (e-> paletteButtonClicked(e));
-		gold1Button = new Button ("", new ImageView (Images.getImage(BlockTypes.GOLD_1)));	
-		gold1Button.setOnAction (e-> paletteButtonClicked(e));
-		exitButton = new Button ("", new ImageView (Images.getImage(BlockTypes.EXIT)));	
-		exitButton.setOnAction (e-> paletteButtonClicked(e));
-		eraserButton = new Button ("", new ImageView (Images.getImage(BlockTypes.ERASER)));	
-		eraserButton.setOnAction (e-> paletteButtonClicked(e));
-		FlowPane palettePane = new FlowPane();
-		palettePane.getChildren().addAll (runnerButton, trollButton, digableButton, ladderButton, hiddenLadderButton, ropeButton, gold1Button, exitButton, eraserButton);
-		Scene paletteScene = new Scene (palettePane, 170, 146);
-		Stage paletteStage = new Stage();
-		paletteStage.initOwner (theStage);
-		paletteStage.setScene (paletteScene);
-		paletteStage.setTitle ("Editor Palette");
-		paletteStage.setResizable(false);
-		
-		// don't allow user to close the palette window
-		paletteStage.setOnCloseRequest (new EventHandler<WindowEvent>() { 
-			@Override public void handle (final WindowEvent windowEvent) { 
-				windowEvent.consume();
-            } 
-			});
-		
+		Stage paletteStage = CreatePaletteStage (theStage);
+      
 		// create the methods to process menu item selections
 		saveItem.setOnAction (new EventHandler<ActionEvent>() {
 			public void handle (ActionEvent event) {
