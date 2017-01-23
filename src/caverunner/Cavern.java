@@ -1011,7 +1011,7 @@ class Cavern {
       }
 
       if (theRunner.Image.nextImage == null) {
-         // at the end of the 'captured' movie so game is over
+         // runner is at the end of the 'captured' movie so game is over
          return CONSTANTS.GAME_OVER;
       }
       // process any 'active' blocks to restore them

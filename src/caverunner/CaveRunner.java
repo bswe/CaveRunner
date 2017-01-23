@@ -828,6 +828,8 @@ public class CaveRunner extends Application {
    Block editBlock = new Block();
    boolean paused = false;
    int TotalGold;
+   String Level;
+   boolean WaitingForPlayer = true;
 
    void addGroundStrip (Cavern theCavern, int xPos, int yPos, int count, boolean sparse) {
       Block block;
@@ -970,12 +972,12 @@ public class CaveRunner extends Application {
       }
    
    void LoadNextLevel (Cavern theCavern) {
-      String fileName = "test2.ser";
-      if (!theCavern.restore (fileName)) {
-         System.out.println ("Cavern file " + fileName + " does not exist");
+      if (!theCavern.restore (Level)) {
+         System.out.println ("Cavern file " + Level + " does not exist");
          return;
          }
       TotalGold = theCavern.LoadCavernIntoView ();
+      WaitingForPlayer = true;
       }
 
    
@@ -1054,6 +1056,8 @@ public class CaveRunner extends Application {
                   return;
                keysPressed.remove (CONSTANTS.NO_KEY_PRESSED);
                keysPressed.add (code);
+               if (WaitingForPlayer == true)
+                  WaitingForPlayer = false;
                }
             }
          );
@@ -1244,12 +1248,12 @@ public class CaveRunner extends Application {
                }
             if (FrameCounter++ % frameRateDivider != 0)
                 return;
+            if (WaitingForPlayer == true)
+               return;
             if (!paused) {
                TotalGold = theCavern.frameHandler(keysPressed);
                if (TotalGold == CONSTANTS.GAME_OVER) {
-                  //paused = true;
                   LoadNextLevel (theCavern);
-                  return;
                   }
                goldText.setText ("Gold to get " + TotalGold);
                }
@@ -1258,6 +1262,7 @@ public class CaveRunner extends Application {
        
       
       //createTestCavern (theCavern);
+      Level = "test2.ser";
       LoadNextLevel (theCavern);
       theStage.show();
 
