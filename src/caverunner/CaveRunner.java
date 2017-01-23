@@ -81,7 +81,7 @@ enum BlockTypes {
    SOFT_TBL,      // ord(13)
    SOFT_BLR,      // ord(14)
    SOFT_TBLR,     // ord(15)
-	RUNNER,        // this item is only used for conveying that runner is selected from palette in the level editor
+   RUNNER,        // this item is only used for conveying that runner is selected from palette in the level editor
 	TROLL,         // this item is only used for conveying that troll is selected from palette in the level editor
    ERASER,        // this item is only used to access the image in the Images class
    HOLE,          // this is used by trolls when searching for a way to drop down
