@@ -1010,6 +1010,10 @@ class Cavern {
          upDateMovie(troll, theTrollMovies);
       }
 
+      if (theRunner.Image.nextImage == null) {
+         // at the end of the 'captured' movie so game is over
+         return CONSTANTS.GAME_OVER;
+      }
       // process any 'active' blocks to restore them
       for (ActiveBlock activeBlock : new ArrayList<>(activeBlocks)) {
          if (--activeBlock.delayAmount == 0) {
