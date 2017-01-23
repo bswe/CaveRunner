@@ -20,6 +20,7 @@ public class CONSTANTS {
    public static final int FALLING_FRAME_DISTANCE = 8;
    public static final int LEAPING_FRAME_DISTANCE = 8;
    public static final int DEFAULT_FRAME_RATE_DIVIDER = 5;  // 5 gives ~ 12 f/s (60/5)
+   public static final int GAME_OVER = -1;
    public static final String NO_KEY_PRESSED = "no key pressed";
    public static final String RIGHT_ARROW = "RIGHT";
    public static final String LEFT_ARROW = "LEFT";
