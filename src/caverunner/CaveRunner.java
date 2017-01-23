@@ -542,14 +542,14 @@ enum Direction {
          return LEFT;
       else
          return RIGHT;
-   }
+      }
    
    static public Direction VerticalDirection (int value) {
       if (value < 0)
          return UP;
       else
          return DOWN;
-   }
+      }
    
    static public Direction Opposite (Direction theDirection) {
       if (theDirection == UP)
@@ -571,7 +571,7 @@ enum SpriteType {
    RUNNER,
    TROLL,
    RAYGUN_BLAST
-}
+   }
 
 class Sprite {
    MovableLocationType Location;
