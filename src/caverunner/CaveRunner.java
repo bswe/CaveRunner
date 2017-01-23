@@ -827,6 +827,7 @@ public class CaveRunner extends Application {
    GraphicsContext editGc;
    Block editBlock = new Block();
    boolean paused = false;
+   int TotalGold;
 
    void addGroundStrip (Cavern theCavern, int xPos, int yPos, int count, boolean sparse) {
       Block block;
@@ -968,6 +969,16 @@ public class CaveRunner extends Application {
          }
       }
    
+   void LoadNextLevel (Cavern theCavern) {
+      String fileName = "test2.ser";
+      if (!theCavern.restore (fileName)) {
+         System.out.println ("Cavern file " + fileName + " does not exist");
+         return;
+         }
+      TotalGold = theCavern.LoadCavernIntoView ();
+      }
+
+   
    public static void main (String[] args) {launch (args);}
 
    public void start (Stage theStage) {
@@ -1019,11 +1030,20 @@ public class CaveRunner extends Application {
       theStage.setScene (theScene);
       theStage.setResizable(false);
       theStage.setTitle ("Cave Runner");
-               
+
+      // init graphics
+      Images.Init();
+      
+      // init cavern
+      // create game view
+      Group gameView = new Group();
+      Cavern theCavern = new Cavern (28, 16, gameView);
+                
       // create fifo queue for holding key presses, and initialize it to empty
       ArrayList<String> keysPressed = new ArrayList<String>();
       keysPressed.add(CONSTANTS.NO_KEY_PRESSED);
  
+      // handle keypad input for playing the game
       theScene.setOnKeyPressed (
          new EventHandler<KeyEvent>() {
             public void handle (KeyEvent e) {
@@ -1058,14 +1078,6 @@ public class CaveRunner extends Application {
       editGc = editCanvas.getGraphicsContext2D();
       editCavern = new Cavern (28, 16, editGc);
 
-      // init graphics
-      Images.Init();
-      
-      // init cavern
-      // create game view
-      Group gameView = new Group();
-      Cavern theCavern = new Cavern (28, 16, gameView);
- 
       // handle mouse input from the scene in the editor mode
       theScene.setOnMousePressed (new EventHandler<MouseEvent>() {
          @Override public void handle (MouseEvent event) {
@@ -1199,7 +1211,6 @@ public class CaveRunner extends Application {
       animationTimer = new AnimationTimer() {
          int FrameCounter = 0;
          int frameRateDivider = CONSTANTS.DEFAULT_FRAME_RATE_DIVIDER;
-         int TotalGold;
 
          public void handle (long currentNanoTime) { 
             // check for game control key presses
@@ -1235,6 +1246,11 @@ public class CaveRunner extends Application {
                 return;
             if (!paused) {
                TotalGold = theCavern.frameHandler(keysPressed);
+               if (TotalGold == CONSTANTS.GAME_OVER) {
+                  //paused = true;
+                  LoadNextLevel (theCavern);
+                  return;
+                  }
                goldText.setText ("Gold to get " + TotalGold);
                }
             }
@@ -1242,15 +1258,9 @@ public class CaveRunner extends Application {
        
       
       //createTestCavern (theCavern);
-      String fileName = "test2.ser";
-      if (!theCavern.restore (fileName)) {
-         System.out.println ("Cavern file " + fileName + " does not exist");
-         return;
-         }
-      int TotalGold = theCavern.LoadCavernIntoView ();
-      goldText.setText ("Gold to get " + TotalGold);
-       theStage.show();
-      
+      LoadNextLevel (theCavern);
+      theStage.show();
+
       // start the app with the "playing game" window
       playGameItem.fire();
       }
