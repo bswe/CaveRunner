@@ -1140,6 +1140,9 @@ class Cavern {
          else {
             theRunner.Location = location;
             theRunner.Image = theRunnerMovies.Facing;
+            theRunner.View = new ImageView (theRunner.Image.theImage);
+            theRunner.View.setX (theRunner.Location.getX());
+            theRunner.View.setY (theRunner.Location.getY());
             theRunner.Orientation = Direction.FACING;
             }
          Trolls.clear();
