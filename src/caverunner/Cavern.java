@@ -920,9 +920,12 @@ class Cavern {
       int xDelta = theRunner.Location.getX() - Troll.Location.getX();
       int yDelta = theRunner.Location.getY() - Troll.Location.getY();
       if ((abs(xDelta) < 8) && (abs(yDelta) < 8)) {
-         // runner caught, execute game over code
-         Troll.Image.theImage = Images.empty;
-         Troll.movieState = MovieState.PAUSED;
+         // runner has been caught, execute the game over code
+         // remove the image of the capturing troll so capture movie looks correct
+         Troll.View.setImage(Images.empty);
+         // delete the capturing troll so its images don't reappear 
+         Trolls.remove (Troll);
+         // load the capture movie
          if (theRunner.Image.movieType != MovieType.BEING_CAPTURED) {
             theRunner.setImage(theRunnerMovies.Captured);
             theRunner.Orientation = Direction.RIGHT;
