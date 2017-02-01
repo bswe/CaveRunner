@@ -40,6 +40,7 @@ import java.util.Iterator;
 import javafx.util.Pair;
 import java.lang.String;
 import javafx.scene.control.ButtonType;
+import javafx.scene.input.MouseButton;
 
 enum ItemTypes {
    GOLD,
@@ -974,7 +975,7 @@ public class CaveRunner extends Application {
             structureInfo = getStructureType (theBlock);
             theBlock.Type = structureInfo.getKey();
             theBlock.blockImage = Images.getImage(theBlock.Type); 
-             }
+            }
          }
       else {
          boolean wasStructural = block.IsStructural();
@@ -987,7 +988,7 @@ public class CaveRunner extends Application {
                structureInfo = getStructureType (theBlock);
                theBlock.Type = structureInfo.getKey();
                theBlock.blockImage = Images.getImage(theBlock.Type); 
-             }
+               }
             }
          }
       }
@@ -1116,11 +1117,17 @@ public class CaveRunner extends Application {
 
       // handle mouse input from the scene in the editor mode
       theScene.setOnMousePressed (new EventHandler<MouseEvent>() {
-         @Override public void handle (MouseEvent event) {
+         @Override public void handle (MouseEvent event) {      
             //System.err.println ("mouse press detected at " + event.getSceneX() + ", " + event.getSceneY());
             if (modeText.getText() == "Playing Game")
                // mouse not valid input device while in play mode
                return;
+            BlockTypes saveBlockType = editBlock.Type;
+            Image saveBlockImage = editBlock.blockImage;
+            if (event.getButton() == MouseButton.SECONDARY) {
+               editBlock.Type = BlockTypes.EMPTY;
+               editBlock.blockImage = null;
+               }
             if (editBlock.Type == BlockTypes.RUNNER)
                editCavern.addRunner (new MovableLocationType (((int)event.getSceneX() / CONSTANTS.BLOCK_WIDTH) * CONSTANTS.BLOCK_WIDTH, 
                                                               (((int)event.getSceneY() - 26) / CONSTANTS.BLOCK_HEIGHT) * CONSTANTS.BLOCK_HEIGHT));
@@ -1137,6 +1144,8 @@ public class CaveRunner extends Application {
                AddBlockToEditorCavern (block);
                }
             editCavern.display();
+            editBlock.Type = saveBlockType;
+            editBlock.blockImage = saveBlockImage;
             }
          });
 
