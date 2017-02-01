@@ -1264,6 +1264,7 @@ public class CaveRunner extends Application {
       //createTestCavern (theCavern);
       Level = "test2.ser";
       LoadNextLevel (theCavern);
+      goldText.setText ("Gold to get " + TotalGold);
       theStage.show();
 
       // start the app with the "playing game" window
