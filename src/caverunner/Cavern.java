@@ -489,16 +489,25 @@ class Cavern {
    private void checkForGold(Sprite theRunner) {
       Block thisBlock;
 
-      thisBlock = getBlockActorIsIn(theRunner.Location);
+      thisBlock = getBlockActorIsIn (theRunner.Location);
       if (thisBlock.Type == BlockTypes.GOLD_1) {
          pling.play();
          thisBlock.Type = BlockTypes.EMPTY;
          thisBlock.blockImage = null;
-         View.getChildren().remove(thisBlock.blockView);
+         View.getChildren().remove (thisBlock.blockView);
          TotalGold--;
          if (TotalGold == 0)
             DisplayEscape();
          }
+      }
+   
+   private boolean isRunnerAtExit (Sprite theRunner) {
+      if (TotalGold != 0)
+         return false;
+      Block thisBlock = getBlockActorIsIn (theRunner.Location);
+      if (thisBlock.Type != BlockTypes.EXIT) 
+         return false;
+      return true;
       }
 
    private void upDateMovie(Sprite theActor, ActorMovies theMovies) {
@@ -1079,8 +1088,8 @@ class Cavern {
       theRunner.View.setY(theRunner.Location.getY());
       theRunner.View.setScaleX(theRunner.getScale());
       
-      // hack for now, remove when 'exit' is implemented
-      if (TotalGold == 0)
+
+      if (isRunnerAtExit (theRunner))
          TotalGold = CONSTANTS.GAME_OVER;
       return TotalGold;
       }
