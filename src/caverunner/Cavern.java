@@ -1094,6 +1094,14 @@ class Cavern {
       return TotalGold;
       }
 
+   public void Clear () {
+      for (int x = 0; x < Width; x++) 
+         for (int y = 0; y < Height; y++) 
+            Blocks[x][y].blockImage = null; 
+      theRunner = null;
+      Trolls.clear();
+      }
+   
    public void display() {
       Gc.drawImage(Images.mossWorld, 0, 0);   // display background
       // display any blocks that have images at their correct graphical location in the window

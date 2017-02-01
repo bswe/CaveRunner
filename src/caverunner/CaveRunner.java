@@ -39,6 +39,7 @@ import javafx.scene.control.Alert.AlertType;
 import java.util.Iterator;
 import javafx.util.Pair;
 import java.lang.String;
+import javafx.scene.control.ButtonType;
 
 enum ItemTypes {
    GOLD,
@@ -718,11 +719,14 @@ class EditorPalette extends Stage {
           hiddenLadderButton,
           ropeButton,
           exitButton,
-          eraserButton;
+          eraserButton,
+          clearButton;
    Block editBlock;
+   Cavern editCavern;
    
-   EditorPalette (Stage parentStage, Block editorBlock) {
+   EditorPalette (Stage parentStage, Block editorBlock, Cavern editorCavern) {
       editBlock = editorBlock;
+      editCavern = editorCavern;
       runnerButton = new Button ("", new ImageView (Images.runner));
       runnerButton.setOnAction (e-> paletteButtonClicked(e));
       trollButton = new Button ("", new ImageView (Images.troll));
@@ -741,9 +745,12 @@ class EditorPalette extends Stage {
       exitButton.setOnAction (e-> paletteButtonClicked(e));
       eraserButton = new Button ("", new ImageView (Images.getImage(BlockTypes.ERASER)));   
       eraserButton.setOnAction (e-> paletteButtonClicked(e));
+      clearButton = new Button ("CLEAR");   
+      clearButton.setOnAction (e-> paletteButtonClicked(e));
       FlowPane palettePane = new FlowPane();
-      palettePane.getChildren().addAll (runnerButton, trollButton, digableButton, ladderButton, hiddenLadderButton, ropeButton, gold1Button, exitButton, eraserButton);
-      Scene paletteScene = new Scene (palettePane, 170, 146);
+      palettePane.getChildren().addAll (runnerButton, trollButton, digableButton, ladderButton, 
+                                        hiddenLadderButton, ropeButton, gold1Button, exitButton, eraserButton, clearButton);
+      Scene paletteScene = new Scene (palettePane, 170, 171);
       this.initOwner (parentStage);
       this.setScene (paletteScene);
       this.setTitle ("Editor Palette");
@@ -759,7 +766,20 @@ class EditorPalette extends Stage {
               
    void paletteButtonClicked (ActionEvent e) {
       //System.err.println ("processing event " + e.toString());
+      if (e.getSource() == clearButton) {
+         System.out.println ("clear button clicked");
+         Alert alert = new Alert (AlertType.CONFIRMATION, "Clear editor cavern?", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
+         alert.showAndWait();
+
+         if (alert.getResult() == ButtonType.YES) {
+            System.out.println ("clear confirmed");
+            editCavern.Clear ();
+            editCavern.display();
+            }
+         return;
+         }
       runnerButton.setStyle ("");
+      trollButton.setStyle ("");
       digableButton.setStyle ("");
       ladderButton.setStyle ("");
       hiddenLadderButton.setStyle ("");
@@ -881,12 +901,12 @@ public class CaveRunner extends Application {
       theCavern.addTroll (new MovableLocationType(88, 420));
       }
    
-   public Stage CreatePaletteStage (Stage theStage) {
-      Stage paletteStage = new EditorPalette (theStage, editBlock);
+   public Stage CreatePaletteStage (Stage theStage, Cavern editCavern) {
+      Stage paletteStage = new EditorPalette (theStage, editBlock, editCavern);
       return paletteStage;
       }
       
-      BlockTypes MapEnvironmentCodeToBlockType (EnvironmentCodes code) {
+   BlockTypes MapEnvironmentCodeToBlockType (EnvironmentCodes code) {
       switch (code) {
          case N:    return BlockTypes.SOFT;
          case T:    return BlockTypes.SOFT_T;
@@ -904,9 +924,9 @@ public class CaveRunner extends Application {
          case TBL:  return BlockTypes.SOFT_TBL;
          case BLR:  return BlockTypes.SOFT_BLR;
          case TBLR: return BlockTypes.SOFT_TBLR;
+         }
+      return null;
       }
-     return null;
-   }
    
    Pair<BlockTypes, ArrayList<Block>> getStructureType (Block block) {
       ArrayList<Block> blocks = new ArrayList();
@@ -1145,7 +1165,7 @@ public class CaveRunner extends Application {
          });
 
       // create editor palette window
-      Stage paletteStage = CreatePaletteStage (theStage);
+      Stage paletteStage = CreatePaletteStage (theStage, editCavern);
       
       // create the methods to process menu item selections
       saveItem.setOnAction (new EventHandler<ActionEvent>() {
@@ -1273,9 +1293,8 @@ public class CaveRunner extends Application {
             }
          };
        
-      
-      //createTestCavern (theCavern);
-      Level = "level_0.ser";
+      // prime game with level 0, which doesn't exist, so LoadNextLevel works right
+      Level = "level_0.ser";    
       int level = LoadNextLevel (theCavern);
       levelText.setText ("level " + level);
       goldText.setText ("Gold to get " + TotalGold);
