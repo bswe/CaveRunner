@@ -850,7 +850,7 @@ public class CaveRunner extends Application {
    Block editBlock = new Block();
    boolean paused = false;
    int TotalGold;
-   String Level;
+   String LevelFileName;
    boolean WaitingForPlayer = true;
 
    void addGroundStrip (Cavern theCavern, int xPos, int yPos, int count, boolean sparse) {
@@ -992,27 +992,35 @@ public class CaveRunner extends Application {
             }
          }
       }
-   
-   int LoadNextLevel (Cavern theCavern) {
-      // need to make this code more robust with exception handling
-      System.out.println ("Level = " + Level);
-      String[] subStrings = Level.split ("\\.");
+   int GetLevelNumber () {
+      String[] subStrings = LevelFileName.split ("\\.");
       subStrings = subStrings[0].split ("_");
-      int levelNumber = Integer.parseInt (subStrings[1]);
-      Level = "level_";
-      Level = Level.concat (Integer.toString(++levelNumber));
-      Level = Level.concat (".ser");
-      System.out.println ("Level = " + Level);
-      if (!theCavern.restore (Level)) {
-         System.out.println ("Cavern file " + Level + " does not exist");
-         return 0;
+      return Integer.parseInt (subStrings[1]);
+      }
+   
+   boolean LoadLevel (Cavern theCavern) {
+      if (!theCavern.restore (LevelFileName)) {
+         System.out.println ("Cavern file " + LevelFileName + " does not exist");
+         return false;
          }
       TotalGold = theCavern.LoadCavernIntoView ();
       WaitingForPlayer = true;
+      return true;
+      }
+   
+   int LoadNextLevel (Cavern theCavern) {
+      // need to make this code more robust with exception handling
+      //System.out.println ("Level = " + Level);
+      int levelNumber = GetLevelNumber();
+      LevelFileName = "level_";
+      LevelFileName = LevelFileName.concat (Integer.toString(++levelNumber));
+      LevelFileName = LevelFileName.concat (".ser");
+      //System.out.println ("Level = " + Level);
+      if (LoadLevel (theCavern) == false)
+         return 0;
       return levelNumber;
       }
 
-   
    public static void main (String[] args) {launch (args);}
 
    public void start (Stage theStage) {
@@ -1216,8 +1224,10 @@ public class CaveRunner extends Application {
             File file = fileChooser.showOpenDialog (theStage);
             if (file != null) 
                if (modeText.getText() == "Playing Game") {
-                  theCavern.restore (file.getName());
+                  LevelFileName = file.getName();
+                  theCavern.restore (LevelFileName);
                   theCavern.LoadCavernIntoView ();
+                  levelText.setText ("level " + GetLevelNumber ());
                   }
                else {
                   editCavern.restore (file.getName());
@@ -1293,17 +1303,19 @@ public class CaveRunner extends Application {
                return;
             if (!paused) {
                TotalGold = theCavern.frameHandler(keysPressed);
-               if (TotalGold == CONSTANTS.GAME_OVER) {
+               if (TotalGold == CONSTANTS.LEVEL_COMPLETED) {
                   int level = LoadNextLevel (theCavern);
                   levelText.setText ("level " + level);
                   }
+               if (TotalGold == CONSTANTS.RUNNER_CAPTURED) 
+                  LoadLevel (theCavern);
                goldText.setText ("Gold to get " + TotalGold);
                }
             }
          };
        
       // prime game with level 0, which doesn't exist, so LoadNextLevel works right
-      Level = "level_0.ser";    
+      LevelFileName = "level_0.ser";    
       int level = LoadNextLevel (theCavern);
       levelText.setText ("level " + level);
       goldText.setText ("Gold to get " + TotalGold);

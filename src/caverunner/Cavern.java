@@ -1035,7 +1035,7 @@ class Cavern {
 
       if (theRunner.Image.nextImage == null) 
          // runner is at the end of the 'captured' movie so game is over
-         return CONSTANTS.GAME_OVER;
+         return CONSTANTS.RUNNER_CAPTURED;
 
       // process any 'active' blocks to restore them
       for (ActiveBlock activeBlock : new ArrayList<>(activeBlocks)) {
@@ -1090,7 +1090,7 @@ class Cavern {
       
 
       if (isRunnerAtExit (theRunner))
-         TotalGold = CONSTANTS.GAME_OVER;
+         TotalGold = CONSTANTS.LEVEL_COMPLETED;
       return TotalGold;
       }
 
