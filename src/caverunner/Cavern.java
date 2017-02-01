@@ -1078,6 +1078,10 @@ class Cavern {
       theRunner.View.setX(theRunner.Location.getX());
       theRunner.View.setY(theRunner.Location.getY());
       theRunner.View.setScaleX(theRunner.getScale());
+      
+      // hack for now, remove when 'exit' is implemented
+      if (TotalGold == 0)
+         TotalGold = CONSTANTS.GAME_OVER;
       return TotalGold;
       }
 

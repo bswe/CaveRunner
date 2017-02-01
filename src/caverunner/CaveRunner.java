@@ -38,6 +38,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import java.util.Iterator;
 import javafx.util.Pair;
+import java.lang.String;
 
 enum ItemTypes {
    GOLD,
@@ -971,13 +972,23 @@ public class CaveRunner extends Application {
          }
       }
    
-   void LoadNextLevel (Cavern theCavern) {
+   int LoadNextLevel (Cavern theCavern) {
+      // need to make this code more robust with exception handling
+      System.out.println ("Level = " + Level);
+      String[] subStrings = Level.split ("\\.");
+      subStrings = subStrings[0].split ("_");
+      int levelNumber = Integer.parseInt (subStrings[1]);
+      Level = "level_";
+      Level = Level.concat (Integer.toString(++levelNumber));
+      Level = Level.concat (".ser");
+      System.out.println ("Level = " + Level);
       if (!theCavern.restore (Level)) {
          System.out.println ("Cavern file " + Level + " does not exist");
-         return;
+         return 0;
          }
       TotalGold = theCavern.LoadCavernIntoView ();
       WaitingForPlayer = true;
+      return levelNumber;
       }
 
    
@@ -1011,7 +1022,8 @@ public class CaveRunner extends Application {
       Text modeText = new Text ("Playing Game");
       Text speedText = new Text ("speed 5");
       Text goldText = new Text ("");
-      statusBar.getChildren().addAll (modeText, speedText, goldText);
+      Text levelText = new Text ("Level 1");
+      statusBar.getChildren().addAll (modeText, speedText, levelText, goldText);
       // we set a background color on the status bar, because we can't rely on the scene background color 
       // because, if the scene is sized small, the status bar will start to overlay the game view 
       // and if we don't explicitly set the statusBar background the center view will start
@@ -1253,7 +1265,8 @@ public class CaveRunner extends Application {
             if (!paused) {
                TotalGold = theCavern.frameHandler(keysPressed);
                if (TotalGold == CONSTANTS.GAME_OVER) {
-                  LoadNextLevel (theCavern);
+                  int level = LoadNextLevel (theCavern);
+                  levelText.setText ("level " + level);
                   }
                goldText.setText ("Gold to get " + TotalGold);
                }
@@ -1262,8 +1275,9 @@ public class CaveRunner extends Application {
        
       
       //createTestCavern (theCavern);
-      Level = "test2.ser";
-      LoadNextLevel (theCavern);
+      Level = "level_0.ser";
+      int level = LoadNextLevel (theCavern);
+      levelText.setText ("level " + level);
       goldText.setText ("Gold to get " + TotalGold);
       theStage.show();
 
