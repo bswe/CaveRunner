@@ -974,7 +974,7 @@ public class CaveRunner extends Application {
          for (Block theBlock : adjacentBlocks) {
             structureInfo = getStructureType (theBlock);
             theBlock.Type = structureInfo.getKey();
-            theBlock.blockImage = Images.getImage(theBlock.Type); 
+            theBlock.blockImage = Images.getImage (theBlock.Type); 
             }
          }
       else {
@@ -987,7 +987,7 @@ public class CaveRunner extends Application {
             for (Block theBlock : adjacentBlocks) {
                structureInfo = getStructureType (theBlock);
                theBlock.Type = structureInfo.getKey();
-               theBlock.blockImage = Images.getImage(theBlock.Type); 
+               theBlock.blockImage = Images.getImage (theBlock.Type); 
                }
             }
          }
