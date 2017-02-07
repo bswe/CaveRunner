@@ -452,23 +452,23 @@ class TrollMovies extends ActorMovies {
       
       // load the runner images for falling into hole into a movie strip (not a movie loop)
       theLastImage = new MovieImage (new Image ("file:Images/fall_in_hole_18.png"), MovieType.FALL_IN_HOLE, StandInHole, 0, 0);
-      theLastImage = new MovieImage (new Image ("file:Images/fall_in_hole_17.png"), MovieType.FALL_IN_HOLE, theLastImage, 0, 0);
-      theLastImage = new MovieImage (new Image ("file:Images/fall_in_hole_16.png"), MovieType.FALL_IN_HOLE, theLastImage, 0, 0);
-      theLastImage = new MovieImage (new Image ("file:Images/fall_in_hole_15.png"), MovieType.FALL_IN_HOLE, theLastImage, 0, 0);
-      theLastImage = new MovieImage (new Image ("file:Images/fall_in_hole_14.png"), MovieType.FALL_IN_HOLE, theLastImage, 0, 0);
+      theLastImage = new MovieImage (new Image ("file:Images/fall_in_hole_17.png"), MovieType.FALL_IN_HOLE, theLastImage, -1, 0);
+      theLastImage = new MovieImage (new Image ("file:Images/fall_in_hole_16.png"), MovieType.FALL_IN_HOLE, theLastImage, -1, 0);
+      theLastImage = new MovieImage (new Image ("file:Images/fall_in_hole_15.png"), MovieType.FALL_IN_HOLE, theLastImage, -1, 0);
+      theLastImage = new MovieImage (new Image ("file:Images/fall_in_hole_14.png"), MovieType.FALL_IN_HOLE, theLastImage, -1, 0);
       theLastImage = new MovieImage (new Image ("file:Images/fall_in_hole_13.png"), MovieType.FALL_IN_HOLE, theLastImage, 0, 0);
       theLastImage = new MovieImage (new Image ("file:Images/fall_in_hole_12.png"), MovieType.FALL_IN_HOLE, theLastImage, 0, 0);
       theLastImage = new MovieImage (new Image ("file:Images/fall_in_hole_11.png"), MovieType.FALL_IN_HOLE, theLastImage, 0, 0);
       theLastImage = new MovieImage (new Image ("file:Images/fall_in_hole_10.png"), MovieType.FALL_IN_HOLE, theLastImage, 0, 0);
       theLastImage = new MovieImage (new Image ("file:Images/fall_in_hole_9.png"), MovieType.FALL_IN_HOLE, theLastImage, 0, 6);
       theLastImage = new MovieImage (new Image ("file:Images/fall_in_hole_8.png"), MovieType.FALL_IN_HOLE, theLastImage, 0, 6);
-      theLastImage = new MovieImage (new Image ("file:Images/fall_in_hole_7.png"), MovieType.FALL_IN_HOLE, theLastImage, 3, 5);
-      theLastImage = new MovieImage (new Image ("file:Images/fall_in_hole_6.png"), MovieType.FALL_IN_HOLE, theLastImage, 3, 5);
-      theLastImage = new MovieImage (new Image ("file:Images/fall_in_hole_5.png"), MovieType.FALL_IN_HOLE, theLastImage, 3, 5);
-      theLastImage = new MovieImage (new Image ("file:Images/fall_in_hole_4.png"), MovieType.FALL_IN_HOLE, theLastImage, 3, 5);
-      theLastImage = new MovieImage (new Image ("file:Images/fall_in_hole_3.png"), MovieType.FALL_IN_HOLE, theLastImage, 3, 5);
-      theLastImage = new MovieImage (new Image ("file:Images/fall_in_hole_2.png"), MovieType.FALL_IN_HOLE, theLastImage, 3, 5);
-      FallInHole = new MovieImage (new Image ("file:Images/fall_in_hole_1.png"), MovieType.FALL_IN_HOLE, theLastImage, 3, 0);
+      theLastImage = new MovieImage (new Image ("file:Images/fall_in_hole_7.png"), MovieType.FALL_IN_HOLE, theLastImage, 0, 5);
+      theLastImage = new MovieImage (new Image ("file:Images/fall_in_hole_6.png"), MovieType.FALL_IN_HOLE, theLastImage, 0, 5);
+      theLastImage = new MovieImage (new Image ("file:Images/fall_in_hole_5.png"), MovieType.FALL_IN_HOLE, theLastImage, 0, 5);
+      theLastImage = new MovieImage (new Image ("file:Images/fall_in_hole_4.png"), MovieType.FALL_IN_HOLE, theLastImage, 0, 5);
+      theLastImage = new MovieImage (new Image ("file:Images/fall_in_hole_3.png"), MovieType.FALL_IN_HOLE, theLastImage, 0, 5);
+      theLastImage = new MovieImage (new Image ("file:Images/fall_in_hole_2.png"), MovieType.FALL_IN_HOLE, theLastImage, 0, 5);
+      FallInHole = new MovieImage (new Image ("file:Images/fall_in_hole_1.png"), MovieType.FALL_IN_HOLE, theLastImage, 0, 0);
       
       // load the runner images for leaping onto a ladder into a movie strip (not a movie loop)
       theLastImage = new MovieImage (new Image ("file:Images/troll_ladder_leap_1.png"), MovieType.LEAPING_ONTO_LADDER, HangingOnLadder, CONSTANTS.LEAPING_FRAME_DISTANCE/2, 0);
@@ -1044,7 +1044,8 @@ public class CaveRunner extends Application {
       // need to make this code more robust with exception handling
       //System.out.println ("Level = " + Level);
       int levelNumber = GetLevelNumber();
-      LevelFileName = "level_";
+      String[] subStrings = LevelFileName.split ("_");
+      LevelFileName = subStrings[0] + "_";
       LevelFileName = LevelFileName.concat (Integer.toString(++levelNumber));
       LevelFileName = LevelFileName.concat (".ser");
       //System.out.println ("Level = " + Level);
@@ -1348,7 +1349,8 @@ public class CaveRunner extends Application {
          };
        
       // prime game with level 0, which doesn't exist, so LoadNextLevel works right
-      LevelFileName = "level_0.ser";    
+      //LevelFileName = "level_0.ser";    
+      LevelFileName = "test_0.ser";    
       int level = LoadNextLevel (theCavern);
       levelText.setText ("level " + level);
       goldText.setText ("Gold to get " + TotalGold);

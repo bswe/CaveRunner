@@ -165,7 +165,7 @@ class Cavern {
    private Block getBlockActorIsIn (MovableLocationType location) {
       int x, y, fudgeFactor;
 
-      if (( ((location.getX() % CONSTANTS.BLOCK_WIDTH) / 4) & 1) == 1) {
+      if ((((location.getX() % CONSTANTS.BLOCK_WIDTH) / 4) & 1) == 1) {
          fudgeFactor = 2;  // add 2 pixels to blocks where runner is on 4, 12, 20, 28, 36 pixel bounderies
          }
       else {
@@ -526,6 +526,7 @@ class Cavern {
    private void ActorNotOnSomethingSolid (Sprite theActor, ActorMovies theMovies) {
       if ((theActor.Type == SpriteType.TROLL) && (ActorIsOnHole (theActor))) {
          theActor.setImage (theTrollMovies.FallInHole);
+         centerActorInBlock (theActor);
          }
       else {
          theActor.setImage (theMovies.Falling);
