@@ -1260,6 +1260,7 @@ public class CaveRunner extends Application {
                   theCavern.restore (LevelFileName);
                   theCavern.LoadCavernIntoView ();
                   levelText.setText ("level " + GetLevelNumber ());
+                  WaitingForPlayer = true;
                   }
                else {
                   editCavern.restore (file.getName());

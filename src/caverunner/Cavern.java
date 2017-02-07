@@ -672,6 +672,7 @@ class Cavern {
          return;
          }
       */
+      // use getScale() to show image as left or right (all images are right handed)
       theActor.Location.setX (theActor.Location.getX() + (theActor.Image.xDelta * theActor.getScale()));
       //theActor.Location.setY (theActor.Location.getY() + (theActor.Image.yDelta * theActor.getScale()));    IS THIS WRONG?????
       theActor.Location.setY (theActor.Location.getY() + (theActor.Image.yDelta));
