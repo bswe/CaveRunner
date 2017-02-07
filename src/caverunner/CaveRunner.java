@@ -84,16 +84,16 @@ enum BlockTypes {
    SOFT_TBL,      // ord(13)
    SOFT_BLR,      // ord(14)
    SOFT_TBLR,     // ord(15)
-   RUNNER,        // this item is only used for conveying that runner is selected from palette in the level editor
-   TROLL,         // this item is only used for conveying that troll is selected from palette in the level editor
-   ERASER,        // this item is only used to access the image in the Images class
-   HOLE,          // this is used by trolls when searching for a way to drop down
    EMPTY,
    LADDER,
    HIDDEN_LADDER,
    ROPE,
    EXIT,
-   GOLD_1
+   GOLD_1,
+   RUNNER,        // this item is only used for conveying that runner is selected from palette in the level editor
+   TROLL,         // this item is only used for conveying that troll is selected from palette in the level editor
+   ERASER,        // this item is only used to access the image in the Images class
+   HOLE           // this item is only used to indicate a temporary laser created empty block
    }
 
 class Images {
@@ -204,7 +204,10 @@ enum MovieType {
    FIRING_RAYGUN,
    RAYGUN_BLAST,
    HANGING_ON_ROPE,
-   BEING_CAPTURED
+   BEING_CAPTURED,
+   FALL_IN_HOLE,
+   STAND_IN_HOLE,
+   OUT_OF_HOLE
    }
 
 class MovieImage {
@@ -223,7 +226,7 @@ class MovieImage {
       RepeatCount = 0;
       }
    
-      MovieImage (Image image, MovieType type, MovieImage next, int x, int y, int repeatCount) {
+   MovieImage (Image image, MovieType type, MovieImage next, int x, int y, int repeatCount) {
       movieType = type;
       theImage = image;
       nextImage = next;
@@ -247,8 +250,8 @@ class ActorMovies {
    }
 
 class RunnerMovies extends ActorMovies {
-   MovieImage firingRaygun;
-   MovieImage raygunBlast;
+   MovieImage FiringRaygun;
+   MovieImage RaygunBlast;
    MovieImage Captured;
 
    RunnerMovies () {
@@ -309,7 +312,7 @@ class RunnerMovies extends ActorMovies {
       theLastImage = new MovieImage (new Image ("file:Images/raygun_blast_4.png"), MovieType.RAYGUN_BLAST, theLastImage, 0, 8);
       theLastImage = new MovieImage (new Image ("file:Images/raygun_blast_3.png"), MovieType.RAYGUN_BLAST, theLastImage, 0, 8);
       theLastImage = new MovieImage (new Image ("file:Images/raygun_blast_2.png"), MovieType.RAYGUN_BLAST, theLastImage, 0, 8);
-      raygunBlast = theLastImage = new MovieImage (new Image ("file:Images/raygun_blast_1.png"), MovieType.RAYGUN_BLAST, theLastImage, 0, 8);
+      RaygunBlast = theLastImage = new MovieImage (new Image ("file:Images/raygun_blast_1.png"), MovieType.RAYGUN_BLAST, theLastImage, 0, 8);
       
       // load the runner images for firing raygun into a movie strip (not a movie loop)
       theLastImage = new MovieImage (new Image ("file:Images/raygun_runner_10.png"), MovieType.FIRING_RAYGUN, Turned, 0, 0);
@@ -321,7 +324,7 @@ class RunnerMovies extends ActorMovies {
       theLastImage = new MovieImage (new Image ("file:Images/raygun_runner_4.png"), MovieType.FIRING_RAYGUN, theLastImage, 0, 0);
       theLastImage = new MovieImage (new Image ("file:Images/raygun_runner_3.png"), MovieType.FIRING_RAYGUN, theLastImage, 0, 0);
       theLastImage = new MovieImage (new Image ("file:Images/raygun_runner_2.png"), MovieType.FIRING_RAYGUN, theLastImage, 0, 0);
-      firingRaygun = theLastImage = new MovieImage (new Image ("file:Images/raygun_runner_1.png"), MovieType.FIRING_RAYGUN, theLastImage, 0, 0);
+      FiringRaygun = theLastImage = new MovieImage (new Image ("file:Images/raygun_runner_1.png"), MovieType.FIRING_RAYGUN, theLastImage, 0, 0);
       
       // load the runner images for leaping onto a ladder into a movie strip (not a movie loop)
       theLastImage = new MovieImage (new Image ("file:Images/runner_ladder_leap_1.png"), MovieType.LEAPING_ONTO_LADDER, HangingOnLadder, CONSTANTS.LEAPING_FRAME_DISTANCE/2, 0);
@@ -386,6 +389,10 @@ class RunnerMovies extends ActorMovies {
    }
 
 class TrollMovies extends ActorMovies {
+   MovieImage FallInHole;
+   MovieImage OutOfHole;
+   MovieImage StandInHole;
+
 
    TrollMovies () {
       // any MovieImage that is passed into the MovieImage constructor should be already initialized before it is used or it will be null
@@ -428,15 +435,40 @@ class TrollMovies extends ActorMovies {
       Falling.nextImage = theLastImage;
       
 
-      // load the troll standing still images and have them point to themselves because they aren't moving (one image movie)
+      // load the troll standing still images and 
+      // have them point to themselves because they aren't moving (one image movie).
+      // also set the deltas to 0 because troll doesn't move
       Turned = new MovieImage (new Image("file:Images/troll_turned.png"), MovieType.STANDING, null, 0, 0);
       Turned.nextImage = Turned;
       // need this for movie updater to work, but troll never faces you so set him to turned
       Facing = new MovieImage (new Image("file:Images/troll_turned.png"), MovieType.FACING_YOU, null, 0, 0);
       Facing.nextImage = Facing;
-      // load the troll hanging on the ladder image and have it point to itself because it doesn't change; set the delta to 0 because it doesn't move
+      // load the troll hanging on the ladder image and have it point to itself because it doesn't change; 
       HangingOnLadder = new MovieImage (new Image("file:Images/troll_climbing_1.png"), MovieType.HANGING_ON_LADDER, null, 0, 0);
       HangingOnLadder.nextImage = HangingOnLadder;
+      // load the troll standing in a hole image and have it point to itself because it doesn't change; 
+      StandInHole = new MovieImage (new Image("file:Images/stand_in_hole.png"), MovieType.STAND_IN_HOLE, null, 0, 0);
+      StandInHole.nextImage = StandInHole;
+      
+      // load the runner images for falling into hole into a movie strip (not a movie loop)
+      theLastImage = new MovieImage (new Image ("file:Images/fall_in_hole_18.png"), MovieType.FALL_IN_HOLE, StandInHole, 0, 0);
+      theLastImage = new MovieImage (new Image ("file:Images/fall_in_hole_17.png"), MovieType.FALL_IN_HOLE, theLastImage, 0, 0);
+      theLastImage = new MovieImage (new Image ("file:Images/fall_in_hole_16.png"), MovieType.FALL_IN_HOLE, theLastImage, 0, 0);
+      theLastImage = new MovieImage (new Image ("file:Images/fall_in_hole_15.png"), MovieType.FALL_IN_HOLE, theLastImage, 0, 0);
+      theLastImage = new MovieImage (new Image ("file:Images/fall_in_hole_14.png"), MovieType.FALL_IN_HOLE, theLastImage, 0, 0);
+      theLastImage = new MovieImage (new Image ("file:Images/fall_in_hole_13.png"), MovieType.FALL_IN_HOLE, theLastImage, 0, 0);
+      theLastImage = new MovieImage (new Image ("file:Images/fall_in_hole_12.png"), MovieType.FALL_IN_HOLE, theLastImage, 0, 0);
+      theLastImage = new MovieImage (new Image ("file:Images/fall_in_hole_11.png"), MovieType.FALL_IN_HOLE, theLastImage, 0, 0);
+      theLastImage = new MovieImage (new Image ("file:Images/fall_in_hole_10.png"), MovieType.FALL_IN_HOLE, theLastImage, 0, 0);
+      theLastImage = new MovieImage (new Image ("file:Images/fall_in_hole_9.png"), MovieType.FALL_IN_HOLE, theLastImage, 0, 6);
+      theLastImage = new MovieImage (new Image ("file:Images/fall_in_hole_8.png"), MovieType.FALL_IN_HOLE, theLastImage, 0, 6);
+      theLastImage = new MovieImage (new Image ("file:Images/fall_in_hole_7.png"), MovieType.FALL_IN_HOLE, theLastImage, 3, 5);
+      theLastImage = new MovieImage (new Image ("file:Images/fall_in_hole_6.png"), MovieType.FALL_IN_HOLE, theLastImage, 3, 5);
+      theLastImage = new MovieImage (new Image ("file:Images/fall_in_hole_5.png"), MovieType.FALL_IN_HOLE, theLastImage, 3, 5);
+      theLastImage = new MovieImage (new Image ("file:Images/fall_in_hole_4.png"), MovieType.FALL_IN_HOLE, theLastImage, 3, 5);
+      theLastImage = new MovieImage (new Image ("file:Images/fall_in_hole_3.png"), MovieType.FALL_IN_HOLE, theLastImage, 3, 5);
+      theLastImage = new MovieImage (new Image ("file:Images/fall_in_hole_2.png"), MovieType.FALL_IN_HOLE, theLastImage, 3, 5);
+      FallInHole = new MovieImage (new Image ("file:Images/fall_in_hole_1.png"), MovieType.FALL_IN_HOLE, theLastImage, 3, 0);
       
       // load the runner images for leaping onto a ladder into a movie strip (not a movie loop)
       theLastImage = new MovieImage (new Image ("file:Images/troll_ladder_leap_1.png"), MovieType.LEAPING_ONTO_LADDER, HangingOnLadder, CONSTANTS.LEAPING_FRAME_DISTANCE/2, 0);

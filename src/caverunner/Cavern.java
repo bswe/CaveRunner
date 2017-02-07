@@ -27,7 +27,7 @@ class Cavern {
    private int frameCounter = 0;
    private Sprite theRunner;
    private String lastKeyCode = "";
-   private Sprite raygunBlast;
+   private Sprite RaygunBlast;
    private ArrayList<ActiveBlock> activeBlocks = new ArrayList<>();
    private ArrayList<Sprite> Trolls = new ArrayList();
    private int TotalGold = 0;
@@ -37,6 +37,7 @@ class Cavern {
    AudioClip laserBlast = new AudioClip ("file:LaserBlast.mp3");
    AudioClip bumpIntoSomething = new AudioClip ("file:BumpIntoSomething.mp3");
    AudioClip runnerCapture = new AudioClip ("file:LodeRunnerCapture.mp3");
+   
    private RunnerMovies theRunnerMovies = new RunnerMovies();
    private TrollMovies theTrollMovies = new TrollMovies();
 
@@ -90,7 +91,7 @@ class Cavern {
       for (int x = 0; x < Width; x++) {
          for (int y = 0; y < Height; y++) {
             if (Blocks[x][y].blockImage != null) {
-               if ( (Blocks[x][y].Type != BlockTypes.EXIT)
+               if ((Blocks[x][y].Type != BlockTypes.EXIT)
                        && (Blocks[x][y].Type != BlockTypes.HIDDEN_LADDER)) {
                   View.getChildren().add (Blocks[x][y].blockView);
                   }
@@ -126,7 +127,7 @@ class Cavern {
 
    public void removeTroll (MovableLocationType location) {
       for (Sprite troll : Trolls) {
-         if ( (troll.Location.getX() == location.getX()) && (troll.Location.getY() == location.getY())) {
+         if ((troll.Location.getX() == location.getX()) && (troll.Location.getY() == location.getY())) {
             Trolls.remove (troll);
             break;
             }
@@ -152,10 +153,10 @@ class Cavern {
       }
 
    public Block getBlock (BlockLocation location) {
-      if ( (0 > location.getX()) || (location.getX() >= Width)) {
+      if ((0 > location.getX()) || (location.getX() >= Width)) {
          return null;
          }
-      if ( (0 > location.getY()) || (location.getY() >= Height)) {
+      if ((0 > location.getY()) || (location.getY() >= Height)) {
          return null;
          }
       return Blocks[location.getX()][location.getY()];
@@ -164,7 +165,7 @@ class Cavern {
    private Block getBlockActorIsIn (MovableLocationType location) {
       int x, y, fudgeFactor;
 
-      if ( ( ( (location.getX() % CONSTANTS.BLOCK_WIDTH) / 4) & 1) == 1) {
+      if (( ((location.getX() % CONSTANTS.BLOCK_WIDTH) / 4) & 1) == 1) {
          fudgeFactor = 2;  // add 2 pixels to blocks where runner is on 4, 12, 20, 28, 36 pixel bounderies
          }
       else {
@@ -204,36 +205,36 @@ class Cavern {
          switch (direction) {
             case RIGHT:
                Delta = thisTrollLocation.getY() - otherTrollLocation.getY();
-               if ( (abs (Delta) < 30)) {
+               if ((abs (Delta) < 30)) {
                   Delta = thisTrollLocation.getX() - otherTrollLocation.getX();
-                  if ( (Delta < 0) && (Delta > -30)) {
+                  if ((Delta < 0) && (Delta > -30)) {
                      return true;
                      }
                   }
                break;
             case LEFT:
                Delta = thisTrollLocation.getY() - otherTrollLocation.getY();
-               if ( (abs (Delta) < 30)) {
+               if ((abs (Delta) < 30)) {
                   Delta = otherTrollLocation.getX() - thisTrollLocation.getX();
-                  if ( (Delta < 0) && (Delta > -30)) {
+                  if ((Delta < 0) && (Delta > -30)) {
                      return true;
                      }
                   }
                break;
             case DOWN:
                Delta = thisTrollLocation.getX() - otherTrollLocation.getX();
-               if ( (abs (Delta) < 30)) {
+               if ((abs (Delta) < 30)) {
                   Delta = thisTrollLocation.getY() - otherTrollLocation.getY();
-                  if ( (Delta < 0) && (Delta > -30)) {
+                  if ((Delta < 0) && (Delta > -30)) {
                      return true;
                      }
                   }
                break;
             case UP:
                Delta = thisTrollLocation.getX() - otherTrollLocation.getX();
-               if ( (abs (Delta) < 30)) {
+               if ((abs (Delta) < 30)) {
                   Delta = otherTrollLocation.getY() - thisTrollLocation.getY();
-                  if ( (Delta < 0) && (Delta > -30)) {
+                  if ((Delta < 0) && (Delta > -30)) {
                      return true;
                      }
                   }
@@ -252,7 +253,7 @@ class Cavern {
       nextBlock = getBlock (location);
       if (TrollNextToTroll (theActor, Direction.RIGHT)) 
          return false;
-      else if ( (nextBlock == null) || (nextBlock.IsStructural())) 
+      else if ((nextBlock == null) || (nextBlock.IsStructural())) 
          return false;
       else 
          return true;
@@ -267,7 +268,7 @@ class Cavern {
       nextBlock = getBlock (location);
       if (TrollNextToTroll (theActor, Direction.LEFT)) 
          return false;
-      else if ( (nextBlock == null) || (nextBlock.IsStructural())) 
+      else if ((nextBlock == null) || (nextBlock.IsStructural())) 
          return false;
       else 
          return true;
@@ -282,7 +283,7 @@ class Cavern {
       nextBlock = getBlock (location);
       if (TrollNextToTroll (theActor, Direction.DOWN)) 
          return false;
-      else if ( (nextBlock == null) || (nextBlock.IsStructural())) 
+      else if ((nextBlock == null) || (nextBlock.IsStructural())) 
          return false;
       else 
          return true;
@@ -297,7 +298,7 @@ class Cavern {
       nextBlock = getBlock (location);
       if (TrollNextToTroll (theActor, Direction.UP)) 
          return false;
-      else if ( (nextBlock == null) || (nextBlock.IsStructural())) 
+      else if ((nextBlock == null) || (nextBlock.IsStructural())) 
          return false;
       else 
          return true;
@@ -307,7 +308,7 @@ class Cavern {
       int xLocation;
 
       xLocation = location.getY() % CONSTANTS.BLOCK_HEIGHT;
-      if ( (xLocation == 0) || (xLocation == 40)) 
+      if ((xLocation == 0) || (xLocation == 40)) 
          return true;
       else 
          return false;
@@ -392,7 +393,7 @@ class Cavern {
       thisBlock = getBlockActorIsIn (theActor.Location);
       location = thisBlock.Location.locationToTheLowerRight();
       nextBlock = getBlock (location);
-      if ( (nextBlock == null) || (nextBlock.IsStructural())) 
+      if ((nextBlock == null) || (nextBlock.IsStructural())) 
          return true;
       else 
          return false;
@@ -405,7 +406,7 @@ class Cavern {
       thisBlock = getBlockActorIsIn (theRunner.Location);
       location = thisBlock.Location.locationToTheLowerRight();
       nextBlock = getBlock (location);
-      if ( (nextBlock != null) && nextBlock.Laserable()) 
+      if ((nextBlock != null) && nextBlock.Laserable()) 
          return true;
       else 
          return false;
@@ -418,7 +419,7 @@ class Cavern {
       thisBlock = getBlockActorIsIn (theRunner.Location);
       location = thisBlock.Location.locationToTheLowerLeft();
       nextBlock = getBlock (location);
-      if ( (nextBlock != null) && nextBlock.Laserable()) 
+      if ((nextBlock != null) && nextBlock.Laserable()) 
          return true;
       else 
          return false;
@@ -431,7 +432,7 @@ class Cavern {
       thisBlock = getBlockActorIsIn (theActor.Location);
       location = thisBlock.Location.locationToTheLowerLeft();
       nextBlock = getBlock (location);
-      if ( (nextBlock == null) || (nextBlock.IsStructural())) 
+      if ((nextBlock == null) || (nextBlock.IsStructural())) 
          return true;
       else 
          return false;
@@ -444,7 +445,7 @@ class Cavern {
       thisBlock = getBlockActorIsIn (theActor.Location);
       location = thisBlock.Location.locationBelow();
       nextBlock = getBlock (location);
-      if ( (nextBlock != null) && (nextBlock.Type == BlockTypes.LADDER)) 
+      if ((nextBlock != null) && (nextBlock.Type == BlockTypes.LADDER)) 
          return true;
       else 
          return false;
@@ -457,7 +458,7 @@ class Cavern {
       thisBlock = getBlockActorIsIn (theActor.Location);
       location = thisBlock.Location.locationAbove();
       nextBlock = getBlock (location);
-      if ( (nextBlock != null) && (nextBlock.Type == BlockTypes.LADDER)) 
+      if ((nextBlock != null) && (nextBlock.Type == BlockTypes.LADDER)) 
          return true;
       else 
          return false;
@@ -467,7 +468,7 @@ class Cavern {
       Block thisBlock, blockBelow;
       BlockLocation location;
 
-      if ( (theActor.Image.movieType == MovieType.CLIMBING_DOWN)
+      if ((theActor.Image.movieType == MovieType.CLIMBING_DOWN)
               || (theActor.Image.movieType == MovieType.CLIMBING_UP)
               || (theActor.Image.movieType == MovieType.HANGING_ON_LADDER)
               || (theActor.Image.movieType == MovieType.LEAPING_OFF_OF_LADDER)
@@ -479,8 +480,8 @@ class Cavern {
       blockBelow = getBlock (location);
       if (!objectIsOnBlockFloor (theActor.Location)) 
          return false;
-      if ( (blockBelow != null)
-              && ( (blockBelow.Type != BlockTypes.LADDER) && (!blockBelow.IsStructural()))) 
+      if ((blockBelow != null)
+              && ((blockBelow.Type != BlockTypes.LADDER) && (!blockBelow.IsStructural()))) 
          return false;
       putActorOnBlock (theActor);
       return true;
@@ -509,12 +510,35 @@ class Cavern {
          return false;
       return true;
       }
+   
+   private boolean ActorIsOnHole (Sprite theActor) {
+      Block thisBlock, blockBelow;
+      BlockLocation location;
+      
+      thisBlock = getBlockActorIsIn (theActor.Location);
+      location = thisBlock.Location.locationBelow();
+      blockBelow = getBlock (location);
+      if ((blockBelow != null) && (blockBelow.Type != BlockTypes.HOLE))
+         return true;
+      return false;
+      }
+   
+   private void ActorNotOnSomethingSolid (Sprite theActor, ActorMovies theMovies) {
+      if ((theActor.Type == SpriteType.TROLL) && (ActorIsOnHole (theActor))) {
+         theActor.setImage (theTrollMovies.FallInHole);
+         }
+      else {
+         theActor.setImage (theMovies.Falling);
+         theActor.Orientation = Direction.FACING;
+         centerActorInBlock (theActor);    
+         }
+      }
 
    private void upDateMovie (Sprite theActor, ActorMovies theMovies) {
       //System.err.println ("upDateMovie: entering with movie type " + theActor.Image.movieType);
       if (theActor.movieState == MovieState.PAUSED)
          return;
-      if (theActor.Image.movieType == MovieType.RUNNING) {
+      if (theActor.Image.movieType == MovieType.RUNNING) {           // ACTOR IS RUNNING
          if (theActor.Orientation == Direction.RIGHT) {
             if (!canActorMoveRight (theActor)) {
                theActor.setImage (theMovies.Turned);
@@ -529,9 +553,7 @@ class Cavern {
                return;
                } 
             else if (!ActorIsOnSomethingSolid (theActor)) {
-               theActor.setImage (theMovies.Falling);
-               theActor.Orientation = Direction.FACING;
-               centerActorInBlock (theActor);
+               ActorNotOnSomethingSolid (theActor, theMovies);
                return;
                } 
             else if (!IsThereSolidGroundOnTheRight (theActor)) {
@@ -555,9 +577,7 @@ class Cavern {
             return;
             } 
          else if (!ActorIsOnSomethingSolid (theActor)) {
-            theActor.setImage (theMovies.Falling);
-            theActor.Orientation = Direction.FACING;
-            centerActorInBlock (theActor);
+            ActorNotOnSomethingSolid (theActor, theMovies);
             return;
             } 
          else if (!IsThereSolidGroundOnTheLeft (theActor)) {
@@ -568,19 +588,18 @@ class Cavern {
                }
             }
          } 
-      else if (theActor.Image.movieType == MovieType.CLIMBING_DOWN) {
+      else if (theActor.Image.movieType == MovieType.CLIMBING_DOWN) {      // ACTOR IS CLIMBING DOWN
          if (!canActorMoveDown (theActor)) {
             theActor.movieState = MovieState.PAUSED;
             putActorOnBlock (theActor);
             return;
             } 
          else if (!IsActorAtLadder (theActor) && !IsThereLadderBelow (theActor)) {
-            theActor.setImage (theMovies.Falling);
-            theActor.Orientation = Direction.FACING;
+            ActorNotOnSomethingSolid (theActor, theMovies);
             return;
             }
          } 
-      else if (theActor.Image.movieType == MovieType.CLIMBING_UP) {
+      else if (theActor.Image.movieType == MovieType.CLIMBING_UP) {        // ACTOR IS CLIMBING UP
          if (!IsActorAtLadder (theActor)) {
             theActor.setImage (theMovies.Facing);
             putActorOnBlock (theActor);
@@ -591,7 +610,7 @@ class Cavern {
             return;
             }
          } 
-      else if (theActor.Image.movieType == MovieType.HANGING_ON_ROPE) {
+      else if (theActor.Image.movieType == MovieType.HANGING_ON_ROPE) {    // ACTOR IS HANGING ON ROPE
          if (theActor.Orientation == Direction.RIGHT) {
             if (!IsActorAtRope (theActor)) {
                if (ActorIsOnSomethingSolid (theActor)) {
@@ -600,9 +619,7 @@ class Cavern {
                   return;
                   } 
                else {
-                  theActor.setImage (theMovies.Falling);
-                  theActor.Orientation = Direction.FACING;
-                  centerActorInBlock (theActor);
+                  ActorNotOnSomethingSolid (theActor, theMovies);
                   return;
                   }
                } 
@@ -626,9 +643,7 @@ class Cavern {
                return;
                } 
             else {
-               theActor.setImage (theMovies.Falling);
-               theActor.Orientation = Direction.FACING;
-               centerActorInBlock (theActor);
+               ActorNotOnSomethingSolid (theActor, theMovies);
                return;
                }
             } 
@@ -645,18 +660,21 @@ class Cavern {
                }
             }
          } 
-      else if ( (theActor.Type == SpriteType.RUNNER) && (theActor.Image.movieType == MovieType.HANGING_ON_LADDER)) {
+      else if ((theActor.Type == SpriteType.RUNNER) && (theActor.Image.movieType == MovieType.HANGING_ON_LADDER)) {
          // set the last key to null to cause the key processor to reprocess any key held down before the end of the leap onto the ladder 
          lastKeyCode = null;
-         } 
-      else if ( (theActor.Image.movieType != MovieType.FALLING) && !ActorIsOnSomethingSolid (theActor)) {
+         }
+      /*  commenting out this code to see if it is really needed, seems like all the cases are covered above
+      else if ((theActor.Image.movieType != MovieType.FALLING) && !ActorIsOnSomethingSolid (theActor)) {
          theActor.setImage (theMovies.Falling);
          theActor.Orientation = Direction.FACING;
          centerActorInBlock (theActor);
          return;
          }
+      */
       theActor.Location.setX (theActor.Location.getX() + (theActor.Image.xDelta * theActor.getScale()));
-      theActor.Location.setY (theActor.Location.getY() + (theActor.Image.yDelta * theActor.getScale()));
+      //theActor.Location.setY (theActor.Location.getY() + (theActor.Image.yDelta * theActor.getScale()));    IS THIS WRONG?????
+      theActor.Location.setY (theActor.Location.getY() + (theActor.Image.yDelta));
       theActor.Image = theActor.Image.nextImage;
 
       //System.err.println ("upDateMovie: leaving with movie type " + theActor.Image.movieType);
@@ -690,7 +708,7 @@ class Cavern {
       // if the runner is moving in response to the last user keypress user stop him where he is
       if (theRunner.Image.movieType == MovieType.RUNNING) 
          theRunner.setImage (theRunnerMovies.Turned);
-      else if ( (theRunner.Image.movieType == MovieType.CLIMBING_DOWN)
+      else if ((theRunner.Image.movieType == MovieType.CLIMBING_DOWN)
               || (theRunner.Image.movieType == MovieType.CLIMBING_UP)
               || (theRunner.Image.movieType == MovieType.HANGING_ON_ROPE)) 
          theRunner.movieState = MovieState.PAUSED;
@@ -698,28 +716,28 @@ class Cavern {
       if (code == CONSTANTS.PAGE_UP) {  // right side ray gun
          if (IsThereSomethingToBlastOnTheRight (theRunner)) {
             laserBlast.play();
-            theRunner.setImage (theRunnerMovies.firingRaygun);
+            theRunner.setImage (theRunnerMovies.FiringRaygun);
             theRunner.Orientation = Direction.RIGHT;
             centerActorInBlock (theRunner);
-            raygunBlast = new Sprite (new MovableLocationType (theRunner.Location.getX() + 44, theRunner.Location.getY()),
-                    theRunnerMovies.raygunBlast, Direction.RIGHT, SpriteType.RAYGUN_BLAST);
-            View.getChildren().add (raygunBlast.View);
+            RaygunBlast = new Sprite (new MovableLocationType (theRunner.Location.getX() + 44, theRunner.Location.getY()),
+                    theRunnerMovies.RaygunBlast, Direction.RIGHT, SpriteType.RAYGUN_BLAST);
+            View.getChildren().add (RaygunBlast.View);
             }
          }
       if (code == CONSTANTS.HOME) {     // left side ray gun
          if (IsThereSomethingToBlastOnTheLeft (theRunner)) {
             laserBlast.play();
-            theRunner.setImage (theRunnerMovies.firingRaygun);
+            theRunner.setImage (theRunnerMovies.FiringRaygun);
             theRunner.Orientation = Direction.LEFT;
             centerActorInBlock (theRunner);
-            raygunBlast = new Sprite (new MovableLocationType (theRunner.Location.getX() - 44, theRunner.Location.getY()),
-                    theRunnerMovies.raygunBlast, Direction.LEFT, SpriteType.RAYGUN_BLAST);
-            View.getChildren().add (raygunBlast.View);
+            RaygunBlast = new Sprite (new MovableLocationType (theRunner.Location.getX() - 44, theRunner.Location.getY()),
+                    theRunnerMovies.RaygunBlast, Direction.LEFT, SpriteType.RAYGUN_BLAST);
+            View.getChildren().add (RaygunBlast.View);
             }
          } 
       else if (code == CONSTANTS.RIGHT_ARROW) {
          if (canActorMoveRight (theRunner)) {
-            if ( (theRunner.Image.movieType == MovieType.CLIMBING_DOWN)
+            if ((theRunner.Image.movieType == MovieType.CLIMBING_DOWN)
                     || (theRunner.Image.movieType == MovieType.CLIMBING_UP)
                     || (theRunner.Image.movieType == MovieType.HANGING_ON_LADDER)) {
                theRunner.setImage (theRunnerMovies.LeapingOffOfLadder);
@@ -738,7 +756,7 @@ class Cavern {
          } 
       else if (code == CONSTANTS.LEFT_ARROW) {
          if (canActorMoveLeft (theRunner)) {
-            if ( (theRunner.Image.movieType == MovieType.CLIMBING_DOWN)
+            if ((theRunner.Image.movieType == MovieType.CLIMBING_DOWN)
                     || (theRunner.Image.movieType == MovieType.CLIMBING_UP)
                     || (theRunner.Image.movieType == MovieType.HANGING_ON_LADDER)) {
                theRunner.setImage (theRunnerMovies.LeapingOffOfLadder);
@@ -846,7 +864,7 @@ class Cavern {
             if (thisBlock.Type == BlockTypes.LADDER) 
                return true;
             break;
-         case HOLE:
+         case EMPTY:
             if (canActorMoveDown (Troll)) 
                return true;
             break;
@@ -885,7 +903,7 @@ class Cavern {
       }
 
    void MoveTrollHorizontally (Sprite Troll, Direction direction) {
-      if ( (Troll.Image.movieType == MovieType.CLIMBING_DOWN)
+      if ((Troll.Image.movieType == MovieType.CLIMBING_DOWN)
               || (Troll.Image.movieType == MovieType.CLIMBING_UP)
               || (Troll.Image.movieType == MovieType.HANGING_ON_LADDER)) {
          Troll.setImage (theTrollMovies.LeapingOffOfLadder);
@@ -918,6 +936,14 @@ class Cavern {
          else // nothing to do if falling
             return;
          } 
+      else if (Troll.Image.movieType == MovieType.FALL_IN_HOLE) {
+         // Let movie play out
+         return;
+         } 
+      else if (Troll.Image.movieType == MovieType.STAND_IN_HOLE) {
+         Troll.movieState = MovieState.PAUSED;
+         return;
+         } 
       else if (Troll.Image.movieType == MovieType.LEAPING_OFF_OF_LADDER) {
          // Let movie play out before processing any troll searching 
          return;
@@ -928,7 +954,7 @@ class Cavern {
          }
       int xDelta = theRunner.Location.getX() - Troll.Location.getX();
       int yDelta = theRunner.Location.getY() - Troll.Location.getY();
-      if ( (abs (xDelta) < 8) && (abs (yDelta) < 8)) {
+      if ((abs (xDelta) < 8) && (abs (yDelta) < 8)) {
          // runner has been caught, execute the game over code
          // remove the image of the capturing troll so capture movie looks correct
          Troll.View.setImage (Images.empty);
@@ -958,7 +984,7 @@ class Cavern {
                   Troll.movieState = MovieState.PLAYING;
                return;  // took an action, so quit
                } 
-            else if ( (PreferredY = DirectionToNearestFeature (Troll, BlockTypes.LADDER)) != Direction.AWAY) {  // look for closest ladder on either side
+            else if ((PreferredY = DirectionToNearestFeature (Troll, BlockTypes.LADDER)) != Direction.AWAY) {  // look for closest ladder on either side
                // head for the ladder
                MoveTrollHorizontally (Troll, PreferredY);
                return;  // took an action, so quit
@@ -982,7 +1008,7 @@ class Cavern {
                   }
                return;  // took an action, so quit
                } 
-            else if ( (PreferredY = DirectionToNearestFeature (Troll, BlockTypes.HOLE)) != Direction.AWAY) {  // look for closest 'hole' on either side
+            else if ((PreferredY = DirectionToNearestFeature (Troll, BlockTypes.EMPTY)) != Direction.AWAY) {  // look for closest 'hole' on either side
                // head for the 'hole' to get a way down
                MoveTrollHorizontally (Troll, PreferredY);
                return;  // took an action, so quit
@@ -1017,7 +1043,7 @@ class Cavern {
       /*
       if (theRunner.Image.movieType == MovieType.BEING_CAPTURED)
          // play capture movie at half speed
-         if ( (frameCounter++ % 2) == 1) 
+         if ((frameCounter++ % 2) == 1) 
             return TotalGold;
        */
       // check for any gold to get
@@ -1051,26 +1077,26 @@ class Cavern {
 
       // THIRD: display any changes in the cavern
       // display any raygun blast before displaying the runner so raygun that the runner is holding displays on top of the blast
-      if (raygunBlast != null) {
-         if (raygunBlast.Image.nextImage != null) {      // still showing the blast
-            raygunBlast.Image = raygunBlast.Image.nextImage;
-            raygunBlast.Location.setX (raygunBlast.Location.getX() + raygunBlast.Image.xDelta);
-            raygunBlast.Location.setY (raygunBlast.Location.getY() + raygunBlast.Image.yDelta);
-            raygunBlast.View.setImage (raygunBlast.Image.theImage);
-            raygunBlast.View.setX (raygunBlast.Location.getX());
-            raygunBlast.View.setY (raygunBlast.Location.getY());
-            raygunBlast.View.setScaleX (raygunBlast.getScale());
+      if (RaygunBlast != null) {
+         if (RaygunBlast.Image.nextImage != null) {      // still showing the blast
+            RaygunBlast.Image = RaygunBlast.Image.nextImage;
+            RaygunBlast.Location.setX (RaygunBlast.Location.getX() + RaygunBlast.Image.xDelta);
+            RaygunBlast.Location.setY (RaygunBlast.Location.getY() + RaygunBlast.Image.yDelta);
+            RaygunBlast.View.setImage (RaygunBlast.Image.theImage);
+            RaygunBlast.View.setX (RaygunBlast.Location.getX());
+            RaygunBlast.View.setY (RaygunBlast.Location.getY());
+            RaygunBlast.View.setScaleX (RaygunBlast.getScale());
             } 
          else {    // blast is complete, so delete the block and save it in the active blocks list to be restored later
-            Block block = getBlockActorIsIn (raygunBlast.Location);
+            Block block = getBlockActorIsIn (RaygunBlast.Location);
             Block newBlock = new Block (block);
             ActiveBlock activeBlock = new ActiveBlock (newBlock, 120);
             activeBlocks.add (activeBlock);
             block.blockImage = null;
             block.blockView.setImage (null);
             block.Type = BlockTypes.EMPTY;
-            View.getChildren().remove (raygunBlast.View);
-            raygunBlast = null;
+            View.getChildren().remove (RaygunBlast.View);
+            RaygunBlast = null;
             }
          }
 
