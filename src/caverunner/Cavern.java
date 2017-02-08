@@ -927,7 +927,13 @@ class Cavern {
    void ProcessTroll (Sprite Troll) {
       //System.err.println ("ProcessTrolls: Enterring - MovieType = " + Troll1.Image.movieType);
 
-      if (Troll.Image.movieType == MovieType.FALLING) {
+      if (Troll.movieState == MovieState.TRAPPED) {
+         if (--Troll.Delay == 0) {
+            Troll.setImage (theTrollMovies.OutOfHole);
+            }
+         return;
+         }
+      else if (Troll.Image.movieType == MovieType.FALLING) {
          if (ActorIsOnSomethingSolid (Troll)) 
             Troll.setImage (theTrollMovies.Turned);
          else if (IsActorAtRope (Troll) && objectIsOnBlockFloor (Troll.Location)) {
@@ -942,8 +948,16 @@ class Cavern {
          // Let movie play out
          return;
          } 
+      else if (Troll.Image.movieType == MovieType.OUT_OF_HOLE) {
+         // Let movie play out
+         return;
+         } 
+      else if (Troll.Image.movieType == MovieType.STANDING) {
+         putActorOnBlock (Troll);
+         } 
       else if (Troll.Image.movieType == MovieType.STAND_IN_HOLE) {
-         Troll.movieState = MovieState.PAUSED;
+         Troll.movieState = MovieState.TRAPPED;
+         Troll.Delay = 36;
          return;
          } 
       else if (Troll.Image.movieType == MovieType.LEAPING_OFF_OF_LADDER) {

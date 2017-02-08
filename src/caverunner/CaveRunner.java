@@ -470,6 +470,40 @@ class TrollMovies extends ActorMovies {
       theLastImage = new MovieImage (new Image ("file:Images/fall_in_hole_2.png"), MovieType.FALL_IN_HOLE, theLastImage, 0, 5);
       FallInHole = new MovieImage (new Image ("file:Images/fall_in_hole_1.png"), MovieType.FALL_IN_HOLE, theLastImage, 0, 0);
       
+      // load the runner images for climbing out of hole into a movie strip (not a movie loop)
+      theLastImage = new MovieImage (new Image ("file:Images/out_of_hole_32.png"), MovieType.OUT_OF_HOLE, Turned, 0, 0);
+      theLastImage = new MovieImage (new Image ("file:Images/out_of_hole_31.png"), MovieType.OUT_OF_HOLE, theLastImage, 2, -4);
+      theLastImage = new MovieImage (new Image ("file:Images/out_of_hole_30.png"), MovieType.OUT_OF_HOLE, theLastImage, 2, -4);
+      theLastImage = new MovieImage (new Image ("file:Images/out_of_hole_29.png"), MovieType.OUT_OF_HOLE, theLastImage, 2, -7);
+      theLastImage = new MovieImage (new Image ("file:Images/out_of_hole_28.png"), MovieType.OUT_OF_HOLE, theLastImage, 2, -7);
+      theLastImage = new MovieImage (new Image ("file:Images/out_of_hole_27.png"), MovieType.OUT_OF_HOLE, theLastImage, 2, -7);
+      theLastImage = new MovieImage (new Image ("file:Images/out_of_hole_26.png"), MovieType.OUT_OF_HOLE, theLastImage, 0, 0);
+      theLastImage = new MovieImage (new Image ("file:Images/out_of_hole_25.png"), MovieType.OUT_OF_HOLE, theLastImage, 0, 0);
+      theLastImage = new MovieImage (new Image ("file:Images/out_of_hole_24.png"), MovieType.OUT_OF_HOLE, theLastImage, 0, 0);
+      theLastImage = new MovieImage (new Image ("file:Images/out_of_hole_23.png"), MovieType.OUT_OF_HOLE, theLastImage, 0, 0);
+      theLastImage = new MovieImage (new Image ("file:Images/out_of_hole_22.png"), MovieType.OUT_OF_HOLE, theLastImage, 0, 0);
+      theLastImage = new MovieImage (new Image ("file:Images/out_of_hole_21.png"), MovieType.OUT_OF_HOLE, theLastImage, 0, 0);
+      theLastImage = new MovieImage (new Image ("file:Images/out_of_hole_20.png"), MovieType.OUT_OF_HOLE, theLastImage, 4, -3);
+      theLastImage = new MovieImage (new Image ("file:Images/out_of_hole_19.png"), MovieType.OUT_OF_HOLE, theLastImage, 4, -3);
+      theLastImage = new MovieImage (new Image ("file:Images/out_of_hole_18.png"), MovieType.OUT_OF_HOLE, theLastImage, 4, -3);
+      theLastImage = new MovieImage (new Image ("file:Images/out_of_hole_17.png"), MovieType.OUT_OF_HOLE, theLastImage, 4, -1);
+      theLastImage = new MovieImage (new Image ("file:Images/out_of_hole_16.png"), MovieType.OUT_OF_HOLE, theLastImage, 0, 0);
+      theLastImage = new MovieImage (new Image ("file:Images/out_of_hole_15.png"), MovieType.OUT_OF_HOLE, theLastImage, 0, 0);
+      theLastImage = new MovieImage (new Image ("file:Images/out_of_hole_14.png"), MovieType.OUT_OF_HOLE, theLastImage, 0, 0);
+      theLastImage = new MovieImage (new Image ("file:Images/out_of_hole_13.png"), MovieType.OUT_OF_HOLE, theLastImage, 0, 0);
+      theLastImage = new MovieImage (new Image ("file:Images/out_of_hole_12.png"), MovieType.OUT_OF_HOLE, theLastImage, 0, 0);
+      theLastImage = new MovieImage (new Image ("file:Images/out_of_hole_11.png"), MovieType.OUT_OF_HOLE, theLastImage, 0, 0);
+      theLastImage = new MovieImage (new Image ("file:Images/out_of_hole_10.png"), MovieType.OUT_OF_HOLE, theLastImage, 0, 0);
+      theLastImage = new MovieImage (new Image ("file:Images/out_of_hole_9.png"), MovieType.OUT_OF_HOLE, theLastImage, 0, 0);
+      theLastImage = new MovieImage (new Image ("file:Images/out_of_hole_8.png"), MovieType.OUT_OF_HOLE, theLastImage, 0, 0);
+      theLastImage = new MovieImage (new Image ("file:Images/out_of_hole_7.png"), MovieType.OUT_OF_HOLE, theLastImage, 0, 0);
+      theLastImage = new MovieImage (new Image ("file:Images/out_of_hole_6.png"), MovieType.OUT_OF_HOLE, theLastImage, 0, 0);
+      theLastImage = new MovieImage (new Image ("file:Images/out_of_hole_5.png"), MovieType.OUT_OF_HOLE, theLastImage, 0, 0);
+      theLastImage = new MovieImage (new Image ("file:Images/out_of_hole_4.png"), MovieType.OUT_OF_HOLE, theLastImage, 0, 0);
+      theLastImage = new MovieImage (new Image ("file:Images/out_of_hole_3.png"), MovieType.OUT_OF_HOLE, theLastImage, 0, 0);
+      theLastImage = new MovieImage (new Image ("file:Images/out_of_hole_2.png"), MovieType.OUT_OF_HOLE, theLastImage, 0, 0);
+      OutOfHole = new MovieImage (new Image ("file:Images/fall_in_hole_1.png"), MovieType.OUT_OF_HOLE, theLastImage, 0, 0);
+
       // load the runner images for leaping onto a ladder into a movie strip (not a movie loop)
       theLastImage = new MovieImage (new Image ("file:Images/troll_ladder_leap_1.png"), MovieType.LEAPING_ONTO_LADDER, HangingOnLadder, CONSTANTS.LEAPING_FRAME_DISTANCE/2, 0);
       theLastImage = new MovieImage (new Image ("file:Images/troll_ladder_leap_11.png"), MovieType.LEAPING_ONTO_LADDER, theLastImage, CONSTANTS.LEAPING_FRAME_DISTANCE/2, 0);
@@ -561,7 +595,8 @@ class MovableLocationType implements Serializable {
 
 enum MovieState {
    PLAYING,
-   PAUSED
+   PAUSED,
+   TRAPPED
    }
 
 enum Direction {
@@ -615,6 +650,7 @@ class Sprite {
    ImageView View;
    Direction Orientation;
    SpriteType Type;
+   int Delay;
 
    Sprite (MovableLocationType location, MovieImage image, Direction orientation, SpriteType type) {
       Location = location;
@@ -625,6 +661,7 @@ class Sprite {
       View.setY (Location.getY());
       Orientation = orientation;
       Type = type;
+      Delay = 0;
       }
 
    void setImage (MovieImage image) {
