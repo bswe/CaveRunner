@@ -764,6 +764,7 @@ class Block {
          case HIDDEN_LADDER:
          case ROPE:
          case EXIT:
+         case HOLE:
          case GOLD_1: return false;
          }
       return true;

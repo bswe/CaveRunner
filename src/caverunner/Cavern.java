@@ -518,7 +518,7 @@ class Cavern {
       thisBlock = getBlockActorIsIn (theActor.Location);
       location = thisBlock.Location.locationBelow();
       blockBelow = getBlock (location);
-      if ((blockBelow != null) && (blockBelow.Type != BlockTypes.HOLE))
+      if ((blockBelow != null) && (blockBelow.Type == BlockTypes.HOLE))
          return true;
       return false;
       }
@@ -1067,8 +1067,15 @@ class Cavern {
 
       // FIRST: process the actors
       ProcessRunner (keysPressed);
-      for (Sprite troll : Trolls) 
-         ProcessTroll (troll);
+      
+      // process any trolls
+      try {
+         for (Sprite troll : Trolls) 
+            ProcessTroll (troll);
+         }
+      catch (Exception e) {
+         // ignore ConcurrentModificationException when troll is deleted from list when runner is caught
+         }
 
       // SECOND: update any active elements in the cavern
       upDateMovie (theRunner, theRunnerMovies);
@@ -1110,7 +1117,7 @@ class Cavern {
             activeBlocks.add (activeBlock);
             block.blockImage = null;
             block.blockView.setImage (null);
-            block.Type = BlockTypes.EMPTY;
+            block.Type = BlockTypes.HOLE;
             View.getChildren().remove (RaygunBlast.View);
             RaygunBlast = null;
             }
