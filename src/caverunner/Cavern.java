@@ -463,6 +463,15 @@ class Cavern {
       else 
          return false;
       }
+   
+   boolean StandingOnTroll (Block block) {
+      for (Sprite troll : Trolls) {
+         Block BlockTrollIsIn = getBlockActorIsIn (troll.Location);
+         if (BlockTrollIsIn == block)
+            return true;
+         }
+      return false;
+      }
 
    private boolean ActorIsOnSomethingSolid (Sprite theActor) {
       Block thisBlock, blockBelow;
@@ -480,8 +489,8 @@ class Cavern {
       blockBelow = getBlock (location);
       if (!objectIsOnBlockFloor (theActor.Location)) 
          return false;
-      if ((blockBelow != null)
-              && ((blockBelow.Type != BlockTypes.LADDER) && (!blockBelow.IsStructural()))) 
+      if ((blockBelow != null) &&
+         ((blockBelow.Type != BlockTypes.LADDER) && (!blockBelow.IsStructural()) && (!StandingOnTroll (blockBelow))))
          return false;
       putActorOnBlock (theActor);
       return true;
