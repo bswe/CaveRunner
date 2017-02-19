@@ -6,7 +6,7 @@
 package caverunner;
 
 import java.io.*;
-import java.util.ArrayList;
+import java.util.*;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.media.AudioClip;
 import javafx.scene.image.ImageView;
@@ -982,9 +982,8 @@ class Cavern {
       if ((abs (xDelta) < 8) && (abs (yDelta) < 8)) {
          // runner has been caught, execute the game over code
          // remove the image of the capturing troll so capture movie looks correct
+         // calling method will delete the capturing troll so its images don't reappear 
          Troll.View.setImage (Images.empty);
-         // delete the capturing troll so its images don't reappear 
-         Trolls.remove (Troll);
          // load the capture movie
          if (theRunner.Image.movieType != MovieType.BEING_CAPTURED) {
             theRunner.setImage (theRunnerMovies.Captured);
@@ -1078,12 +1077,12 @@ class Cavern {
       ProcessRunner (keysPressed);
       
       // process any trolls
-      try {
-         for (Sprite troll : Trolls) 
-            ProcessTroll (troll);
-         }
-      catch (Exception e) {
-         // ignore ConcurrentModificationException when troll is deleted from list when runner is caught
+      for (final Iterator iterator = Trolls.iterator(); iterator.hasNext(); ) {
+         Sprite troll = (Sprite) iterator.next();
+         ProcessTroll (troll);
+         if (troll.View.getImage() == Images.empty) 
+            // capturing troll is deleted from list when runner is caught to avoid displaying wrong image
+            iterator.remove();
          }
 
       // SECOND: update any active elements in the cavern
