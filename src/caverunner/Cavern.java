@@ -936,13 +936,7 @@ class Cavern {
    void ProcessTroll (Sprite Troll) {
       //System.err.println ("ProcessTrolls: Enterring - MovieType = " + Troll1.Image.movieType);
 
-      if (Troll.movieState == MovieState.TRAPPED) {
-         if (--Troll.Delay == 0) {
-            Troll.setImage (theTrollMovies.OutOfHole);
-            }
-         return;
-         }
-      else if (Troll.Image.movieType == MovieType.FALLING) {
+      if (Troll.Image.movieType == MovieType.FALLING) {
          if (ActorIsOnSomethingSolid (Troll)) 
             Troll.setImage (theTrollMovies.Turned);
          else if (IsActorAtRope (Troll) && objectIsOnBlockFloor (Troll.Location)) {
@@ -964,7 +958,7 @@ class Cavern {
       else if (Troll.Image.movieType == MovieType.STANDING) {
          putActorOnBlock (Troll);
          } 
-      else if (Troll.Image.movieType == MovieType.STAND_IN_HOLE) {
+      else if ((Troll.Image.movieType == MovieType.STAND_IN_HOLE) && (Troll.movieState != MovieState.TRAPPED)) {
          Troll.movieState = MovieState.TRAPPED;
          Troll.Delay = 36;
          return;
@@ -995,7 +989,14 @@ class Cavern {
          }
       Direction PreferredX = Direction.HorizontalDirection (xDelta);
       Direction PreferredY = Direction.VerticalDirection (yDelta);
-      if (abs (yDelta) >= 8) {   // check vertical delta first since climbing/going-down are ussually more difficult
+      if (Troll.movieState == MovieState.TRAPPED) {
+         if (--Troll.Delay == 0) {
+            Troll.setImage (theTrollMovies.OutOfHole);
+            Troll.Orientation = PreferredX;
+            }
+         return;
+         }
+      else if (abs (yDelta) >= 8) {   // check vertical delta first since climbing/going-down are ussually more difficult
          // if runner is above or below then climb or drop to get to the same level if possible
          if (PreferredY == Direction.UP) {
             if (canActorMoveUp (Troll) && IsActorAtLadder (Troll)) {
