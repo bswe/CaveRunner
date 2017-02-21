@@ -936,40 +936,36 @@ class Cavern {
    void ProcessTroll (Sprite Troll) {
       //System.err.println ("ProcessTrolls: Enterring - MovieType = " + Troll1.Image.movieType);
 
-      if (Troll.Image.movieType == MovieType.FALLING) {
-         if (ActorIsOnSomethingSolid (Troll)) 
-            Troll.setImage (theTrollMovies.Turned);
-         else if (IsActorAtRope (Troll) && objectIsOnBlockFloor (Troll.Location)) {
-            // falling troll always grabs a rope if they have the opportunity
-            Troll.setImage (theTrollMovies.HangingOnRope);
-            Troll.movieState = MovieState.PAUSED;
-            } 
-         else // nothing to do if falling
+      switch (Troll.Image.movieType) {
+         case FALL_IN_HOLE:
+         case OUT_OF_HOLE:
+         case LEAPING_OFF_OF_LADDER:
+         case LEAPING_ONTO_LADDER:
+            // Let these movies play out before processing any troll searching
             return;
-         } 
-      else if (Troll.Image.movieType == MovieType.FALL_IN_HOLE) {
-         // Let movie play out
-         return;
-         } 
-      else if (Troll.Image.movieType == MovieType.OUT_OF_HOLE) {
-         // Let movie play out
-         return;
-         } 
-      else if (Troll.Image.movieType == MovieType.STANDING) {
-         putActorOnBlock (Troll);
-         } 
-      else if ((Troll.Image.movieType == MovieType.STAND_IN_HOLE) && (Troll.movieState != MovieState.TRAPPED)) {
-         Troll.movieState = MovieState.TRAPPED;
-         Troll.Delay = 36;
-         return;
-         } 
-      else if (Troll.Image.movieType == MovieType.LEAPING_OFF_OF_LADDER) {
-         // Let movie play out before processing any troll searching 
-         return;
-         } 
-      else if (Troll.Image.movieType == MovieType.LEAPING_ONTO_LADDER) {
-         // Let movie play out before processing any troll searching
-         return;
+         case FALLING:
+            // check for landing or passing rope
+            if (ActorIsOnSomethingSolid (Troll)) 
+               Troll.setImage (theTrollMovies.Turned);
+            else if (IsActorAtRope (Troll) && objectIsOnBlockFloor (Troll.Location)) {
+               // falling troll always grabs a rope if they have the opportunity
+               Troll.setImage (theTrollMovies.HangingOnRope);
+               Troll.movieState = MovieState.PAUSED;
+               } 
+            else // nothing to do if falling
+               return;
+            break;
+         case STANDING: 
+            putActorOnBlock (Troll);
+            break;
+         case STAND_IN_HOLE:
+            // troll has landed on bottom of hole, so make him wait there about 4 seconds
+            if (Troll.movieState != MovieState.TRAPPED) {
+               Troll.movieState = MovieState.TRAPPED;
+               Troll.Delay = 36;
+               return;
+               } 
+            break;
          }
       int xDelta = theRunner.Location.getX() - Troll.Location.getX();
       int yDelta = theRunner.Location.getY() - Troll.Location.getY();
